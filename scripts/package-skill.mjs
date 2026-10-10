@@ -1,0 +1,11 @@
+import { entries, zip, tgz } from '../lib/bundle.mjs';
+import { skill, root, name } from '../lib/install.mjs';
+import { mkdir, writeFile } from 'node:fs/promises';
+import { join } from 'node:path';
+import './sync-shadcn-sandbox.mjs';
+const files=(await entries(skill)).map(f=>({...f,name:name+'/'+f.name}));
+await mkdir(join(root,'public'),{recursive:true});
+const archive=zip(files);
+for(const ext of ['skill','skill.zip'])await writeFile(join(root,'public',name+'.'+ext),archive);
+await writeFile(join(root,'public',name+'.tar.gz'),tgz(files));
+console.log(`Packaged ${files.length} skill files from skills/${name}`);

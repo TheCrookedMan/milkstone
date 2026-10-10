@@ -1,0 +1,44 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "strict": true,
+    "noEmit": true,
+    "lib": [
+      "ES2022",
+      "DOM",
+      "DOM.Iterable"
+    ],
+    "skipLibCheck": true,
+    "types": [
+      "vite/client",
+      "node"
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "vue": [
+        "./node_modules/vue"
+      ],
+      "reka-ui": [
+        "./node_modules/reka-ui"
+      ],
+      "echarts": [
+        "./node_modules/echarts"
+      ],
+      "@vue-flow/core": [
+        "./node_modules/@vue-flow/core"
+      ],
+      "echarts/*": [
+        "./node_modules/echarts/*"
+      ]
+    }
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.vue",
+    "../components/**/*.vue",
+    "../*.mts",
+    "vite.config.ts"
+  ]
+}

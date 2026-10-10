@@ -1,0 +1,6 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "milk-white-web-design",
+  "version": "1.7.0",
+  "description": "Milkstone: tactile light/dark Web design, editable Vue components, visual workbenches and a portable Agent Skill"
+}

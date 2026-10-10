@@ -1,0 +1,1281 @@
+{
+  "checked_at": "2026-10-09",
+  "official_catalog": "https://www.shadcn-vue.com/docs/components",
+  "source": "https://github.com/unovue/shadcn-vue",
+  "license": "MIT; Copyright (c) 2023 unovue",
+  "items": [
+    {
+      "name": "accordion",
+      "url": "https://www.shadcn-vue.com/r/styles/new-york-v4/accordion.json",
+      "sha256": "df37fe515ae1aa86cb35684c1c2477a4b7e21f3b1d7a5333697b0bbc76a8f793",
+      "files": [
+        "src/components/ui/accordion/Accordion.vue",
+        "src/components/ui/accordion/AccordionContent.vue",
+        "src/components/ui/accordion/AccordionItem.vue",
+        "src/components/ui/accordion/AccordionTrigger.vue",
+        "src/components/ui/accordion/index.ts"
+      ],
+      "dependencies": [
+        "reka-ui",
+        "@vueuse/core"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "alert",
+      "url": "https://www.shadcn-vue.com/r/styles/new-york-v4/alert.json",
+      "sha256": "f76bbe9e8bb5c0696aa961e57af74067527edb60c86117b584881675c69ceaaf",
+      "files": [
+        "src/components/ui/alert/Alert.vue",
+        "src/components/ui/alert/AlertDescription.vue",
+        "src/components/ui/alert/AlertTitle.vue",
+        "src/components/ui/alert/index.ts"
+      ],
+      "dependencies": [],
+      "registryDependencies": []
+    },
+    {
+      "name": "alert-dialog",
+      "url": "https://www.shadcn-vue.com/r/styles/new-york-v4/alert-dialog.json",
+      "sha256": "7cb8abb4ceba4dba923a7322968c6e79937d65059e951a1bd7aaadb78d6f4815",
+      "files": [
+        "src/components/ui/alert-dialog/AlertDialog.vue",
+        "src/components/ui/alert-dialog/AlertDialogAction.vue",
+        "src/components/ui/alert-dialog/AlertDialogCancel.vue",
+        "src/components/ui/alert-dialog/AlertDialogContent.vue",
+        "src/components/ui/alert-dialog/AlertDialogDescription.vue",
+        "src/components/ui/alert-dialog/AlertDialogFooter.vue",
+        "src/components/ui/alert-dialog/AlertDialogHeader.vue",
+        "src/components/ui/alert-dialog/AlertDialogTitle.vue",
+        "src/components/ui/alert-dialog/AlertDialogTrigger.vue",
+        "src/components/ui/alert-dialog/index.ts"
+      ],
+      "dependencies": [
+        "reka-ui",
+        "@vueuse/core"
+      ],
+      "registryDependencies": [
+        "button"
+      ]
+    },
+    {
+      "name": "aspect-ratio",
+      "url": "https://www.shadcn-vue.com/r/styles/new-york-v4/aspect-ratio.json",
+      "sha256": "28a076f1789cf21c0dcf802532afd49c7a0f60c08e320f0050ff2435218d9df9",
+      "files": [
+        "src/components/ui/aspect-ratio/AspectRatio.vue",
+        "src/components/ui/aspect-ratio/index.ts"
+      ],
+      "dependencies": [
+        "reka-ui"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "attachment",
+      "url": "https://www.shadcn-vue.com/r/styles/new-york-v4/attachment.json",
+      "sha256": "245b1d07459e8201ca8a48b7fd863bcd07ba753f650673879b422755f4dac2b0",
+      "files": [
+        "src/components/ui/attachment/Attachment.vue",
+        "src/components/ui/attachment/AttachmentAction.vue",
+        "src/components/ui/attachment/AttachmentActions.vue",
+        "src/components/ui/attachment/AttachmentContent.vue",
+        "src/components/ui/attachment/AttachmentDescription.vue",
+        "src/components/ui/attachment/AttachmentGroup.vue",
+        "src/components/ui/attachment/AttachmentMedia.vue",
+        "src/components/ui/attachment/AttachmentTitle.vue",
+        "src/components/ui/attachment/AttachmentTrigger.vue",
+        "src/components/ui/attachment/index.ts"
+      ],
+      "dependencies": [
+        "reka-ui"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "avatar",
+      "url": "https://www.shadcn-vue.com/r/styles/new-york-v4/avatar.json",
+      "sha256": "49e22323a22d7d48724b472d773bac9a73f4fc0874c31eb665f4eb2be5dcacb5",
+      "files": [
+        "src/components/ui/avatar/Avatar.vue",
+        "src/components/ui/avatar/AvatarFallback.vue",
+        "src/components/ui/avatar/AvatarImage.vue",
+        "src/components/ui/avatar/index.ts"
+      ],
+      "dependencies": [
+        "reka-ui",
+        "@vueuse/core"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "badge",
+      "url": "https://www.shadcn-vue.com/r/styles/new-york-v4/badge.json",
+      "sha256": "ee4f7ed4c761643e2dd0fe56ac25283808fb340602e5f1a91bdae615f3f30048",
+      "files": [
+        "src/components/ui/badge/Badge.vue",
+        "src/components/ui/badge/index.ts"
+      ],
+      "dependencies": [
+        "reka-ui",
+        "@vueuse/core"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "breadcrumb",
+      "url": "https://www.shadcn-vue.com/r/styles/new-york-v4/breadcrumb.json",
+      "sha256": "db15636eda29627d531f36461375cc276e0a3a010712d37f449ecd9ce66bc468",
+      "files": [
+        "src/components/ui/breadcrumb/Breadcrumb.vue",
+        "src/components/ui/breadcrumb/BreadcrumbEllipsis.vue",
+        "src/components/ui/breadcrumb/BreadcrumbItem.vue",
+        "src/components/ui/breadcrumb/BreadcrumbLink.vue",
+        "src/components/ui/breadcrumb/BreadcrumbList.vue",
+        "src/components/ui/breadcrumb/BreadcrumbPage.vue",
+        "src/components/ui/breadcrumb/BreadcrumbSeparator.vue",
+        "src/components/ui/breadcrumb/index.ts"
+      ],
+      "dependencies": [
+        "reka-ui"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "bubble",
+      "url": "https://www.shadcn-vue.com/r/styles/new-york-v4/bubble.json",
+      "sha256": "83be192d49df71f8c9e41b1fafeb84eb45e18aa970513a2fc775f21d4a5ce705",
+      "files": [
+        "src/components/ui/bubble/Bubble.vue",
+        "src/components/ui/bubble/BubbleContent.vue",
+        "src/components/ui/bubble/BubbleGroup.vue",
+        "src/components/ui/bubble/BubbleReactions.vue",
+        "src/components/ui/bubble/index.ts"
+      ],
+      "dependencies": [
+        "reka-ui"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "button",
+      "url": "https://www.shadcn-vue.com/r/styles/new-york-v4/button.json",
+      "sha256": "261bfaa31841e744a52d2323931ce4453bd977e134112f7abdaebbaf2ddedec9",
+      "files": [
+        "src/components/ui/button/Button.vue",
+        "src/components/ui/button/index.ts"
+      ],
+      "dependencies": [
+        "reka-ui"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "button-group",
+      "url": "https://www.shadcn-vue.com/r/styles/new-york-v4/button-group.json",
+      "sha256": "b94b73d62c792362f7574ff7965f46aba65ca7ab037fabfb0862e5fde1e70556",
+      "files": [
+        "src/components/ui/button-group/ButtonGroup.vue",
+        "src/components/ui/button-group/ButtonGroupSeparator.vue",
+        "src/components/ui/button-group/ButtonGroupText.vue",
+        "src/components/ui/button-group/index.ts"
+      ],
+      "dependencies": [
+        "reka-ui",
+        "@vueuse/core"
+      ],
+      "registryDependencies": [
+        "separator"
+      ]
+    },
+    {
+      "name": "calendar",
+      "url": "https://www.shadcn-vue.com/r/styles/new-york-v4/calendar.json",
+      "sha256": "dee6ee1e1e7d67937bf2d31f21c6c0eafdd7a2f3236c9b702c796b68e72a4333",
+      "files": [
+        "src/components/ui/calendar/Calendar.vue",
+        "src/components/ui/calendar/CalendarCell.vue",
+        "src/components/ui/calendar/CalendarCellTrigger.vue",
+        "src/components/ui/calendar/CalendarGrid.vue",
+        "src/components/ui/calendar/CalendarGridBody.vue",
+        "src/components/ui/calendar/CalendarGridHead.vue",
+        "src/components/ui/calendar/CalendarGridRow.vue",
+        "src/components/ui/calendar/CalendarHeadCell.vue",
+        "src/components/ui/calendar/CalendarHeader.vue",
+        "src/components/ui/calendar/CalendarHeading.vue",
+        "src/components/ui/calendar/CalendarNextButton.vue",
+        "src/components/ui/calendar/CalendarPrevButton.vue",
+        "src/components/ui/calendar/index.ts"
+      ],
+      "dependencies": [
+        "reka-ui",
+        "@vueuse/core"
+      ],
+      "registryDependencies": [
+        "native-select",
+        "button"
+      ]
+    },
+    {
+      "name": "card",
+      "url": "https://www.shadcn-vue.com/r/styles/new-york-v4/card.json",
+      "sha256": "2eee3fd4b44dc093ccb42a5d48634623769bc13b3189b1c19d9b3e0a111aa132",
+      "files": [
+        "src/components/ui/card/Card.vue",
+        "src/components/ui/card/CardAction.vue",
+        "src/components/ui/card/CardContent.vue",
+        "src/components/ui/card/CardDescription.vue",
+        "src/components/ui/card/CardFooter.vue",
+        "src/components/ui/card/CardHeader.vue",
+        "src/components/ui/card/CardTitle.vue",
+        "src/components/ui/card/index.ts"
+      ],
+      "dependencies": [],
+      "registryDependencies": []
+    },
+    {
+      "name": "carousel",
+      "url": "https://www.shadcn-vue.com/r/styles/new-york-v4/carousel.json",
+      "sha256": "967811452890701a87256f6a437adc418f9b990f99f3de4abdfc0b257e8eefeb",
+      "files": [
+        "src/components/ui/carousel/Carousel.vue",
+        "src/components/ui/carousel/CarouselContent.vue",
+        "src/components/ui/carousel/CarouselItem.vue",
+        "src/components/ui/carousel/CarouselNext.vue",
+        "src/components/ui/carousel/CarouselPrevious.vue",
+        "src/components/ui/carousel/index.ts",
+        "src/components/ui/carousel/interface.ts",
+        "src/components/ui/carousel/useCarousel.ts"
+      ],
+      "dependencies": [
+        "embla-carousel-vue",
+        "@vueuse/core"
+      ],
+      "registryDependencies": [
+        "button"
+      ]
+    },
+    {
+      "name": "chart",
+      "url": "https://www.shadcn-vue.com/r/styles/new-york-v4/chart.json",
+      "sha256": "c176ffedecb24aa21239e50595f5fc335b77d2ab245308db4011b051ed1b4d16",
+      "files": [
+        "src/components/ui/chart/ChartContainer.vue",
+        "src/components/ui/chart/ChartLegendContent.vue",
+        "src/components/ui/chart/ChartStyle.vue",
+        "src/components/ui/chart/ChartTooltipContent.vue",
+        "src/components/ui/chart/index.ts",
+        "src/components/ui/chart/utils.ts"
+      ],
+      "dependencies": [
+        "reka-ui",
+        "@vueuse/core"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "checkbox",
+      "url": "https://www.shadcn-vue.com/r/styles/new-york-v4/checkbox.json",
+      "sha256": "023d1b3cdbe693d9ce263a1600632cb499c3ae276f29652059275ff62c6857ee",
+      "files": [
+        "src/components/ui/checkbox/Checkbox.vue",
+        "src/components/ui/checkbox/index.ts"
+      ],
+      "dependencies": [
+        "reka-ui",
+        "@vueuse/core"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "collapsible",
+      "url": "https://www.shadcn-vue.com/r/styles/new-york-v4/collapsible.json",
+      "sha256": "019845856a261e6f12d795c98580fe3c90a35db9a1f1d73ee4162fb19f33f4e3",
+      "files": [
+        "src/components/ui/collapsible/Collapsible.vue",
+        "src/components/ui/collapsible/CollapsibleContent.vue",
+        "src/components/ui/collapsible/CollapsibleTrigger.vue",
+        "src/components/ui/collapsible/index.ts"
+      ],
+      "dependencies": [
+        "reka-ui"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "combobox",
+      "url": "https://www.shadcn-vue.com/r/styles/new-york-v4/combobox.json",
+      "sha256": "4d7fd86e2255ba6409529067424bdf66f585f704cc35d5a15658c1dcb9232f3e",
+      "files": [
+        "src/components/ui/combobox/Combobox.vue",
+        "src/components/ui/combobox/ComboboxAnchor.vue",
+        "src/components/ui/combobox/ComboboxEmpty.vue",
+        "src/components/ui/combobox/ComboboxGroup.vue",
+        "src/components/ui/combobox/ComboboxInput.vue",
+        "src/components/ui/combobox/ComboboxItem.vue",
+        "src/components/ui/combobox/ComboboxItemIndicator.vue",
+        "src/components/ui/combobox/ComboboxList.vue",
+        "src/components/ui/combobox/ComboboxSeparator.vue",
+        "src/components/ui/combobox/ComboboxTrigger.vue",
+        "src/components/ui/combobox/ComboboxViewport.vue",
+        "src/components/ui/combobox/index.ts"
+      ],
+      "dependencies": [
+        "reka-ui",
+        "@vueuse/core"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "command",
+      "url": "https://www.shadcn-vue.com/r/styles/new-york-v4/command.json",
+      "sha256": "ccc97578a53157a05ad270d06ae8db7eaafea9ea599249edb017c0ff82134d37",
+      "files": [
+        "src/components/ui/command/Command.vue",
+        "src/components/ui/command/CommandDialog.vue",
+        "src/components/ui/command/CommandEmpty.vue",
+        "src/components/ui/command/CommandGroup.vue",
+        "src/components/ui/command/CommandInput.vue",
+        "src/components/ui/command/CommandItem.vue",
+        "src/components/ui/command/CommandList.vue",
+        "src/components/ui/command/CommandSeparator.vue",
+        "src/components/ui/command/CommandShortcut.vue",
+        "src/components/ui/command/index.ts"
+      ],
+      "dependencies": [
+        "reka-ui",
+        "@vueuse/core"
+      ],
+      "registryDependencies": [
+        "dialog"
+      ]
+    },
+    {
+      "name": "context-menu",
+      "url": "https://www.shadcn-vue.com/r/styles/new-york-v4/context-menu.json",
+      "sha256": "d1dbfcd1e6472458b2d298a1df968ec0c0ddbdeb743d1fe135b14ab40d6214f8",
+      "files": [
+        "src/components/ui/context-menu/ContextMenu.vue",
+        "src/components/ui/context-menu/ContextMenuCheckboxItem.vue",
+        "src/components/ui/context-menu/ContextMenuContent.vue",
+        "src/components/ui/context-menu/ContextMenuGroup.vue",
+        "src/components/ui/context-menu/ContextMenuItem.vue",
+        "src/components/ui/context-menu/ContextMenuLabel.vue",
+        "src/components/ui/context-menu/ContextMenuPortal.vue",
+        "src/components/ui/context-menu/ContextMenuRadioGroup.vue",
+        "src/components/ui/context-menu/ContextMenuRadioItem.vue",
+        "src/components/ui/context-menu/ContextMenuSeparator.vue",
+        "src/components/ui/context-menu/ContextMenuShortcut.vue",
+        "src/components/ui/context-menu/ContextMenuSub.vue",
+        "src/components/ui/context-menu/ContextMenuSubContent.vue",
+        "src/components/ui/context-menu/ContextMenuSubTrigger.vue",
+        "src/components/ui/context-menu/ContextMenuTrigger.vue",
+        "src/components/ui/context-menu/index.ts"
+      ],
+      "dependencies": [
+        "reka-ui",
+        "@vueuse/core"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "dialog",
+      "url": "https://www.shadcn-vue.com/r/styles/new-york-v4/dialog.json",
+      "sha256": "7a6d656c3db4dd54da780b017e8c5859e33dc9d340675e16f4c0a650c1da9d6d",
+      "files": [
+        "src/components/ui/dialog/Dialog.vue",
+        "src/components/ui/dialog/DialogClose.vue",
+        "src/components/ui/dialog/DialogContent.vue",
+        "src/components/ui/dialog/DialogDescription.vue",
+        "src/components/ui/dialog/DialogFooter.vue",
+        "src/components/ui/dialog/DialogHeader.vue",
+        "src/components/ui/dialog/DialogOverlay.vue",
+        "src/components/ui/dialog/DialogScrollContent.vue",
+        "src/components/ui/dialog/DialogTitle.vue",
+        "src/components/ui/dialog/DialogTrigger.vue",
+        "src/components/ui/dialog/index.ts"
+      ],
+      "dependencies": [
+        "reka-ui",
+        "@vueuse/core"
+      ],
+      "registryDependencies": [
+        "button"
+      ]
+    },
+    {
+      "name": "drawer",
+      "url": "https://www.shadcn-vue.com/r/styles/new-york-v4/drawer.json",
+      "sha256": "abf8703c553eaddd0bcab0dcbc0c15724a4eac9deb023fc7ac45b63b0fe2a1ea",
+      "files": [
+        "src/components/ui/drawer/Drawer.vue",
+        "src/components/ui/drawer/DrawerClose.vue",
+        "src/components/ui/drawer/DrawerContent.vue",
+        "src/components/ui/drawer/DrawerDescription.vue",
+        "src/components/ui/drawer/DrawerFooter.vue",
+        "src/components/ui/drawer/DrawerHeader.vue",
+        "src/components/ui/drawer/DrawerOverlay.vue",
+        "src/components/ui/drawer/DrawerTitle.vue",
+        "src/components/ui/drawer/DrawerTrigger.vue",
+        "src/components/ui/drawer/index.ts"
+      ],
+      "dependencies": [
+        "reka-ui",
+        "@vueuse/core"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "dropdown-menu",
+      "url": "https://www.shadcn-vue.com/r/styles/new-york-v4/dropdown-menu.json",
+      "sha256": "f317e62a5eaea800e8c79a8ff807acdbef7bc128a122030c43559b7a3587ce00",
+      "files": [
+        "src/components/ui/dropdown-menu/DropdownMenu.vue",
+        "src/components/ui/dropdown-menu/DropdownMenuCheckboxItem.vue",
+        "src/components/ui/dropdown-menu/DropdownMenuContent.vue",
+        "src/components/ui/dropdown-menu/DropdownMenuGroup.vue",
+        "src/components/ui/dropdown-menu/DropdownMenuItem.vue",
+        "src/components/ui/dropdown-menu/DropdownMenuLabel.vue",
+        "src/components/ui/dropdown-menu/DropdownMenuRadioGroup.vue",
+        "src/components/ui/dropdown-menu/DropdownMenuRadioItem.vue",
+        "src/components/ui/dropdown-menu/DropdownMenuSeparator.vue",
+        "src/components/ui/dropdown-menu/DropdownMenuShortcut.vue",
+        "src/components/ui/dropdown-menu/DropdownMenuSub.vue",
+        "src/components/ui/dropdown-menu/DropdownMenuSubContent.vue",
+        "src/components/ui/dropdown-menu/DropdownMenuSubTrigger.vue",
+        "src/components/ui/dropdown-menu/DropdownMenuTrigger.vue",
+        "src/components/ui/dropdown-menu/index.ts"
+      ],
+      "dependencies": [
+        "reka-ui",
+        "@vueuse/core"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "empty",
+      "url": "https://www.shadcn-vue.com/r/styles/new-york-v4/empty.json",
+      "sha256": "e146911efe5dbbb097cddf7366fd5e9f84055588611f2020f8b07c59320599f8",
+      "files": [
+        "src/components/ui/empty/Empty.vue",
+        "src/components/ui/empty/EmptyContent.vue",
+        "src/components/ui/empty/EmptyDescription.vue",
+        "src/components/ui/empty/EmptyHeader.vue",
+        "src/components/ui/empty/EmptyMedia.vue",
+        "src/components/ui/empty/EmptyTitle.vue",
+        "src/components/ui/empty/index.ts"
+      ],
+      "dependencies": [],
+      "registryDependencies": []
+    },
+    {
+      "name": "field",
+      "url": "https://www.shadcn-vue.com/r/styles/new-york-v4/field.json",
+      "sha256": "194ba2826aa8f06e1096d131e38b17253b6529bdf9268b4cf4d044836e247b82",
+      "files": [
+        "src/components/ui/field/Field.vue",
+        "src/components/ui/field/FieldContent.vue",
+        "src/components/ui/field/FieldDescription.vue",
+        "src/components/ui/field/FieldError.vue",
+        "src/components/ui/field/FieldGroup.vue",
+        "src/components/ui/field/FieldLabel.vue",
+        "src/components/ui/field/FieldLegend.vue",
+        "src/components/ui/field/FieldSeparator.vue",
+        "src/components/ui/field/FieldSet.vue",
+        "src/components/ui/field/FieldTitle.vue",
+        "src/components/ui/field/index.ts"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "label",
+        "separator"
+      ]
+    },
+    {
+      "name": "form",
+      "url": "https://www.shadcn-vue.com/r/styles/new-york-v4/form.json",
+      "sha256": "088b2b2002d7ef0804d814308b0eb6f41c1bf7e0e70e56093a5d850f42fba432",
+      "files": [
+        "src/components/ui/form/FormControl.vue",
+        "src/components/ui/form/FormDescription.vue",
+        "src/components/ui/form/FormItem.vue",
+        "src/components/ui/form/FormLabel.vue",
+        "src/components/ui/form/FormMessage.vue",
+        "src/components/ui/form/index.ts",
+        "src/components/ui/form/injectionKeys.ts",
+        "src/components/ui/form/useFormField.ts"
+      ],
+      "dependencies": [
+        "reka-ui",
+        "vee-validate",
+        "@vee-validate/zod",
+        "zod@3.25.76"
+      ],
+      "registryDependencies": [
+        "label"
+      ]
+    },
+    {
+      "name": "hover-card",
+      "url": "https://www.shadcn-vue.com/r/styles/new-york-v4/hover-card.json",
+      "sha256": "32902a7dd23feaeb1c3ff59e32c2b5836f8e55e3a75fef5dde3c66a3bb7f08f8",
+      "files": [
+        "src/components/ui/hover-card/HoverCard.vue",
+        "src/components/ui/hover-card/HoverCardContent.vue",
+        "src/components/ui/hover-card/HoverCardTrigger.vue",
+        "src/components/ui/hover-card/index.ts"
+      ],
+      "dependencies": [
+        "reka-ui",
+        "@vueuse/core"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "input",
+      "url": "https://www.shadcn-vue.com/r/styles/new-york-v4/input.json",
+      "sha256": "2569180b92411fa83143ecaefaee0cd625061c0ba9bd327ffb1bb1de1231309d",
+      "files": [
+        "src/components/ui/input/Input.vue",
+        "src/components/ui/input/index.ts"
+      ],
+      "dependencies": [
+        "@vueuse/core"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "input-group",
+      "url": "https://www.shadcn-vue.com/r/styles/new-york-v4/input-group.json",
+      "sha256": "4865d988c628f519b8a68d14dda6618af0dfe1c7ddab4a305e1339da91722021",
+      "files": [
+        "src/components/ui/input-group/InputGroup.vue",
+        "src/components/ui/input-group/InputGroupAddon.vue",
+        "src/components/ui/input-group/InputGroupButton.vue",
+        "src/components/ui/input-group/InputGroupInput.vue",
+        "src/components/ui/input-group/InputGroupText.vue",
+        "src/components/ui/input-group/InputGroupTextarea.vue",
+        "src/components/ui/input-group/index.ts"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "button",
+        "input",
+        "textarea"
+      ]
+    },
+    {
+      "name": "input-otp",
+      "url": "https://www.shadcn-vue.com/r/styles/new-york-v4/input-otp.json",
+      "sha256": "ac5a8c976a94216de30fd0f4eb40c06728f2c48e82572adbcaa5f8e4c2fdb792",
+      "files": [
+        "src/components/ui/input-otp/InputOTP.vue",
+        "src/components/ui/input-otp/InputOTPGroup.vue",
+        "src/components/ui/input-otp/InputOTPSeparator.vue",
+        "src/components/ui/input-otp/InputOTPSlot.vue",
+        "src/components/ui/input-otp/index.ts"
+      ],
+      "dependencies": [
+        "vue-input-otp",
+        "@vueuse/core",
+        "reka-ui"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "item",
+      "url": "https://www.shadcn-vue.com/r/styles/new-york-v4/item.json",
+      "sha256": "69a37edab5e2e9456907d94ddeea771c6be04efba3a38fd6b7de3bd8542a5783",
+      "files": [
+        "src/components/ui/item/Item.vue",
+        "src/components/ui/item/ItemActions.vue",
+        "src/components/ui/item/ItemContent.vue",
+        "src/components/ui/item/ItemDescription.vue",
+        "src/components/ui/item/ItemFooter.vue",
+        "src/components/ui/item/ItemGroup.vue",
+        "src/components/ui/item/ItemHeader.vue",
+        "src/components/ui/item/ItemMedia.vue",
+        "src/components/ui/item/ItemSeparator.vue",
+        "src/components/ui/item/ItemTitle.vue",
+        "src/components/ui/item/index.ts"
+      ],
+      "dependencies": [
+        "reka-ui"
+      ],
+      "registryDependencies": [
+        "separator"
+      ]
+    },
+    {
+      "name": "kbd",
+      "url": "https://www.shadcn-vue.com/r/styles/new-york-v4/kbd.json",
+      "sha256": "e803c522b502ee4c4e54b05669c9739e9a212526bd910d4f27bd486cf33de930",
+      "files": [
+        "src/components/ui/kbd/Kbd.vue",
+        "src/components/ui/kbd/KbdGroup.vue",
+        "src/components/ui/kbd/index.ts"
+      ],
+      "dependencies": [],
+      "registryDependencies": []
+    },
+    {
+      "name": "label",
+      "url": "https://www.shadcn-vue.com/r/styles/new-york-v4/label.json",
+      "sha256": "de701b21153d3fcd9f6e396768b5faee91e4461bae616d15510739c851cac71e",
+      "files": [
+        "src/components/ui/label/Label.vue",
+        "src/components/ui/label/index.ts"
+      ],
+      "dependencies": [
+        "reka-ui",
+        "@vueuse/core"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "marker",
+      "url": "https://www.shadcn-vue.com/r/styles/new-york-v4/marker.json",
+      "sha256": "ca0667943757f4840806cd984a8e027586e892a902100f7d364bbb637b117b65",
+      "files": [
+        "src/components/ui/marker/Marker.vue",
+        "src/components/ui/marker/MarkerContent.vue",
+        "src/components/ui/marker/MarkerIcon.vue",
+        "src/components/ui/marker/index.ts"
+      ],
+      "dependencies": [
+        "reka-ui"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "menubar",
+      "url": "https://www.shadcn-vue.com/r/styles/new-york-v4/menubar.json",
+      "sha256": "6d6e813c29513bd99abb64387b9ff33450a968bb67f4ca5e592689ec2a61e51f",
+      "files": [
+        "src/components/ui/menubar/Menubar.vue",
+        "src/components/ui/menubar/MenubarCheckboxItem.vue",
+        "src/components/ui/menubar/MenubarContent.vue",
+        "src/components/ui/menubar/MenubarGroup.vue",
+        "src/components/ui/menubar/MenubarItem.vue",
+        "src/components/ui/menubar/MenubarLabel.vue",
+        "src/components/ui/menubar/MenubarMenu.vue",
+        "src/components/ui/menubar/MenubarRadioGroup.vue",
+        "src/components/ui/menubar/MenubarRadioItem.vue",
+        "src/components/ui/menubar/MenubarSeparator.vue",
+        "src/components/ui/menubar/MenubarShortcut.vue",
+        "src/components/ui/menubar/MenubarSub.vue",
+        "src/components/ui/menubar/MenubarSubContent.vue",
+        "src/components/ui/menubar/MenubarSubTrigger.vue",
+        "src/components/ui/menubar/MenubarTrigger.vue",
+        "src/components/ui/menubar/index.ts"
+      ],
+      "dependencies": [
+        "reka-ui",
+        "@vueuse/core"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "message",
+      "url": "https://www.shadcn-vue.com/r/styles/new-york-v4/message.json",
+      "sha256": "510d5a0c48571f446a71d0798d3d40420b96f7eabed91c3388f3cbad91c879b6",
+      "files": [
+        "src/components/ui/message/Message.vue",
+        "src/components/ui/message/MessageAvatar.vue",
+        "src/components/ui/message/MessageContent.vue",
+        "src/components/ui/message/MessageFooter.vue",
+        "src/components/ui/message/MessageGroup.vue",
+        "src/components/ui/message/MessageHeader.vue",
+        "src/components/ui/message/index.ts"
+      ],
+      "dependencies": [
+        "reka-ui"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "message-scroller",
+      "url": "https://www.shadcn-vue.com/r/styles/new-york-v4/message-scroller.json",
+      "sha256": "8562ede2e62c12473094079c2629c9ce7edc0a4bf81a20ed5de84e3c7c605618",
+      "files": [
+        "src/components/ui/message-scroller/MessageScroller.vue",
+        "src/components/ui/message-scroller/MessageScrollerButton.vue",
+        "src/components/ui/message-scroller/MessageScrollerContent.vue",
+        "src/components/ui/message-scroller/MessageScrollerItem.vue",
+        "src/components/ui/message-scroller/MessageScrollerProvider.vue",
+        "src/components/ui/message-scroller/MessageScrollerViewport.vue",
+        "src/components/ui/message-scroller/index.ts",
+        "src/components/ui/message-scroller/useMessageScroller.ts"
+      ],
+      "dependencies": [],
+      "registryDependencies": [
+        "button"
+      ]
+    },
+    {
+      "name": "native-select",
+      "url": "https://www.shadcn-vue.com/r/styles/new-york-v4/native-select.json",
+      "sha256": "f139ca5ceb5efa78c855c460d5424a1e72a61b73055cfac6d1ca8b168611c2c0",
+      "files": [
+        "src/components/ui/native-select/NativeSelect.vue",
+        "src/components/ui/native-select/NativeSelectOptGroup.vue",
+        "src/components/ui/native-select/NativeSelectOption.vue",
+        "src/components/ui/native-select/index.ts"
+      ],
+      "dependencies": [
+        "reka-ui",
+        "@vueuse/core"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "navigation-menu",
+      "url": "https://www.shadcn-vue.com/r/styles/new-york-v4/navigation-menu.json",
+      "sha256": "764e2c6a60ff8cbee64a69f09b020ec6bf3ce31c15baad6e5e524f44a47bb45c",
+      "files": [
+        "src/components/ui/navigation-menu/NavigationMenu.vue",
+        "src/components/ui/navigation-menu/NavigationMenuContent.vue",
+        "src/components/ui/navigation-menu/NavigationMenuIndicator.vue",
+        "src/components/ui/navigation-menu/NavigationMenuItem.vue",
+        "src/components/ui/navigation-menu/NavigationMenuLink.vue",
+        "src/components/ui/navigation-menu/NavigationMenuList.vue",
+        "src/components/ui/navigation-menu/NavigationMenuTrigger.vue",
+        "src/components/ui/navigation-menu/NavigationMenuViewport.vue",
+        "src/components/ui/navigation-menu/index.ts"
+      ],
+      "dependencies": [
+        "reka-ui",
+        "@vueuse/core"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "number-field",
+      "url": "https://www.shadcn-vue.com/r/styles/new-york-v4/number-field.json",
+      "sha256": "4e54a9cc60221bcfde438f7e5611ffa42b395c7b4e14adb0208086a4b40d9f2d",
+      "files": [
+        "src/components/ui/number-field/NumberField.vue",
+        "src/components/ui/number-field/NumberFieldContent.vue",
+        "src/components/ui/number-field/NumberFieldDecrement.vue",
+        "src/components/ui/number-field/NumberFieldIncrement.vue",
+        "src/components/ui/number-field/NumberFieldInput.vue",
+        "src/components/ui/number-field/index.ts"
+      ],
+      "dependencies": [
+        "reka-ui",
+        "@vueuse/core"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "pagination",
+      "url": "https://www.shadcn-vue.com/r/styles/new-york-v4/pagination.json",
+      "sha256": "735c885eb7474e7b4785256298e5a46d9b39a356db087e2b41aa0758f63e81fc",
+      "files": [
+        "src/components/ui/pagination/Pagination.vue",
+        "src/components/ui/pagination/PaginationContent.vue",
+        "src/components/ui/pagination/PaginationEllipsis.vue",
+        "src/components/ui/pagination/PaginationFirst.vue",
+        "src/components/ui/pagination/PaginationItem.vue",
+        "src/components/ui/pagination/PaginationLast.vue",
+        "src/components/ui/pagination/PaginationNext.vue",
+        "src/components/ui/pagination/PaginationPrevious.vue",
+        "src/components/ui/pagination/index.ts"
+      ],
+      "dependencies": [
+        "reka-ui",
+        "@vueuse/core"
+      ],
+      "registryDependencies": [
+        "button"
+      ]
+    },
+    {
+      "name": "pin-input",
+      "url": "https://www.shadcn-vue.com/r/styles/new-york-v4/pin-input.json",
+      "sha256": "cb6c0344302687a7e13a765ecfcf5151452eb9223c196c6bfa8015a7cff4e6d5",
+      "files": [
+        "src/components/ui/pin-input/PinInput.vue",
+        "src/components/ui/pin-input/PinInputGroup.vue",
+        "src/components/ui/pin-input/PinInputSeparator.vue",
+        "src/components/ui/pin-input/PinInputSlot.vue",
+        "src/components/ui/pin-input/index.ts"
+      ],
+      "dependencies": [
+        "reka-ui",
+        "@vueuse/core"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "popover",
+      "url": "https://www.shadcn-vue.com/r/styles/new-york-v4/popover.json",
+      "sha256": "1d56bebbfe460b133b746cc6f85c7f9078913094a8a866bdbba9b2ca28cb6200",
+      "files": [
+        "src/components/ui/popover/Popover.vue",
+        "src/components/ui/popover/PopoverAnchor.vue",
+        "src/components/ui/popover/PopoverContent.vue",
+        "src/components/ui/popover/PopoverTrigger.vue",
+        "src/components/ui/popover/index.ts"
+      ],
+      "dependencies": [
+        "reka-ui",
+        "@vueuse/core"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "progress",
+      "url": "https://www.shadcn-vue.com/r/styles/new-york-v4/progress.json",
+      "sha256": "9a807d5408b05e065a396f22ff3a1adf720ca2177cae5d767ecba908cec828f0",
+      "files": [
+        "src/components/ui/progress/Progress.vue",
+        "src/components/ui/progress/index.ts"
+      ],
+      "dependencies": [
+        "reka-ui",
+        "@vueuse/core"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "questionnaire",
+      "url": "https://www.shadcn-vue.com/r/styles/new-york-v4/questionnaire.json",
+      "sha256": "078b4cac59dcc7da8f4e72090fb8e09c15af1204b17467630e693e3c4e356ca1",
+      "files": [
+        "src/components/ui/questionnaire/Questionnaire.vue",
+        "src/components/ui/questionnaire/QuestionnaireActions.vue",
+        "src/components/ui/questionnaire/QuestionnaireChoice.vue",
+        "src/components/ui/questionnaire/QuestionnaireChoiceDescription.vue",
+        "src/components/ui/questionnaire/QuestionnaireChoices.vue",
+        "src/components/ui/questionnaire/QuestionnaireDescription.vue",
+        "src/components/ui/questionnaire/QuestionnaireError.vue",
+        "src/components/ui/questionnaire/QuestionnaireInput.vue",
+        "src/components/ui/questionnaire/QuestionnaireItem.vue",
+        "src/components/ui/questionnaire/QuestionnaireNext.vue",
+        "src/components/ui/questionnaire/QuestionnairePrevious.vue",
+        "src/components/ui/questionnaire/QuestionnaireProgress.vue",
+        "src/components/ui/questionnaire/QuestionnaireSkip.vue",
+        "src/components/ui/questionnaire/QuestionnaireSubmit.vue",
+        "src/components/ui/questionnaire/QuestionnaireTitle.vue",
+        "src/components/ui/questionnaire/index.ts",
+        "src/components/ui/questionnaire/useQuestionnaire.ts"
+      ],
+      "dependencies": [
+        "reka-ui"
+      ],
+      "registryDependencies": [
+        "button"
+      ]
+    },
+    {
+      "name": "radio-group",
+      "url": "https://www.shadcn-vue.com/r/styles/new-york-v4/radio-group.json",
+      "sha256": "daa823e58944d2028419c2d068749f3bdbfe7bc9ba64517f4b7db38175852a3c",
+      "files": [
+        "src/components/ui/radio-group/RadioGroup.vue",
+        "src/components/ui/radio-group/RadioGroupItem.vue",
+        "src/components/ui/radio-group/index.ts"
+      ],
+      "dependencies": [
+        "reka-ui",
+        "@vueuse/core"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "range-calendar",
+      "url": "https://www.shadcn-vue.com/r/styles/new-york-v4/range-calendar.json",
+      "sha256": "695b7dc0cc02818dd4415556700a848682903f7fa66216ec3546f46eeae00804",
+      "files": [
+        "src/components/ui/range-calendar/RangeCalendar.vue",
+        "src/components/ui/range-calendar/RangeCalendarCell.vue",
+        "src/components/ui/range-calendar/RangeCalendarCellTrigger.vue",
+        "src/components/ui/range-calendar/RangeCalendarGrid.vue",
+        "src/components/ui/range-calendar/RangeCalendarGridBody.vue",
+        "src/components/ui/range-calendar/RangeCalendarGridHead.vue",
+        "src/components/ui/range-calendar/RangeCalendarGridRow.vue",
+        "src/components/ui/range-calendar/RangeCalendarHeadCell.vue",
+        "src/components/ui/range-calendar/RangeCalendarHeader.vue",
+        "src/components/ui/range-calendar/RangeCalendarHeading.vue",
+        "src/components/ui/range-calendar/RangeCalendarNextButton.vue",
+        "src/components/ui/range-calendar/RangeCalendarPrevButton.vue",
+        "src/components/ui/range-calendar/index.ts"
+      ],
+      "dependencies": [
+        "reka-ui",
+        "@vueuse/core"
+      ],
+      "registryDependencies": [
+        "button"
+      ]
+    },
+    {
+      "name": "resizable",
+      "url": "https://www.shadcn-vue.com/r/styles/new-york-v4/resizable.json",
+      "sha256": "ff13012c81c464b430fc06715f78cf2d3cd14592fe982c7450279e9ce8c0930e",
+      "files": [
+        "src/components/ui/resizable/ResizableHandle.vue",
+        "src/components/ui/resizable/ResizablePanel.vue",
+        "src/components/ui/resizable/ResizablePanelGroup.vue",
+        "src/components/ui/resizable/index.ts"
+      ],
+      "dependencies": [
+        "reka-ui",
+        "@vueuse/core"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "scroll-area",
+      "url": "https://www.shadcn-vue.com/r/styles/new-york-v4/scroll-area.json",
+      "sha256": "b81e27736a846db477ab5aeec3640480c58ace845961fd2921d54e495b2dc0e3",
+      "files": [
+        "src/components/ui/scroll-area/ScrollArea.vue",
+        "src/components/ui/scroll-area/ScrollBar.vue",
+        "src/components/ui/scroll-area/index.ts"
+      ],
+      "dependencies": [
+        "reka-ui",
+        "@vueuse/core"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "select",
+      "url": "https://www.shadcn-vue.com/r/styles/new-york-v4/select.json",
+      "sha256": "e36c6e26d672381c28b994e324a37cc70233aab94a3e37516ee2297173592cd5",
+      "files": [
+        "src/components/ui/select/Select.vue",
+        "src/components/ui/select/SelectContent.vue",
+        "src/components/ui/select/SelectGroup.vue",
+        "src/components/ui/select/SelectItem.vue",
+        "src/components/ui/select/SelectItemText.vue",
+        "src/components/ui/select/SelectLabel.vue",
+        "src/components/ui/select/SelectScrollDownButton.vue",
+        "src/components/ui/select/SelectScrollUpButton.vue",
+        "src/components/ui/select/SelectSeparator.vue",
+        "src/components/ui/select/SelectTrigger.vue",
+        "src/components/ui/select/SelectValue.vue",
+        "src/components/ui/select/index.ts"
+      ],
+      "dependencies": [
+        "reka-ui",
+        "@vueuse/core"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "separator",
+      "url": "https://www.shadcn-vue.com/r/styles/new-york-v4/separator.json",
+      "sha256": "76c92d837e98846833c1cac2410d335505a17bebfad31a9462fc949d0e15b6c4",
+      "files": [
+        "src/components/ui/separator/Separator.vue",
+        "src/components/ui/separator/index.ts"
+      ],
+      "dependencies": [
+        "reka-ui",
+        "@vueuse/core"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "sheet",
+      "url": "https://www.shadcn-vue.com/r/styles/new-york-v4/sheet.json",
+      "sha256": "a9e861d96e3a668785e7e42a3fd7f8d0159439d6827f545889b5f1632da59dad",
+      "files": [
+        "src/components/ui/sheet/Sheet.vue",
+        "src/components/ui/sheet/SheetClose.vue",
+        "src/components/ui/sheet/SheetContent.vue",
+        "src/components/ui/sheet/SheetDescription.vue",
+        "src/components/ui/sheet/SheetFooter.vue",
+        "src/components/ui/sheet/SheetHeader.vue",
+        "src/components/ui/sheet/SheetOverlay.vue",
+        "src/components/ui/sheet/SheetTitle.vue",
+        "src/components/ui/sheet/SheetTrigger.vue",
+        "src/components/ui/sheet/index.ts"
+      ],
+      "dependencies": [
+        "reka-ui",
+        "@vueuse/core"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "sidebar",
+      "url": "https://www.shadcn-vue.com/r/styles/new-york-v4/sidebar.json",
+      "sha256": "8458e1dc9374436ab25cdb852dcd727d18d09b3f4cb3f2756b069d6fbdecb0d9",
+      "files": [
+        "src/components/ui/sidebar/Sidebar.vue",
+        "src/components/ui/sidebar/SidebarContent.vue",
+        "src/components/ui/sidebar/SidebarFooter.vue",
+        "src/components/ui/sidebar/SidebarGroup.vue",
+        "src/components/ui/sidebar/SidebarGroupAction.vue",
+        "src/components/ui/sidebar/SidebarGroupContent.vue",
+        "src/components/ui/sidebar/SidebarGroupLabel.vue",
+        "src/components/ui/sidebar/SidebarHeader.vue",
+        "src/components/ui/sidebar/SidebarInput.vue",
+        "src/components/ui/sidebar/SidebarInset.vue",
+        "src/components/ui/sidebar/SidebarMenu.vue",
+        "src/components/ui/sidebar/SidebarMenuAction.vue",
+        "src/components/ui/sidebar/SidebarMenuBadge.vue",
+        "src/components/ui/sidebar/SidebarMenuButton.vue",
+        "src/components/ui/sidebar/SidebarMenuButtonChild.vue",
+        "src/components/ui/sidebar/SidebarMenuItem.vue",
+        "src/components/ui/sidebar/SidebarMenuSkeleton.vue",
+        "src/components/ui/sidebar/SidebarMenuSub.vue",
+        "src/components/ui/sidebar/SidebarMenuSubButton.vue",
+        "src/components/ui/sidebar/SidebarMenuSubItem.vue",
+        "src/components/ui/sidebar/SidebarProvider.vue",
+        "src/components/ui/sidebar/SidebarRail.vue",
+        "src/components/ui/sidebar/SidebarSeparator.vue",
+        "src/components/ui/sidebar/SidebarTrigger.vue",
+        "src/components/ui/sidebar/index.ts",
+        "src/components/ui/sidebar/utils.ts"
+      ],
+      "dependencies": [
+        "reka-ui",
+        "@vueuse/core"
+      ],
+      "registryDependencies": [
+        "sheet",
+        "input",
+        "tooltip",
+        "skeleton",
+        "separator",
+        "button"
+      ]
+    },
+    {
+      "name": "skeleton",
+      "url": "https://www.shadcn-vue.com/r/styles/new-york-v4/skeleton.json",
+      "sha256": "f686feb37acd77b137ad6f810ab97e731dd1990be833c609d55135c6bd21007a",
+      "files": [
+        "src/components/ui/skeleton/Skeleton.vue",
+        "src/components/ui/skeleton/index.ts"
+      ],
+      "dependencies": [],
+      "registryDependencies": []
+    },
+    {
+      "name": "slider",
+      "url": "https://www.shadcn-vue.com/r/styles/new-york-v4/slider.json",
+      "sha256": "ae11fa53b627ca94a5833857a5fc73f9db6845518e255164c1b52653ebc81b71",
+      "files": [
+        "src/components/ui/slider/Slider.vue",
+        "src/components/ui/slider/index.ts"
+      ],
+      "dependencies": [
+        "reka-ui",
+        "@vueuse/core"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "sonner",
+      "url": "https://www.shadcn-vue.com/r/styles/new-york-v4/sonner.json",
+      "sha256": "5fd62105d2bfb5e5a21d55a9b4ad5244503f668679b17e1e203d3c8df3823f3d",
+      "files": [
+        "src/components/ui/sonner/Sonner.vue",
+        "src/components/ui/sonner/index.ts"
+      ],
+      "dependencies": [
+        "vue-sonner"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "spinner",
+      "url": "https://www.shadcn-vue.com/r/styles/new-york-v4/spinner.json",
+      "sha256": "906a41cf7c1cd9babd1626976259acbcc95a25d5bbd58c7fa0eefe68e0e5822f",
+      "files": [
+        "src/components/ui/spinner/Spinner.vue",
+        "src/components/ui/spinner/index.ts"
+      ],
+      "dependencies": [],
+      "registryDependencies": []
+    },
+    {
+      "name": "stepper",
+      "url": "https://www.shadcn-vue.com/r/styles/new-york-v4/stepper.json",
+      "sha256": "36dfb9c139c6cd5d1a765e0061d659550e717bf1f5970b7000b99dc2a8d84958",
+      "files": [
+        "src/components/ui/stepper/Stepper.vue",
+        "src/components/ui/stepper/StepperDescription.vue",
+        "src/components/ui/stepper/StepperIndicator.vue",
+        "src/components/ui/stepper/StepperItem.vue",
+        "src/components/ui/stepper/StepperSeparator.vue",
+        "src/components/ui/stepper/StepperTitle.vue",
+        "src/components/ui/stepper/StepperTrigger.vue",
+        "src/components/ui/stepper/index.ts"
+      ],
+      "dependencies": [
+        "reka-ui",
+        "@vueuse/core"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "switch",
+      "url": "https://www.shadcn-vue.com/r/styles/new-york-v4/switch.json",
+      "sha256": "16772794f71c0fc92150975062904591a44180d4711019fbc05a67afa8c1dc07",
+      "files": [
+        "src/components/ui/switch/Switch.vue",
+        "src/components/ui/switch/index.ts"
+      ],
+      "dependencies": [
+        "reka-ui",
+        "@vueuse/core"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "table",
+      "url": "https://www.shadcn-vue.com/r/styles/new-york-v4/table.json",
+      "sha256": "11deac384ad8959ed3b8bf5a46b3e2d6aed4b86943915518019facf8550064d0",
+      "files": [
+        "src/components/ui/table/Table.vue",
+        "src/components/ui/table/TableBody.vue",
+        "src/components/ui/table/TableCaption.vue",
+        "src/components/ui/table/TableCell.vue",
+        "src/components/ui/table/TableEmpty.vue",
+        "src/components/ui/table/TableFooter.vue",
+        "src/components/ui/table/TableHead.vue",
+        "src/components/ui/table/TableHeader.vue",
+        "src/components/ui/table/TableRow.vue",
+        "src/components/ui/table/index.ts"
+      ],
+      "dependencies": [
+        "@vueuse/core"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "tabs",
+      "url": "https://www.shadcn-vue.com/r/styles/new-york-v4/tabs.json",
+      "sha256": "21b07c3277d9f037ddff5172121640d0b000927710ddf986f2420f1294f245ae",
+      "files": [
+        "src/components/ui/tabs/Tabs.vue",
+        "src/components/ui/tabs/TabsContent.vue",
+        "src/components/ui/tabs/TabsList.vue",
+        "src/components/ui/tabs/TabsTrigger.vue",
+        "src/components/ui/tabs/index.ts"
+      ],
+      "dependencies": [
+        "reka-ui",
+        "@vueuse/core"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "tags-input",
+      "url": "https://www.shadcn-vue.com/r/styles/new-york-v4/tags-input.json",
+      "sha256": "4757ae2c06c54dacf36a23efc7ac2950515974484cc579143d8045eaddd0578f",
+      "files": [
+        "src/components/ui/tags-input/TagsInput.vue",
+        "src/components/ui/tags-input/TagsInputInput.vue",
+        "src/components/ui/tags-input/TagsInputItem.vue",
+        "src/components/ui/tags-input/TagsInputItemDelete.vue",
+        "src/components/ui/tags-input/TagsInputItemText.vue",
+        "src/components/ui/tags-input/index.ts"
+      ],
+      "dependencies": [
+        "reka-ui",
+        "@vueuse/core"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "textarea",
+      "url": "https://www.shadcn-vue.com/r/styles/new-york-v4/textarea.json",
+      "sha256": "94f6216433b4bb23cf77097780e612b1b3ace5b4a00ec01352c4b5bb465fcf43",
+      "files": [
+        "src/components/ui/textarea/Textarea.vue",
+        "src/components/ui/textarea/index.ts"
+      ],
+      "dependencies": [
+        "@vueuse/core"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "toggle",
+      "url": "https://www.shadcn-vue.com/r/styles/new-york-v4/toggle.json",
+      "sha256": "44b3936ba73b3bf060b93fbf5f7f0dca94974db17bc439e483b85bb7b5a5424c",
+      "files": [
+        "src/components/ui/toggle/Toggle.vue",
+        "src/components/ui/toggle/index.ts"
+      ],
+      "dependencies": [
+        "reka-ui",
+        "@vueuse/core"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "toggle-group",
+      "url": "https://www.shadcn-vue.com/r/styles/new-york-v4/toggle-group.json",
+      "sha256": "13e3ef5eaa8ca7a21dacca85902f6ddbff85f9a53f8077542e0d25a788bbdc46",
+      "files": [
+        "src/components/ui/toggle-group/ToggleGroup.vue",
+        "src/components/ui/toggle-group/ToggleGroupItem.vue",
+        "src/components/ui/toggle-group/index.ts"
+      ],
+      "dependencies": [
+        "reka-ui",
+        "@vueuse/core"
+      ],
+      "registryDependencies": [
+        "toggle"
+      ]
+    },
+    {
+      "name": "tooltip",
+      "url": "https://www.shadcn-vue.com/r/styles/new-york-v4/tooltip.json",
+      "sha256": "e3dff977eae8565dbaa6ecc95b6e24a950bc1be7475b423cd9b902e9fbac165e",
+      "files": [
+        "src/components/ui/tooltip/Tooltip.vue",
+        "src/components/ui/tooltip/TooltipContent.vue",
+        "src/components/ui/tooltip/TooltipProvider.vue",
+        "src/components/ui/tooltip/TooltipTrigger.vue",
+        "src/components/ui/tooltip/index.ts"
+      ],
+      "dependencies": [
+        "reka-ui",
+        "@vueuse/core"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "toast",
+      "url": "https://www.shadcn-vue.com/r/styles/new-york/toast.json",
+      "sha256": "299580fe3a7e7673e9300cd703c23fb1057416d7689e8629404b66442d8cc6c8",
+      "files": [
+        "src/components/ui/toast/Toast.vue",
+        "src/components/ui/toast/ToastAction.vue",
+        "src/components/ui/toast/ToastClose.vue",
+        "src/components/ui/toast/ToastDescription.vue",
+        "src/components/ui/toast/ToastProvider.vue",
+        "src/components/ui/toast/ToastTitle.vue",
+        "src/components/ui/toast/ToastViewport.vue",
+        "src/components/ui/toast/Toaster.vue",
+        "src/components/ui/toast/index.ts",
+        "src/components/ui/toast/use-toast.ts"
+      ],
+      "dependencies": [
+        "reka-ui",
+        "@vueuse/core"
+      ],
+      "registryDependencies": []
+    }
+  ],
+  "local_adaptations": [
+    "Resolve registry UI import aliases to @/components/ui",
+    "Paper-white semantic theme, white highlights and soft grey tactile surfaces, including portals and as-child triggers",
+    "Explicit button defaults and stable data-mono-button attribute",
+    "Slot attributes for legacy and unmarked interactive components",
+    "Forward slider accessible name to thumbs",
+    "Command search auto-focus is opt-in through native props",
+    "Legacy Toast state typing compatible with Vue 3.5; neutral destructive foregrounds"
+  ]
+}
