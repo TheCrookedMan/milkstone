@@ -1,6 +1,6 @@
 ---
 name: milk-white-web-design
-description: 创建、改造或评审浅灰纸底与细微纹理、左上白高光和右下灰柔影、浮起圆角 Card、紧凑胶囊按钮、内凹输入与 Tabbar 构成的柔和拟物 Web 界面，并支持保持相同凸起与凹槽光照关系的黑色风格，包含 shadcn-vue 组件目录、刻度控件、ECharts、动态关系与星空、柔焦园区雷达、Vue Flow / ComfyUI 格式工作流及 Vue 初始化参考。适用于用户选择浅灰柔和实体设计语言的项目；保留已有框架和品牌约束。
+description: 创建、改造或评审浅灰纸底与细微纹理、左上白高光和右下灰柔影、浮起圆角 Card、紧凑胶囊按钮、内凹输入与 Tabbar 构成的柔和拟物 Web 界面，并支持保持相同凸起与凹槽光照关系的黑色风格，包含 shadcn-vue 组件目录、刻度控件、ECharts、动态关系与星空、柔焦园区雷达、Hairline 空状态插图、Vue Flow / ComfyUI 格式工作流及 Vue 初始化参考。适用于用户选择浅灰柔和实体设计语言的项目；保留已有框架和品牌约束。
 ---
 
 # 浅灰柔和拟物 Web 设计
@@ -14,6 +14,7 @@ description: 创建、改造或评审浅灰纸底与细微纹理、左上白高�
 - 设计页面、令牌和控件时读取 [设计系统](references/design-system.md)，复制 [CSS 令牌](assets/milk-tokens.css)，参考 [组件示例](assets/vue-panel/src/App.vue) 与 [实体相框图片](assets/FramedImage.vue)。
 - 实现白色／黑色风格切换时读取 [双模式主题](references/theme-modes.md)，保留源码主题控制、选择记忆与绘制器同源取色。
 - 使用 shadcn-vue 或展示完整基础组件库时读取 [shadcn-vue 组件目录](references/shadcn-catalog.md)，复用本地源码、交互语义和浅灰柔和拟物主题。
+- 需要暂无数据、暂无用户或无搜索结果的简洁等距线稿时读取 [空状态插图](references/empty-state-illustrations.md)；新建交互图形可调用可用的 `hairline-create`，文字和操作仍由页面组件承接。
 - 需要实体 Tabbar、旋钮、开关和刻印读数时读取 [实体控件](references/instrument-components.md)，使用 [控件示例](assets/components/InstrumentControls.vue)。
 - 需要图表或关系图时读取 [数据可视化](references/data-visualization.md)，复用 [ECharts 图表](assets/components/ChartStudio.vue) 与 [神经／章鱼／星空图](assets/components/RelationStudio.vue)。
 - 需要电流光点、球面星体、太阳日冕及自转与公转设置时读取 [动态关系与星空](references/stellar-relations.md)，独立集成时保留 [星体组件](assets/components/StellarGraph.vue) 与相邻 `StellarSurface.vue`。

@@ -16,6 +16,12 @@ Copyright (c) 2023 unovue. The original license is preserved in
 public/licenses/shadcn-vue-MIT.txt and the standalone catalog's
 LICENSE.shadcn-vue.txt.
 
+The Hairline runtime and fixed demonstration page retain the MIT license and
+Copyright (c) 2026 Lucas Marques. Their license is preserved in
+public/licenses/hairline-MIT.txt and beside the empty-tray figure in the
+standalone catalog. The compact SVGs are rendered snapshots; the empty-tray
+geometry and Vue integration are Milkstone adaptations.
+
 Historical design research referenced neural-creator-dashboard at a fixed
 PolyForm Noncommercial version. That upstream React implementation, original
 skill text and media are not distributed here. Its license is not changed by

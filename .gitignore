@@ -25,6 +25,7 @@ work/
 .claude/
 .agents/
 /verification.json
+.vercel/
 /*.skill
 /*.skill.zip
 /*.tar.gz

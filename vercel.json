@@ -1,0 +1,33 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "vite",
+  "installCommand": "npx --yes pnpm@10.18.3 install --frozen-lockfile",
+  "buildCommand": "npx --yes pnpm@10.18.3 run build",
+  "outputDirectory": "dist",
+  "headers": [
+    {
+      "source": "/milk-white-web-design.skill",
+      "headers": [
+        { "key": "Content-Type", "value": "application/octet-stream" },
+        { "key": "Content-Disposition", "value": "attachment; filename=\"milk-white-web-design.skill\"" },
+        { "key": "Cache-Control", "value": "no-store" }
+      ]
+    },
+    {
+      "source": "/milk-white-web-design.skill.zip",
+      "headers": [
+        { "key": "Content-Type", "value": "application/octet-stream" },
+        { "key": "Content-Disposition", "value": "attachment; filename=\"milk-white-web-design.skill.zip\"" },
+        { "key": "Cache-Control", "value": "no-store" }
+      ]
+    },
+    {
+      "source": "/milk-white-web-design.tar.gz",
+      "headers": [
+        { "key": "Content-Type", "value": "application/octet-stream" },
+        { "key": "Content-Disposition", "value": "attachment; filename=\"milk-white-web-design.tar.gz\"" },
+        { "key": "Cache-Control", "value": "no-store" }
+      ]
+    }
+  ]
+}

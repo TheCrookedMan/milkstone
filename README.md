@@ -33,6 +33,7 @@ Milkstone 将可运行的页面、可编辑的组件源码和可供 Agent 复用
 | --- | --- |
 | **shadcn-vue 组件目录** | 70 项交互演示，支持中英文搜索、分类筛选；按钮、Card、表单、Tabs、表格、日历、导航、浮层等共享材质与排版规范 |
 | **实体控件** | 刻度旋钮、蚀刻标签、胶囊按键、凹槽导航、开关及轻压回弹反馈 |
+| **空状态插图** | Hairline 等距线稿空托盘，明暗静态插图与自包含交互 HTML；暂无数据、暂无用户和筛选无结果的本地操作演示 |
 | **数据图表** | ECharts 折线与柱形切换、系列显隐、数据明细；组件目录另含 Unovis Chart 和 TanStack Data Table |
 | **关系与星空** | 神经网络、章鱼图、星空三种模式；沿路径移动的电流光点、轨道、自转、公转及五类可配置星体皮肤 |
 | **园区雷达** | 原生 Canvas 2D 柔焦等距建筑、粒子、XYZ 坐标、每五秒一圈的扫描和楼层亮起效果 |
@@ -42,6 +43,8 @@ Milkstone 将可运行的页面、可编辑的组件源码和可供 Agent 复用
 70 项组件以 **2026-10-09 核对的 shadcn-vue 官方目录**为基准；本地来源、版本与适配方式记录在[组件来源清单](docs/shadcn-registry-source.json)中。
 
 星体使用程序生成的 WebGL 球面材质，并提供 Canvas 2D 回退。工作流支持明确的 **ComfyUI Workflow JSON 0.4 子集**，详见[格式与接入范围](skills/milk-white-web-design/references/workflow-editor.md)。
+
+空状态示例复用 Hairline 的等距线稿语言，普通页面仅加载静态 SVG。需要制作新的物件与指针交互时，可使用已安装的 `hairline-create`；使用附带插图无需安装该技能。生成和接入方法见[空状态插图规范](skills/milk-white-web-design/references/empty-state-illustrations.md)。
 
 ## 快速开始
 
@@ -66,6 +69,7 @@ pnpm dev --host 127.0.0.1
 | --- | --- |
 | `/#/#stack` | 技术栈与技能能力 |
 | `/#/#shadcn` | 70 项基础组件 |
+| `/#/#empty-states` | 空状态插图与交互示例 |
 | `/#/#instruments` | 实体控件 |
 | `/#/#charts` | 数据图表 |
 | `/#/#relations` | 关系与星空 |
@@ -84,6 +88,10 @@ pnpm preview
 ```
 
 `pnpm dev` 和 `pnpm build` 会先自动同步独立组件目录并生成技能包。生产静态文件输出到 `dist/`；使用 Hash 路由，可放到支持静态文件的站点根路径。
+
+### 在线发布
+
+项目已包含 Vercel 静态部署配置，固定 pnpm 版本并保留技能包的附件下载行为。可从 GitHub 导入本仓库，或通过 Vercel CLI 发布，操作和验收步骤见 [Vercel 部署说明](docs/deployment.md)。
 
 ## 技术架构
 

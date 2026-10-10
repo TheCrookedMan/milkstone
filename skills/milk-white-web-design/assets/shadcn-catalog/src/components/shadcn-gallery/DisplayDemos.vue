@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { h, ref } from 'vue'
-import { FileText, Layers, Check, Info, FolderOpen, X, ArrowUpDown } from '@lucide/vue'
+import { FileText, Layers, Check, Info, X, ArrowUpDown } from '@lucide/vue'
 import { VisAxis, VisGroupedBar, VisXYContainer } from '@unovis/vue'
 import { columnFilteringFeature, createColumnHelper, createFilteredRowModel, createPaginatedRowModel, createSortedRowModel, filterFn_includesString, FlexRender, rowPaginationFeature, rowSortingFeature, sortFn_alphanumeric, sortFn_basic, tableFeatures, useTable } from '@tanstack/vue-table'
 import { Button } from '@/components/ui/button'
@@ -17,6 +17,7 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import { type ChartConfig, ChartContainer, ChartCrosshair, ChartTooltip, ChartTooltipContent, componentToString } from '@/components/ui/chart'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty'
+import HairlineEmptyArt from './HairlineEmptyArt.vue'
 import { Item, ItemActions, ItemContent, ItemDescription, ItemMedia, ItemTitle } from '@/components/ui/item'
 import { Kbd, KbdGroup } from '@/components/ui/kbd'
 import { Marker, MarkerContent, MarkerIcon } from '@/components/ui/marker'
@@ -37,7 +38,7 @@ const alertVisible = ref(true)
 const attachmentVisible = ref(true)
 const cardSaved = ref(false)
 const collapsedOpen = ref(false)
-const emptyCreated = ref(false)
+const emptyRecords = ref<string[]>([])
 const itemPinned = ref(false)
 const bubbleLiked = ref(false)
 const progress = ref(64)
@@ -216,8 +217,16 @@ function submitQuestionnaire(event: Event) {
   </div>
 
   <Empty v-else-if="name === 'empty'" class="p-5">
-    <EmptyHeader><EmptyMedia variant="icon"><FolderOpen /></EmptyMedia><EmptyTitle>{{ emptyCreated ? '第一张画布已就绪' : '画布还是空白' }}</EmptyTitle><EmptyDescription>{{ emptyCreated ? '演示画布已展开，继续挑选构件。' : '留白已准备好，放下第一个构件。' }}</EmptyDescription></EmptyHeader>
-    <EmptyContent><Button size="sm" variant="outline" @click="emptyCreated = !emptyCreated">{{ emptyCreated ? '重置演示' : '创建演示画布' }}</Button></EmptyContent>
+    <EmptyHeader>
+      <EmptyMedia><HairlineEmptyArt v-if="!emptyRecords.length" /><Check v-else class="size-6" aria-hidden="true" /></EmptyMedia>
+      <EmptyTitle>{{ emptyRecords.length ? '第一条记录，已放在此处。' : '暂无数据' }}</EmptyTitle>
+      <EmptyDescription>{{ emptyRecords.length ? '这条演示记录仅保存在当前页面。' : '这里还没有记录。放入第一条数据，让留白有了内容。' }}</EmptyDescription>
+    </EmptyHeader>
+    <EmptyContent>
+      <ul v-if="emptyRecords.length" class="empty-demo-records" aria-label="演示记录"><li v-for="record in emptyRecords" :key="record">{{ record }}</li></ul>
+      <Button size="sm" variant="outline" type="button" @click="emptyRecords = emptyRecords.length ? [] : ['纸面样本记录']">{{ emptyRecords.length ? '重置为空状态' : '添加演示记录' }}</Button>
+      <p class="demo-caption" role="status">{{ emptyRecords.length }} 条演示记录 · Hairline 静态占位图</p>
+    </EmptyContent>
   </Empty>
 
   <Item v-else-if="name === 'item'" variant="outline" size="sm" class="w-full">
@@ -317,6 +326,7 @@ function submitQuestionnaire(event: Event) {
 </template>
 
 <style scoped>
+.empty-demo-records { margin: 0; padding: 0; list-style: none; font-size: var(--milk-ui-font-body); line-height: var(--milk-ui-leading-body); }
 .landscape-frame { overflow: hidden; border: 1px solid transparent; border-radius: 10px; }
 .landscape-svg { width: 100%; height: 100%; }
 .avatar-row { min-height: 90px; }

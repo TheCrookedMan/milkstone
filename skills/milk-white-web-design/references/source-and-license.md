@@ -11,6 +11,10 @@ Milkstone 于 2026-10-09 从项目维护者提供的本地 neural-web-landing �
 
 分发位置是 `assets/shadcn-catalog/`，与根工程实际展示的本地源码同步；许可证原文随分发保留。安装后的技能应复制到工作目录再安装依赖。
 
+## Hairline 空状态示例
+
+2026-10-10 使用已安装的 `hairline-create` 制作空托盘示例。Hairline 的固定引擎与演示页面版权为 `Copyright (c) 2026 Lucas Marques`，适用 [随图保留的 MIT 许可](../assets/shadcn-catalog/src/components/shadcn-gallery/hairline/LICENSE.txt)。自包含 HTML 保留原始 kernel 和 bench；明暗 SVG 是该图形静止姿态的渲染快照。空托盘几何、Vue 承载与业务空状态组合由 Milkstone 编写。复用方法见 [空状态插图](empty-state-illustrations.md)。
+
 # 来源、范围与许可
 
 提炼日期：2026-10-09。

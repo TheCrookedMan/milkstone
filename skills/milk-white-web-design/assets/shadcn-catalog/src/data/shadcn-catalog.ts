@@ -42,7 +42,7 @@ export const shadcnCatalog: ShadcnCatalogItem[] = [
   { id: 'dialog', name: 'Dialog', label: '对话框', category: '导航与浮层', description: '暂时聚焦一件事，完成后回到原来的画面。', owner: 'overlay' },
   { id: 'drawer', name: 'Drawer', label: '底部抽屉', category: '导航与浮层', description: '从页面底部拉出一层，容纳当下需要的设置。', owner: 'overlay' },
   { id: 'dropdown-menu', name: 'Dropdown Menu', label: '下拉菜单', category: '导航与浮层', description: '把相关操作收进按钮旁的一列菜单。', owner: 'overlay' },
-  { id: 'empty', name: 'Empty', label: '空状态', category: '基础与展示', description: '留白也有方向，从第一个构件开始。', owner: 'display' },
+  { id: 'empty', name: 'Empty', label: '空状态', category: '基础与展示', description: '等距线稿托盘承接留白，从第一条记录开始。', owner: 'display' },
   { id: 'field', name: 'Field', label: '字段布局', category: '表单与输入', description: '标签、输入与反馈各就其位，组成完整字段。', owner: 'input' },
   { id: 'form', name: 'Form', label: '表单', category: '表单与输入', description: '把填写、校验与提交反馈接成一次完整操作。', owner: 'input', wide: true },
   { id: 'hover-card', name: 'Hover Card', label: '悬浮卡片', category: '导航与浮层', description: '停留片刻，查看名字背后的补充资料。', owner: 'overlay' },
