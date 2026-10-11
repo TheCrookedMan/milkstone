@@ -6,10 +6,10 @@ export { default as ChartLegendContent } from "./ChartLegendContent.vue"
 export { default as ChartTooltipContent } from "./ChartTooltipContent.vue"
 export { componentToString } from "./utils"
 
-// Milk charts share palette variables in both modes. Compatibility theme pairs
-// supplied by consumers must use inverse RGB colors with identical alpha.
+// Prefer semantic palette variables. Milk may override the light series palette;
+// existing light/dark theme pairs remain valid.
 // Format: { THEME_NAME: CSS_SELECTOR }
-export const THEMES = { light: "", dark: ":root[data-theme=dark]" } as const
+export const THEMES = { light: "", dark: ":root[data-theme=dark]", milk: ":root[data-theme=milk]" } as const
 
 export type ChartConfig = {
   [k in string]: {
@@ -17,7 +17,7 @@ export type ChartConfig = {
     icon?: string | Component
   } & (
     | { color?: string, theme?: never }
-    | { color?: never, theme: Record<keyof typeof THEMES, string> }
+    | { color?: never, theme: Record<"light" | "dark", string> & Partial<Record<"milk", string>> }
   )
 }
 

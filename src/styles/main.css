@@ -40,7 +40,10 @@ dialog{position:fixed;inset:0;margin:auto;height:fit-content;color:var(--milk-in
 @media(min-width:901px) and (max-width:1120px){.brand small{display:none}.nav{gap:18px}}
 
 .theme-spec-control{display:flex;align-items:center;gap:16px;margin-top:20px;font-size:13px}.theme-spec-note{font-size:11px;margin-top:18px}.theme-scroll-note{max-width:680px;margin:24px 0 0;font-size:14px;line-height:1.7}
-@media(max-width:600px){.header .nav .pill{display:none}.brand{font-size:23px}.theme-spec-control{flex-wrap:wrap;gap:12px}}
+.theme-spec-description{font-size:14px;line-height:1.8}
+.swatch-label{display:flex;flex-direction:column;gap:5px;line-height:1.4}
+.swatch-label small{font:10px/1.4 monospace;color:var(--milk-muted)}
+@media(max-width:600px){.header .nav .pill{display:none}.header .nav{padding:5px}.brand{font-size:23px}.theme-spec-control{flex-wrap:wrap;gap:12px}}
 
 /* Quiet structural dividers use the same soft highlight as the component rims. */
 .header,.section{border-image:var(--milk-border-gradient) 1}

@@ -57,11 +57,11 @@ src/
 
 ## UI 与动效集成
 
-以下颜色以默认 light 为基准，dark 使用对应深色背景、主题及文本，表面、边框与八类柔影按角色校准颜色和透明度，保持相同光照关系、凸起与凹槽感及交互几何，见 [双模式主题](theme-modes.md)。
+以下颜色以默认 light 为基准，dark 使用对应深色背景、主题及文本，milk 使用牛奶柔白背景、暖白凸面和浅暖灰凹槽，表面、边框与八类柔影按角色校准颜色和透明度，保持相同光照关系、凸起与凹槽感及交互几何，见 [三种主题](theme-modes.md)。
 
 Tailwind 4 使用 Vite 插件，入口先 `@import "tailwindcss"` 再引入令牌，需要工具类时用 `@theme inline` 映射，如 `--color-background: var(--milk-canvas)`。milk-* 名称保持兼容，其值遵循 [浅灰柔和拟物设计系统](design-system.md)，shadcn 的 background、card、popover、primary、muted、border、ring、destructive 同源映射。普通实体外框和已有结构边界采用 1px 半透明白边，图片专用 3px 白色 rim；复用 --milk-border-width、--milk-border-color 与 --milk-border-gradient，圆角外框可用 padding-box/border-box，无圆角单边结构线可用同源 border-image。Card 和浮层使用外浮柔影，按钮及选中拨片使用小尺度外浮柔影，输入和 Tabbar 凹槽使用内凹阴影；八类阴影角色以 milk-tokens.css 为参数来源。左上白色高光与右下灰色投影配合灰白表面形成柔和层次。milk-relief 及角色类保留兼容，depth 为 0，不再构造伪元素硬底座或 isolation 结构。文字布局不额外套框，图形内容线保留信息含义。实际聚焦控件在已有边框内显示统一柔和渐变流光，保留正常边框几何与柔影；成功装饰时取消外围 outline 与 ring，未接管时保留可见键盘 outline 回退，见 [焦点规范](design-system.md)。画布为 #e9eaee，纸纹静态且极轻，错误状态通过图标和文字表达。
 
-颜色令牌与 `html[data-theme]` 由源码主题控制器管理，启动调用 `initTheme`，切换调用 `setTheme`；`milk-design-theme` 记住选择，变化派发 `milk-theme-change`。令牌默认定义于 :root；嵌入已有系统时可限定主题容器。Teleport 的 Dialog／Popover 根同样需要主题类或主题化 portal 容器，不能丢失 CSS 变量。保留 Reka 焦点和键盘语义。
+颜色令牌与 `html[data-theme]` 由源码主题控制器管理，启动调用 `initTheme`，三选项切换调用 `setTheme` 设置 `light`、`dark` 或 `milk`；`milk-design-theme` 记住选择，变化派发 `milk-theme-change`。令牌默认定义于 :root；嵌入已有系统时可限定主题容器。Teleport 的 Dialog／Popover 根同样需要主题类或主题化 portal 容器，不能丢失 CSS 变量。保留 Reka 焦点和键盘语义。
 
 ECharts/Unovis 等非 CSS 取色通过同一控制器按文本、网格和数据系列角色适配，避免对已解析 CSS 令牌重复取反。Canvas/WebGL 保持星体、建筑与发光的自然照明，只更新需要主题对比的背景、坐标、轨道和标签；主题变化后重绘已有数据，几何和动画相位保持，不通过整页 filter 替代源码取色。
 
@@ -69,7 +69,7 @@ ECharts/Unovis 等非 CSS 取色通过同一控制器按文本、网格和数据
 
 页面入场复用 assets/reveal-controller.ts 与 assets/milk-motion.css，在 mount 后调用 initRevealMotion()，以 data-milk-reveal 标记单元素、data-milk-reveal-group 标记直接子项分组。原生 IntersectionObserver 触发一次 700ms 渐显／18px 上移，组内延迟按 80ms 递增并封顶 240ms；MutationObserver 登记异步组件、筛选和路由新增内容，无新增动画依赖。旋转媒体、可拖节点和连续动画保留自身 transform，入场仅施加到包装层。返回清理函数接入卸载与 HMR dispose；键盘聚焦时立即显示，减少动态效果、缺少观察器或清理后内容完整可见，详见 [交互规范](motion-and-network.md)。
 
-按钮触感复用 assets/press-controller.ts 的委托控制器，在 initTheme() 后、mount 前调用 initPressFeedback()，返回清理函数接入卸载与 HMR dispose。统一令牌规定 100ms 按下、至少 112ms 反馈和 420ms 平稳回位，默认位移 2px、缩放 0.975；不延迟业务 click，不让按压覆盖浮层定位、节点拖拽或滑杆行为。两模式共用运动几何，减少动态效果只保留即时材质反馈，详见 [交互规范](motion-and-network.md)。
+按钮触感复用 assets/press-controller.ts 的委托控制器，在 initTheme() 后、mount 前调用 initPressFeedback()，返回清理函数接入卸载与 HMR dispose。统一令牌规定 100ms 按下、至少 112ms 反馈和 420ms 平稳回位，默认位移 2px、缩放 0.975；不延迟业务 click，不让按压覆盖浮层定位、节点拖拽或滑杆行为。三种风格共用运动几何，减少动态效果只保留即时材质反馈，详见 [交互规范](motion-and-network.md)。
 
 焦点集成与令牌、入场样式一同引入 assets/milk-focus.css，在应用入口调用一次 assets/focus-controller.ts 的 initFocusBorder()；返回清理函数接入卸载与 HMR dispose。由共享控制器跟随真实焦点、复合输入活动格及 Portal，单个 SVG 装饰贴合边框内侧，不更改业务 DOM 的键盘语义。减少动态效果为静态亮边，forced-colors 使用 Highlight；初始化失败或清理后保留可见键盘 outline，详见 [交互规范](motion-and-network.md)。
 

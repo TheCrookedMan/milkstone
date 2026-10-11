@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils"
 import { useTheme } from "@/theme-controller"
 
 const props = defineProps<ToasterProps>()
-const { theme } = useTheme()
+const { isDark } = useTheme()
 </script>
 
 <template>
@@ -47,7 +47,7 @@ const { theme } = useTheme()
       '--border-radius': 'var(--radius)',
     }"
     v-bind="props"
-    :theme="theme"
+    :theme="isDark ? 'dark' : 'light'"
   >
     <template #success-icon>
       <CircleCheckIcon class="size-4" />

@@ -12,6 +12,12 @@
   --milk-focus-flow-jade:#91c7bf;
   --milk-focus-flow-lilac:#c0addd;
 }
+:root[data-theme="milk"] {
+  --milk-focus-rim:#898779;
+  --milk-focus-flow:#94aebd;
+  --milk-focus-flow-jade:#98b8a9;
+  --milk-focus-flow-lilac:#b9a7bd;
+}
 /* Keep a native keyboard fallback until the controller has drawn its light. */
 :focus-visible { outline:2px solid var(--milk-focus)!important; outline-offset:2px!important }
 /* Main is a skip-navigation destination, not a control surface. Keep focus

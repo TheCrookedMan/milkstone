@@ -14,7 +14,7 @@ Chart 与 Data Table 是基础组件和数据工具的组合示例，Typography 
 
 ## 技能内独立运行
 
-`assets/shadcn-catalog/` 是独立的 Vue / Vite / pnpm 沙盒，包含完整 `src/components/ui/`、三组 gallery 示例、目录数据、纸感材质 `shadcn-theme.css`、字阶与间距 `shadcn-metrics.css`、`milk-tokens.css` 与双模式主题资源、自己的 `components.json` 和锁文件。根工程 `src/` 是开发来源，打包时将这些源码同步至沙盒；修改根源码后重新打包，避免两份示例分叉。
+`assets/shadcn-catalog/` 是独立的 Vue / Vite / pnpm 沙盒，包含完整 `src/components/ui/`、三组 gallery 示例、目录数据、纸感材质 `shadcn-theme.css`、字阶与间距 `shadcn-metrics.css`、`milk-tokens.css` 与三种主题资源、自己的 `components.json` 和锁文件。根工程 `src/` 是开发来源，打包时将这些源码同步至沙盒；修改根源码后重新打包，避免两份示例分叉。
 
 复制整个 `assets/shadcn-catalog/` 到工作目录后，在复制出的目录执行：
 
@@ -27,13 +27,13 @@ pnpm dev
 
 在工作副本安装依赖，不在技能安装目录直接运行安装命令。完整沙盒使用自己的锁文件；移入已有项目时保留项目原有包管理器，并按所用组件补依赖。
 
-## 浅灰柔和拟物主题
+## 统一柔和拟物主题
 
-以下材料以默认 light 为基准，dark 使用对应深色主题，材质颜色与透明度按相近感知深度校准；保持左上受光、右下投影、凸面较亮、凹槽较暗以及相同边框宽度、阴影几何和交互几何，见 [双模式主题](theme-modes.md)。
+以下材料以默认 light 为基准，dark 使用对应深色主题，milk 使用牛奶柔白、暖白受光面与浅暖灰凹槽，材质颜色与透明度按相近感知深度校准；保持左上受光、右下投影、凸面较亮、凹槽较暗以及相同边框宽度、阴影几何和交互几何，见 [三种主题](theme-modes.md)。
 
-将 shadcn 的 background、foreground、card、popover、primary、secondary、muted、accent、border、input、ring 与 chart 系列映射到 [浅灰柔和拟物设计令牌](design-system.md)。两模式复用同一套组件状态样式，接入上游组件时去除与此规则冲突的 `dark:` 材质和 ring 差异，黑版通过同一语义令牌体系校准颜色与透明度，不能让凸面变凹或将输入槽变为外浮。画布使用 #e9eaee 与极轻随机纸纹，#ebedf1 面板、#eef0f4 凸面及 #e4e6eb 凹槽协调过渡，深蓝灰文字保持可读。选中拨片与主操作通过较亮凸面和柔影浮起；图形数据可保持灰阶。错误与完成状态同时有图标与说明，不依赖彩色。图表用亮度、线型和图例区分数据。Switch 开启采用低饱和玉绿色槽面与“开”，关闭采用中性灰槽面与“关”，同时保留拨片位置，避免仅依赖灰度或颜色；两模式通过 --milk-switch-on-surface／--milk-switch-on-ink 与 --milk-switch-off-surface／--milk-switch-off-ink 校准清晰的状态对比，原有凹槽、凸面和阻尼几何保持一致。装饰状态文字不改变可访问名称，真实状态仍由 Reka 的 aria-checked 表达。
+将 shadcn 的 background、foreground、card、popover、primary、secondary、muted、accent、border、input、ring 与 chart 系列映射到 [浅灰柔和拟物设计令牌](design-system.md)。三种风格复用同一套组件状态样式，接入上游组件时去除与此规则冲突的 `dark:` 材质和 ring 差异，黑版与乳白版通过同一语义令牌体系校准颜色与透明度，不能让凸面变凹或将输入槽变为外浮。画布使用 #e9eaee 与极轻随机纸纹，#ebedf1 面板、#eef0f4 凸面及 #e4e6eb 凹槽协调过渡，深蓝灰文字保持可读。选中拨片与主操作通过较亮凸面和柔影浮起；图形数据可保持灰阶。错误与完成状态同时有图标与说明，不依赖彩色。图表用亮度、线型和图例区分数据。Switch 开启采用低饱和玉绿色槽面与“开”，关闭采用中性灰槽面与“关”，同时保留拨片位置，避免仅依赖灰度或颜色；三种风格通过 --milk-switch-on-surface／--milk-switch-on-ink 与 --milk-switch-off-surface／--milk-switch-off-ink 校准清晰的状态对比，原有凹槽、凸面和阻尼几何保持一致。装饰状态文字不改变可访问名称，真实状态仍由 Reka 的 aria-checked 表达。
 
-Card、按钮、TabsList、Input、Textarea、Select、面板与 Portal 普通外框采用 1px 半透明白边，图片区专用 3px 白色 rim；页面、列表和表格现有结构边界复用普通边框。复用 --milk-border-width、--milk-border-color 和 --milk-border-gradient，圆角外框可用 padding-box/border-box，无圆角单边结构线可用同源 border-image，不为文字布局新增外框。Card 使用外浮柔影，Button 与选中的 TabsTrigger 使用小尺度外浮柔影；TabsList 为 recessed 凹槽，未选中 Tab 融入槽面，Input、Textarea 与读数窗使用内凹表面及阴影。八类阴影按角色复用 milk-tokens.css，左上白色高光和右下灰色投影形成柔和层次。milk-relief 及角色类保留兼容，depth 为 0，不再绘制伪元素硬底座或 isolation 结构。按压保留表面变化与小幅位移，文字按主题切换并保持清楚。Button、TabsTrigger、链接、Input、Textarea、Select、Combobox 与菜单项聚焦时，在已有边框内显示统一荧光流动效果，不改变原边框几何和柔影。InputGroup、Tags 等复合输入仅选一个可见边界，PIN/OTP 跟随活动格。成功装饰时取消额外 outline 与 Tailwind ring，未接管时保留可见键盘 outline 回退；减少动态效果显示静态亮边，强制颜色模式使用 Highlight，详见 [焦点规范](design-system.md)。此规则同样覆盖 dark 与 Portal，保留 Reka 键盘、ARIA 和焦点管理。Dialog、Popover、Dropdown、Tooltip、Sheet 和通知的 Portal 根继承相同规范，随 html[data-theme] 同步；Unovis 非 CSS 取色按文本、网格与数据系列角色读取当前主题，不对已解析 CSS 令牌重复取反。
+Card、按钮、TabsList、Input、Textarea、Select、面板与 Portal 普通外框采用 1px 半透明白边，图片区专用 3px 白色 rim；页面、列表和表格现有结构边界复用普通边框。复用 --milk-border-width、--milk-border-color 和 --milk-border-gradient，圆角外框可用 padding-box/border-box，无圆角单边结构线可用同源 border-image，不为文字布局新增外框。Card 使用外浮柔影，Button 与选中的 TabsTrigger 使用小尺度外浮柔影；TabsList 为 recessed 凹槽，未选中 Tab 融入槽面，Input、Textarea 与读数窗使用内凹表面及阴影。八类阴影按角色复用 milk-tokens.css，左上白色高光和右下灰色投影形成柔和层次。milk-relief 及角色类保留兼容，depth 为 0，不再绘制伪元素硬底座或 isolation 结构。按压保留表面变化与小幅位移，文字按主题切换并保持清楚。Button、TabsTrigger、链接、Input、Textarea、Select、Combobox 与菜单项聚焦时，在已有边框内显示统一荧光流动效果，不改变原边框几何和柔影。InputGroup、Tags 等复合输入仅选一个可见边界，PIN/OTP 跟随活动格。成功装饰时取消额外 outline 与 Tailwind ring，未接管时保留可见键盘 outline 回退；减少动态效果显示静态亮边，强制颜色模式使用 Highlight，详见 [焦点规范](design-system.md)。此规则同样覆盖所有主题与 Portal，保留 Reka 键盘、ARIA 和焦点管理。Dialog、Popover、Dropdown、Tooltip、Sheet 和通知的 Portal 根继承相同规范，随 html[data-theme] 同步；Unovis 非 CSS 取色按文本、网格与数据系列角色读取当前主题，不对已解析 CSS 令牌重复取反。
 
 ## 字阶、密度与组合
 
@@ -61,7 +61,7 @@ Card、按钮、TabsList、Input、Textarea、Select、面板与 Portal 普通�
 
 窄屏 Card 内边距可降至 20px，标准字号和普通控件高度保持；组合字段、操作区和导航优先换行，确需横向滚动时保留清晰边界。子项设置可收缩宽度，说明允许换行，长名称按实际可用空间折行或截断，浮层宽度限制在视口内。不能靠固定桌面宽度、裁剪文字或缩小字形消除溢出。
 
-Textarea、Sidebar、Table／Data Table、Message Scroller 与浮层的 scroll／auto 区域采用共享纸感滚动条：12px 凹槽轨道、圆角浮起滑块、白高光与微投影，悬浮加深、拖拽压实，light／dark 同向受光，横纵轴及 Portal 一致。原生使用 milk-tokens.css 的 thin／scrollbar-color 回退与受支持的 ::-webkit-scrollbar 完整样式；ScrollArea 自绘条在 shadcn-theme.css 复用相同材质，按 Reka 的 hover／scroll 语义显现，保留滑块拖拽、DOM 测量及键盘行为。仅隐藏 Reka 视口原生条等明确用途的局部滚动条，不改原有 overflow 或用 hidden／clip 裁切内容。区域边界和标签保持可辨，滚轮、触控与键盘仍能访问全部内容，独立非交互滚动区按需提供 tabindex="0" 和可访问名称，不覆盖基础组件自身焦点语义。
+Textarea、Sidebar、Table／Data Table、Message Scroller 与浮层的 scroll／auto 区域采用共享纸感滚动条：12px 凹槽轨道、圆角浮起滑块、白高光与微投影，悬浮加深、拖拽压实，light／dark／milk 同向受光，横纵轴及 Portal 一致。原生使用 milk-tokens.css 的 thin／scrollbar-color 回退与受支持的 ::-webkit-scrollbar 完整样式；ScrollArea 自绘条在 shadcn-theme.css 复用相同材质，按 Reka 的 hover／scroll 语义显现，保留滑块拖拽、DOM 测量及键盘行为。仅隐藏 Reka 视口原生条等明确用途的局部滚动条，不改原有 overflow 或用 hidden／clip 裁切内容。区域边界和标签保持可辨，滚轮、触控与键盘仍能访问全部内容，独立非交互滚动区按需提供 tabindex="0" 和可访问名称，不覆盖基础组件自身焦点语义。
 
 这些规则适用于 light、dark 及 Portal 内的组件，几何、层级与受光方向一致。保留基础组件的 props、插槽、尺寸变体和用户传入 `class` 的扩展能力；共享选择器按语义或组件标记作用，不通过全局 `!important` 锁死业务布局。覆盖上游默认密度时同时检查嵌套组合，避免 InputGroup 按钮、Calendar 日期、Sidebar 操作和表格工具栏被放大两次。
 
@@ -69,7 +69,7 @@ Textarea、Sidebar、Table／Data Table、Message Scroller 与浮层的 scroll�
 
 优先复用本地基础组件，业务页面只组合结构和传入数据。保留 Reka 的焦点管理、方向键、Escape、ARIA 与键盘导航；Label 关联真实输入，图标按钮提供名称。表单演示明确反馈校验和提交结果，菜单动作展示真实状态变化，日期、分页、筛选与步骤控件连接各自的状态。减少动态效果时仍可阅读所有内容。
 
-按钮与触发按键复用共享 press-controller.ts 和阻尼令牌：100ms 轻微下沉、至少 112ms 按下反馈、420ms 平稳回位，默认位移 2px、缩放 0.975，阴影同步变化，业务动作立即执行。TabsTrigger 位移 1px，Switch、Checkbox 和 Radio 原位缩放 0.98，保持自身选中／拨动几何。鼠标、触摸与 Space／Enter 共用短暂 data-milk-press 状态，禁用项不反馈；不要在组件内重复注册计时器，或用按压 transform 覆盖 Popover、Tooltip 和 Slider 的定位。减少动态效果时只保留即时材质反馈，两模式共用同一运动参数。详见 [交互规范](motion-and-network.md)。
+按钮与触发按键复用共享 press-controller.ts 和阻尼令牌：100ms 轻微下沉、至少 112ms 按下反馈、420ms 平稳回位，默认位移 2px、缩放 0.975，阴影同步变化，业务动作立即执行。TabsTrigger 位移 1px，Switch、Checkbox 和 Radio 原位缩放 0.98，保持自身选中／拨动几何。鼠标、触摸与 Space／Enter 共用短暂 data-milk-press 状态，禁用项不反馈；不要在组件内重复注册计时器，或用按压 transform 覆盖 Popover、Tooltip 和 Slider 的定位。减少动态效果时只保留即时材质反馈，三种风格共用同一运动参数。详见 [交互规范](motion-and-network.md)。
 
 按钮及触发按键的悬浮波纹复用 hover-controller.ts 与 milk-hover.css，从指针进入处轻柔扩散一次后淡出，保留原有表面、按压与柔和渐变焦点流光。共享委托同样覆盖 Portal，禁用、触摸及减少动态效果不播放；不要为波纹改写基础组件的事件、焦点管理或定位几何，详见 [交互规范](motion-and-network.md)。
 

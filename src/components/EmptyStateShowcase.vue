@@ -7,8 +7,8 @@ import illustrationUrl from './shadcn-gallery/hairline/hairline-empty-tray.html?
 import { useTheme } from '../theme-controller'
 
 const id = useId()
-const { theme } = useTheme()
-const interactiveUrl = computed(() => `${illustrationUrl}?theme=${theme.value}`)
+const { isDark } = useTheme()
+const interactiveUrl = computed(() => `${illustrationUrl}?theme=${isDark.value ? 'dark' : 'light'}`)
 const records = ref<string[]>([])
 const members = ref<string[]>([])
 const emptyQuery = '轨道之外'

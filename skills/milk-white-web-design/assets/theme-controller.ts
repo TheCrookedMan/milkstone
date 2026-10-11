@@ -1,10 +1,14 @@
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 
-export type ThemeMode = 'light' | 'dark'
+export type ThemeMode = 'light' | 'dark' | 'milk'
 export const THEME_STORAGE_KEY = 'milk-design-theme'
 export const THEME_EVENT = 'milk-theme-change'
-const BROWSER_COLORS: Record<ThemeMode, string> = { light: '#e9eaee', dark: '#1c1f24' }
+const BROWSER_COLORS: Record<ThemeMode, string> = { light: '#e9eaee', dark: '#1c1f24', milk: '#f4f1ea' }
 let current: ThemeMode = 'light'
+
+function storedTheme(value: string | null | undefined): ThemeMode {
+  return value === 'dark' || value === 'milk' ? value : 'light'
+}
 
 /** Exact RGB complement; alpha and geometry are never changed. */
 export function invertHex(color: string): string {
@@ -16,7 +20,7 @@ export function invertHex(color: string): string {
 }
 
 export function getTheme(): ThemeMode {
-  if (typeof document !== 'undefined') return document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light'
+  if (typeof document !== 'undefined') return storedTheme(document.documentElement.dataset.theme)
   return current
 }
 export function isDark(): boolean { return getTheme() === 'dark' }
@@ -35,7 +39,7 @@ function applyTheme(mode: ThemeMode) {
   current = mode
   if (typeof document === 'undefined') return
   document.documentElement.dataset.theme = mode
-  document.documentElement.style.colorScheme = mode
+  document.documentElement.style.colorScheme = mode === 'dark' ? 'dark' : 'light'
   document.querySelector('meta[name="theme-color"]')?.setAttribute('content', BROWSER_COLORS[mode])
   window.dispatchEvent(new CustomEvent(THEME_EVENT, { detail: mode }))
 }
@@ -47,7 +51,7 @@ export function setTheme(mode: ThemeMode) {
 
 export function initTheme() {
   let mode: ThemeMode = 'light'
-  try { if (localStorage.getItem(THEME_STORAGE_KEY) === 'dark') mode = 'dark' } catch { /* Default remains light. */ }
+  try { mode = storedTheme(localStorage.getItem(THEME_STORAGE_KEY)) } catch { /* Default remains light. */ }
   applyTheme(mode)
 }
 
@@ -55,7 +59,7 @@ export function useTheme() {
   const theme = ref<ThemeMode>(getTheme())
   const sync = () => { theme.value = getTheme() }
   const storage = (event: StorageEvent) => {
-    if (event.key === THEME_STORAGE_KEY) applyTheme(event.newValue === 'dark' ? 'dark' : 'light')
+    if (event.key === THEME_STORAGE_KEY || event.key === null) applyTheme(storedTheme(event.newValue))
   }
   onMounted(() => { sync(); window.addEventListener(THEME_EVENT, sync); window.addEventListener('storage', storage) })
   onUnmounted(() => { window.removeEventListener(THEME_EVENT, sync); window.removeEventListener('storage', storage) })

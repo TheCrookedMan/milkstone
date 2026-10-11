@@ -15,13 +15,13 @@
 
 ## 为什么叫 Milkstone
 
-**Milk** 对应冷灰纸白、柔和高光与细腻表面，**Stone** 对应石墨暗色、实体厚度与稳定的按压反馈。两种明暗共享一套材料角色、布局和交互规则。
+**Milk** 对应纸白与牛奶乳白、柔和高光与细腻表面，**Stone** 对应石墨暗色、实体厚度与稳定的按压反馈。白色、黑色、乳白三种风格共享一套材料角色、布局和交互规则。
 
 Milkstone 将可运行的页面、可编辑的组件源码和可供 Agent 复用的规范放在同一个工程中。你可以浏览组件、复制领域工作台，也可以安装技能，让 Agent 按相同的设计语言完成后续页面。
 
 ## 界面预览
 
-下图为仓库中真实运行的 Card、按钮、搜索框和分类导航。明暗模式保持相同的凸起与凹槽关系。
+下图为仓库中真实运行的 Card、按钮、搜索框和分类导航。三种风格保持相同的凸起与凹槽关系。下图展示纸白和石墨；新增乳白可在在线体验的“界面风格”中选择。
 
 | 纸白 / Light | 石墨 / Dark |
 | --- | --- |
@@ -75,7 +75,7 @@ pnpm dev --host 127.0.0.1
 | `/#/#relations` | 关系与星空 |
 | `/#/#campus` | 园区雷达 |
 | `/#/#workflow` | 节点工作流 |
-| `/#/#theme` | 明暗设计规范 |
+| `/#/#theme` | 白色、黑色与乳白设计规范 |
 | `/#/guide` | 使用指南 |
 
 ### 检查与构建
@@ -134,16 +134,18 @@ milkstone/
 
 ## 设计规范
 
-- **材料与光照**：冷灰纸白 / 石墨暗色，轻微纸纹；左上受光、右下柔影。Card 浮起，输入框和 Tabs 槽位内收，选中拨片浮起。
+- **材料与光照**：冷灰纸白 / 石墨暗色 / 牛奶乳白，轻微纸纹；左上受光、右下柔影。Card 浮起，输入框和 Tabs 槽位内收，选中拨片浮起。
 - **间距**：使用 4、8、12、16、24、32px 节奏；标签与控件 8px，独立分区 24px，操作区 12px。
 - **字阶**：辅助文字 12px、标签与普通按钮 13px、正文 14px、次标题 16px、Card 标题 18px、弹层标题 20px。
 - **尺寸**：普通控件 44px、small 36px、图标按钮 40px、Tabs 拨片 40px；日历与嵌入控件保留专用密度。
 - **渐入**：标题、卡片和工作台随视区逐层显现，700ms 淡入并轻移 18px；同组错峰 80ms，延迟上限 240ms。
 - **按压**：100ms 按下、至少 112ms 反馈、420ms 平稳回位；普通按钮下沉 2px、缩放至 0.975。
-- **明暗一致**：共用几何、层级与状态规则，按材料角色切换配色，保留相同的凸起和凹槽感。
+- **三种风格**：白色清爽、黑色沉静、乳白温润；共用几何、层级与状态规则，按材料角色切换配色，保留相同的凸起和凹槽感。
 - **轻触与焦点**：按钮悬浮时表面微波轻轻荡开，按下后阻尼回位；焦点以低饱和雾蓝、青玉与淡紫流光沿已有边缘游走，首尾自然渐隐。保留 Reka 的键盘、ARIA 和焦点管理，支持减少动态效果及静态焦点回退。
 
-详细说明：[设计规范](skills/milk-white-web-design/references/design-system.md) · [双模式主题](skills/milk-white-web-design/references/theme-modes.md) · [交互与动画](skills/milk-white-web-design/references/motion-and-network.md) · [组件目录规范](skills/milk-white-web-design/references/shadcn-catalog.md)。
+乳白以 `#f4f1ea` 牛奶柔白为基底，`#fbf9f4` 凸面与 `#e9e4da` 凹槽形成柔和层次，搭配暖白高光、浅暖灰投影与深灰褐文字；不改变组件的间距、字阶或阻尼。
+
+详细说明：[设计规范](skills/milk-white-web-design/references/design-system.md) · [三种主题](skills/milk-white-web-design/references/theme-modes.md) · [交互与动画](skills/milk-white-web-design/references/motion-and-network.md) · [组件目录规范](skills/milk-white-web-design/references/shadcn-catalog.md)。
 
 ## Agent Skill
 
@@ -171,7 +173,7 @@ node /path/to/milkstone/bin/milk-white-web-design.mjs install --target /path/to/
 安装后在支持的 Agent 中调用：
 
 ```text
-$milk-white-web-design 为我的产品实现纸感界面，支持明暗主题与实体交互。
+$milk-white-web-design 为我的产品实现纸感界面，支持白色、黑色、乳白主题与实体交互。
 ```
 
 ChatGPT 桌面插件注册、其他宿主路径与实际验证范围见 [Agent 接入说明](docs/agent-installation.md)。文件写入与宿主实际启用分别验证。

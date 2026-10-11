@@ -6,8 +6,8 @@
 
 首个图形是空托盘：盘体完整呈现，缺少的是其中的内容。它可作为通用占位图，由页面标题区分暂无数据、暂无用户或搜索无结果。
 
-- 应用内使用 [HairlineEmptyArt.vue](../assets/shadcn-catalog/src/components/shadcn-gallery/HairlineEmptyArt.vue) 承载 [浅色 SVG](../assets/shadcn-catalog/src/components/shadcn-gallery/hairline/empty-tray.svg) 与 [暗色 SVG](../assets/shadcn-catalog/src/components/shadcn-gallery/hairline/empty-tray-dark.svg) 的静止缩略图，复制组件时保留相邻 `hairline/` 目录，并沿用模板的 `@/theme-controller`。普通 Empty 展示使用这个轻量版本，不加载交互引擎。
-- 需要查看指针反馈时，单独打开 [Hairline 交互 HTML](../assets/shadcn-catalog/src/components/shadcn-gallery/hairline/hairline-empty-tray.html)。它是自包含演示，保留原始引擎和页面；使用 `?theme=light` 或 `?theme=dark` 选择其原生主题，避免整图反色。
+- 应用内使用 [HairlineEmptyArt.vue](../assets/shadcn-catalog/src/components/shadcn-gallery/HairlineEmptyArt.vue) 承载 [浅色 SVG](../assets/shadcn-catalog/src/components/shadcn-gallery/hairline/empty-tray.svg) 与 [暗色 SVG](../assets/shadcn-catalog/src/components/shadcn-gallery/hairline/empty-tray-dark.svg) 的静止缩略图，复制组件时保留相邻 `hairline/` 目录，并沿用模板的 `@/theme-controller`。普通 Empty 展示使用这个轻量版本，不加载交互引擎；milk 沿用浅色线稿，周围的容器与文字使用乳白主题令牌。
+- 需要查看指针反馈时，单独打开 [Hairline 交互 HTML](../assets/shadcn-catalog/src/components/shadcn-gallery/hairline/hairline-empty-tray.html)。它是自包含演示，保留原始引擎和页面；使用 `?theme=light` 或 `?theme=dark` 选择其原生主题。Hairline 引擎仅提供这两种原生主题；从乳白页面打开时明确回退为 `?theme=light`，保留浅色线稿与固定引擎，不传入未支持的 milk 参数或整图反色。
 - [empty-tray.js](../assets/shadcn-catalog/src/components/shadcn-gallery/hairline/empty-tray.js) 是可继续编辑和重新生成的图形源文件。它与 HTML、SVG 一起分发；修改时仍执行 `hairline-create` 的原始构建与验证流程，并保留 [Hairline 许可](../assets/shadcn-catalog/src/components/shadcn-gallery/hairline/LICENSE.txt)。
 
 静态缩略图不承诺悬停、旋转或拖动。独立交互演示用于查看图形的回应，业务空状态的标题与操作仍由 Empty 组件完成，不把整页演示缩成不可读的卡片内嵌页面。
@@ -38,6 +38,6 @@
 
 插图不代替空状态的标题、说明和按钮。常规占位图区建议宽 160–200px，保持原始纵横比，窄屏随容器缩小；图与标题间隔 16px，标题与说明间隔 8px，正文与操作间隔 24px。标题采用组件内 18px 字阶，说明 14px，辅助注记 12px，按钮复用现有 44px／36px 规格。父级 Card 仍使用统一内边距和材料令牌，不为每一条说明再套实体面板。
 
-周围的 Card、按钮和输入框沿用 [设计系统](design-system.md) 与 [双模式主题](theme-modes.md)，线稿保持克制，不通过整页反色或额外浮雕把细线变成厚重轮廓。应用内静态缩略图由承载组件接入主题；独立 Hairline HTML 使用原生主题参数，保持固定引擎与页面不变。分别检查明暗背景的可读性，不用 UI 投影规则改写插图自身的线条层级。
+周围的 Card、按钮和输入框沿用 [设计系统](design-system.md) 与 [三种主题](theme-modes.md)，线稿保持克制，不通过整页反色或额外浮雕把细线变成厚重轮廓。应用内静态缩略图由承载组件接入主题；独立 Hairline HTML 使用原生主题参数，保持固定引擎与页面不变。分别检查纸白、石墨与乳白背景的可读性，不用 UI 投影规则改写插图自身的线条层级。
 
 若标题已完整传达状态，插图作为装饰，不重复播报；有独立意义时提供简短替代说明。业务操作始终是可访问按钮或链接，键盘用户不必操作插图才能理解状态或继续。减少动态效果时保留完整静止图，离屏暂停并在卸载时清理图形；无 JavaScript 或交互不可用时，标题、说明和下一步仍可读可用。状态切换不无故抢夺焦点，不让持续图形读数成为 live region。

@@ -24,7 +24,7 @@ export const skillOverview = {
       id: 'interface', label: '界面交互', index: '02', summary: '让触碰与切换，都有回应。',
       items: [
         { name: 'Vue Router', version: dependencies['vue-router'], role: '连接组件展区、设计规范与使用指南。' },
-        { name: 'shadcn-vue', version: '本地源码', role: '70 项组件演示，共用纸面材质与明暗主题。' },
+        { name: 'shadcn-vue', version: '本地源码', role: '70 项组件演示，共用白色、黑色与乳白三种材质主题。' },
         { name: 'Reka UI', version: dependencies['reka-ui'], role: '处理标签切换、键盘导航与浮层焦点，让操作自然衔接。' },
         { name: 'VueUse', version: dependencies['@vueuse/core'], role: '连接响应式属性与系统偏好，让组件随环境调整。' },
         { name: 'GSAP', version: dependencies.gsap, role: '按需编排复杂转场，与内置渐入过渡和减少动态效果规范配合。' },
@@ -69,6 +69,6 @@ export const skillOverview = {
     { label: '本地预览 · 在项目根目录执行', command: 'pnpm install --frozen-lockfile\npnpm dev' },
     { label: '检查与交付 · 同步构建技能包', command: 'pnpm typecheck\npnpm build' },
     { label: '独立工作台 · 先复制技能的完整 assets 目录', command: 'cd component-lab\npnpm install --frozen-lockfile\npnpm dev' },
-    { label: '使用技能 · 安装后发送给 Agent', command: '$milk-white-web-design 为我的产品实现纸感界面，支持明暗主题与实体交互。' },
+    { label: '使用技能 · 安装后发送给 Agent', command: '$milk-white-web-design 为我的产品实现纸感界面，支持白色、黑色与乳白主题和实体交互。' },
   ],
 }
