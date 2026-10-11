@@ -22,19 +22,19 @@ description: 创建、改造或评审浅灰纸底与细微纹理、左上白高�
 - 需要节点编辑或 ComfyUI 数据交换时读取 [工作流编辑](references/workflow-editor.md)，复用 [工作台](assets/components/WorkflowStudio.vue)。
 - 完整组件沙盒与按需依赖见 [组件集成](references/component-integration.md)；所有演示数据和本地模拟状态须明确标记。
 - 初始化工程时读取 [初始化](references/project-initialization.md) 与 [架构](references/web-architecture.md)。独立示例是最小可运行样本，不覆盖已有 package.json。
-- 实现状态和动画时读取 [交互规范](references/motion-and-network.md)，复用 [入场控制器](assets/reveal-controller.ts)、[入场样式](assets/milk-motion.css)、[按压控制器](assets/press-controller.ts) 与统一阻尼令牌。
+- 实现状态和动画时读取 [交互规范](references/motion-and-network.md)，复用 [入场控制器](assets/reveal-controller.ts)、[入场样式](assets/milk-motion.css)、[按压控制器](assets/press-controller.ts)、[焦点控制器](assets/focus-controller.ts) 与 [焦点样式](assets/milk-focus.css)，保持统一阻尼和边框光效。
 - 交付前按 [验收](references/acceptance.md) 检查真实页面，注明未执行项。
 - 复用来源相关内容时读取 [来源与许可](references/source-and-license.md)。
 
 ## 核心约束
 
-light 基准：画布 #e9eaee、面板 #ebedf1、凸面 #eef0f4、浅亮面 #f4f5f8、凹槽 #e4e6eb、深面 #dfe2e8；正文 #2e3540、次字 #5b6573、图形内容线 #cdd2db、焦点 #6b7c93。极轻静态纸纹不能干扰读数。普通外框与结构边界采用 1px 半透明白边，图片区专用 3px 白 rim，圆角外框复用 milk-border-width、milk-border-color 与 milk-border-gradient；文字布局不额外套框。八类阴影恢复真实角色：milk-shadow、milk-card-shadow、milk-card-hover-shadow、milk-floating-shadow 为容器或 Card 外浮；milk-button-shadow、milk-hover-shadow 为小尺度外浮；milk-pressed、milk-control-shadow 为内凹，数值以 assets/milk-tokens.css 为准。表面复用 raised/recessed/panel 令牌，输入与 Tabbar 凹槽内凹、选中拨片浮起，按压有浅凹反馈。milk-relief 及角色类仅保留兼容，depth 为 0，不绘制硬底座、::before/::after 实体层或独立隔离层叠结构。保持清楚文字与可辨焦点反馈，默认、悬浮、按压、禁用和加载状态可辨。
+light 基准：画布 #e9eaee、面板 #ebedf1、凸面 #eef0f4、浅亮面 #f4f5f8、凹槽 #e4e6eb、深面 #dfe2e8；正文 #2e3540、次字 #5b6573、图形内容线 #cdd2db、焦点回退 #6b7c93。极轻静态纸纹不能干扰读数。普通外框与结构边界采用 1px 半透明白边，图片区专用 3px 白 rim，圆角外框复用 milk-border-width、milk-border-color 与 milk-border-gradient；文字布局不额外套框。八类阴影恢复真实角色：milk-shadow、milk-card-shadow、milk-card-hover-shadow、milk-floating-shadow 为容器或 Card 外浮；milk-button-shadow、milk-hover-shadow 为小尺度外浮；milk-pressed、milk-control-shadow 为内凹，数值以 assets/milk-tokens.css 为准。表面复用 raised/recessed/panel 令牌，输入与 Tabbar 凹槽内凹、选中拨片浮起，按压有浅凹反馈。milk-relief 及角色类仅保留兼容，depth 为 0，不绘制硬底座、::before/::after 实体层或独立隔离层叠结构。保持清楚文字与可辨焦点反馈，默认、悬浮、按压、禁用和加载状态可辨。
 
 两模式共用设计、材料角色与状态行为。dark 将背景、主题及文本切为对应深色配色，但高光与投影维持白版的光照关系：左上较亮、右下较暗，凸面亮于基底、凹槽暗于基底，选中拨片浮起。按相同角色校准暗色表面、边框、高光、阴影及其透明度，使默认、悬浮、按压、焦点、选中、禁用、加载和错误状态的深度感一致；阴影方向、偏移、模糊与扩展、边框宽度、圆角、尺寸、字体、间距和交互几何不变。选择记住并在刷新后恢复，DOM 与 Portal 复用语义令牌，图表按文本、网格和数据系列角色适配；图片、星体与建筑自然照明保持。由源码控制器及颜色令牌实现，不使用整页 filter。接口见 [双模式主题](references/theme-modes.md)。
 
 控件、图表、关系图、星空、园区扫描与工作流统一使用浅灰柔和拟物材质。页面元素进入视区时以 700ms 渐显并从下方 18px 归位，分组子项每隔 80ms 错峰、延迟上限 240ms，每个元素只播放一次。入场作用于内容包装层，不改变星体、媒体或拖拽节点自身的旋转与定位。按钮使用轻微机械阻尼：100ms 按下、至少保留 112ms 反馈、420ms 单调回位，位移 2px、缩放 0.975；Tab 位移 1px，小开关原位缩放 0.98，阴影同步压实。两模式时序相同，按键操作不等待动画；复用统一控制器，避免覆盖拖拽、滑杆和浮层定位。具体曲线、状态及减少动态效果规则见交互规范。图形内容可保持灰阶，以亮度、线型、形状、图标和文字区分状态。园区柔焦、粒子、扫描灯与余辉、星体光晕、太阳肌理及电流光尾保留自身内容光学与动态关系；它们和 UI 投影分别按各自含义呈现。
 
-按钮用 button，导航用链接，弹窗使用可访问对话框。Input、Textarea、Select、Combobox 及 InputGroup、Tags、PIN/OTP 等复合输入容器聚焦时不显示最外层 outline、Tailwind ring 或焦点边框变色，以内部 inset 材质变化、光标、选中与状态提示表达焦点；正常 1px 半透明边框和柔影保持。普通按钮、Tab 与链接仍保留可见键盘 outline。dark 与 Portal 同样遵循，保留键盘、ARIA 与焦点恢复行为。减少动态效果时去除位移和持续动画，信息仍完整可用。演示数据明确标注，真实接口失败不得回退为假成功。
+按钮用 button，导航用链接，弹窗使用可访问对话框。获取焦点的按钮、链接、输入、Tab 与菜单项统一在已有边框内显示冷白蓝荧光流动效果，不叠加最外层 outline 或 Tailwind ring，不改变尺寸、圆角和原有实体材质。复合输入仅选一处可见边界，PIN/OTP 跟随当前活动格；dark 与 Portal 同样遵循。仅在焦点装饰成功接管时移除原焦点外圈，控制器未初始化或无法装饰时保留可见键盘 outline；减少动态效果为静态亮边，强制颜色模式使用 Highlight，详见 [焦点规范](references/design-system.md)。保留键盘、ARIA 与焦点恢复行为。演示数据明确标注，真实接口失败不得回退为假成功。
 
 overflow 为 scroll／auto 的区域使用细而低调的纸感滚动条：凹槽轨道、圆角浮起滑块、白色高光与微投影，悬浮加深、拖拽压实；明暗保持同向光照，横纵轴及 Portal 一致，覆盖 Textarea、Sidebar、Table、Message 与 ScrollArea。不改原有 overflow，保留拖拽、滚轮、触控与键盘访问，具体令牌与原生回退见 [设计系统](references/design-system.md)。
 

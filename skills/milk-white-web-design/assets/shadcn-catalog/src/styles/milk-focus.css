@@ -1,0 +1,59 @@
+/* Focus is a cool light travelling on the existing rim, never a second box. */
+:root {
+  --milk-focus-rim:#637b9a;
+  --milk-focus-flow:#9abbe3;
+  --milk-focus-head:#f7fbff;
+  --milk-focus-glow:rgba(112,154,207,.55);
+  --milk-focus-lap:3s;
+}
+:root[data-theme="dark"] {
+  --milk-focus-rim:#aabbd0;
+  --milk-focus-flow:#b5d4f7;
+  --milk-focus-head:#ffffff;
+  --milk-focus-glow:rgba(151,195,245,.6);
+}
+/* Keep a native keyboard fallback until the controller has drawn its light. */
+:focus-visible { outline:2px solid var(--milk-focus)!important; outline-offset:2px!important }
+[data-milk-focus-source]:is(:focus,:focus-visible),
+[data-milk-focus-owner],
+[data-milk-focus-owner]:focus-within,
+:is([data-slot="attachment"],[data-slot="input-group"],[data-slot="number-field-content"],[data-slot="tags-input"],[data-slot="command-input-wrapper"],[data-slot="questionnaire-choice"]):has([data-milk-focus-source]),
+[data-slot="tags-input"]:has([data-milk-focus-source]) [data-slot="tags-input-item"][data-state="active"] {
+  outline:none!important;
+  outline-offset:0!important;
+  --tw-ring-shadow:0 0 transparent!important;
+  --tw-ring-offset-shadow:0 0 transparent!important;
+  --tw-ring-offset-width:0px!important;
+}
+.milk-focus-overlay {
+  position:fixed;
+  inset:0;
+  width:100vw;
+  height:100vh;
+  margin:0;
+  padding:0;
+  border:0;
+  z-index:2147483647;
+  pointer-events:none!important;
+  overflow:visible;
+  visibility:hidden;
+}
+.milk-focus-overlay * { pointer-events:none!important }
+.milk-focus-overlay path { stroke-width:2px; stroke-linecap:round; stroke-linejoin:round; vector-effect:non-scaling-stroke }
+.milk-focus-track { stroke:var(--milk-focus-rim); opacity:1 }
+.milk-focus-glow,.milk-focus-trail,.milk-focus-head { animation:milk-focus-flow var(--milk-focus-lap) linear infinite }
+.milk-focus-glow { stroke:var(--milk-focus-flow); stroke-width:4px!important; stroke-dasharray:17 83; opacity:.65; filter:drop-shadow(0 0 2px var(--milk-focus-glow)) }
+.milk-focus-trail { stroke:var(--milk-focus-flow); stroke-dasharray:13 87 }
+.milk-focus-head { stroke:var(--milk-focus-head); stroke-dasharray:3 97 }
+@keyframes milk-focus-flow { to { stroke-dashoffset:-100 } }
+@media(prefers-reduced-motion:reduce) {
+  .milk-focus-overlay path { animation:none!important }
+  .milk-focus-track { opacity:1; stroke:var(--milk-focus-rim) }
+  .milk-focus-glow,.milk-focus-trail,.milk-focus-head { display:none }
+}
+@media(forced-colors:active) {
+  :focus-visible { outline-color:Highlight!important }
+  .milk-focus-overlay { forced-color-adjust:none }
+  .milk-focus-track { stroke:Highlight; opacity:1 }
+  .milk-focus-glow,.milk-focus-trail,.milk-focus-head { display:none; animation:none!important }
+}

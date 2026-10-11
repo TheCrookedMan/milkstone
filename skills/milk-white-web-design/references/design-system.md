@@ -1,13 +1,13 @@
 # 纸感材质设计规范
 以下以默认 light 为基准，两模式共用材料角色、几何和状态行为。dark 使用对应深色背景、主题和文本；高光与投影维持相同光照方向，颜色及透明度按相近的感知深度校准，不作机械反色。圆角、尺寸、阴影方向/偏移/模糊/扩展、渐变方向/色标位置、边框宽度和交互几何保持，见 [双模式主题](theme-modes.md)。
 
-画布 #e9eaee；面板 #ebedf1；凸面 #eef0f4；浅亮面 #f4f5f8；凹槽 #e4e6eb；深面 #dfe2e8；兼容 --milk-warm 辅面 #e5e7ec；正文 #2e3540；次字 #5b6573；图形内容线 #cdd2db；焦点 #6b7c93。整体为协调的浅灰柔和拟物（soft neumorphic），圆角 Card 浮起，按钮呈紧凑胶囊，材料之间用轻微亮度差过渡。
+画布 #e9eaee；面板 #ebedf1；凸面 #eef0f4；浅亮面 #f4f5f8；凹槽 #e4e6eb；深面 #dfe2e8；兼容 --milk-warm 辅面 #e5e7ec；正文 #2e3540；次字 #5b6573；图形内容线 #cdd2db；焦点回退 #6b7c93。整体为协调的浅灰柔和拟物（soft neumorphic），圆角 Card 浮起，按钮呈紧凑胶囊，材料之间用轻微亮度差过渡。
 
 白版使用左上白色柔和高光与右下灰色柔和投影表现浮起；Card、按钮和图片的投影按各自尺度调整，图片投影较清晰但边缘柔软。输入框和读数窗使用内凹阴影，Tabbar 是凹槽，选中拨片浮起，未选中项融入凹槽。dark 继续让左上受光、右下投影，凸面比相邻基底亮、凹槽比相邻基底暗；内凹阴影保留左上内暗与右下内亮，不把高光和暗部交换。按压切到凹面并保留小幅位移，悬浮略加强浮起，不再绘制硬边底座。
 
 --milk-surface-raised 用于浮起顶面，--milk-surface-recessed 用于输入和 Tabbar 凹槽，--milk-surface-panel 用于面板；--milk-surface-side 保留兼容材料值，不用于硬侧面构造。页面保留极轻、不规则、静态纸纹，纹理不能抢占读数，不呈现点阵、旧纸或折痕。
 
-light 普通外框与结构边界使用 1px 半透明白边，图片区专用 3px 白色 rim；dark 保留高光边的受光含义，并按深色表面的明度与透明度校准。--milk-border-width 为 1px，--milk-border-color 对应 #ffffff99，--milk-border-gradient 为 145deg 的 #ffffffc2 到 #ffffff38；具体参数以 assets/milk-tokens.css 为准。圆角外框可用 padding-box/border-box 分层，无圆角单边结构线可沿用 border-image；不为无边界文字布局额外套框。图形内容线与非输入控件的键盘 outline 保留信息含义。
+light 普通外框与结构边界使用 1px 半透明白边，图片区专用 3px 白色 rim；dark 保留高光边的受光含义，并按深色表面的明度与透明度校准。--milk-border-width 为 1px，--milk-border-color 对应 #ffffff99，--milk-border-gradient 为 145deg 的 #ffffffc2 到 #ffffff38；具体参数以 assets/milk-tokens.css 为准。圆角外框可用 padding-box/border-box 分层，无圆角单边结构线可沿用 border-image；不为无边界文字布局额外套框。图形内容线保留信息含义，焦点边界按下述荧光规则统一。
 
 八类真实阴影复用统一令牌，不在组件里任意堆叠。颜色、透明度、偏移和模糊以 assets/milk-tokens.css 为唯一参数来源：
 
@@ -50,7 +50,11 @@ overflow 为 scroll／auto 的区域采用细而低调的纸感滚动条，保�
 
 通过表面边界、区域标签与内容层级辨识滚动范围，保留滑块拖拽、鼠标滚轮、触控板、触屏和键盘操作。独立且需要键盘滚动的非交互容器可设置 tabindex="0" 与可访问名称；已有输入和 Reka 控件保留自身焦点管理，不重复增加焦点入口。窄屏横向表格及浮层中的长内容必须可以滚动到末端，不以裁切内容消除溢出。
 
-面板圆角 24px、媒体 28px、输入框 12px、按钮胶囊 999px。按钮视觉紧凑，触控目标保持至少 44px。普通按钮、Tab 与链接的键盘焦点使用独立可见 outline。输入、下拉和复合输入容器（Input、Textarea、Select、Combobox、InputGroup、Tags、PIN/OTP）在 focus、focus-visible 或 focus-within 时不绘制最外层 outline、Tailwind ring，也不改变外边框颜色；以内部 inset 材质变化、光标、选中和状态提示表达焦点，保留正常 1px 半透明边框及柔影。dark 与 Portal 内控件使用相同规则，键盘操作、ARIA 和焦点恢复保持。正文与读数保持可读对比，不用模糊文字投影代替字形。默认、悬浮、按压、焦点、禁用与加载状态可辨。
+面板圆角 24px、媒体 28px、输入框 12px、按钮胶囊 999px。按钮视觉紧凑，触控目标保持至少 44px。正文与读数保持可读对比，不用模糊文字投影代替字形。默认、悬浮、按压、焦点、禁用与加载状态可辨。
+
+焦点统一沿实际聚焦元素的已有边框内侧表现：低亮稳定轨道上叠加冷白蓝荧光短光段，约 3s 绕圆角连续流动一周。装饰 SVG 绘制约 2px 宽的内侧亮边，不新增外圈，不改变 border 宽度、尺寸、圆角、布局或凸凹材质；装饰不接收指针且对辅助技术隐藏。覆盖按钮、链接、输入框、下拉触发器、Tab、菜单项及可聚焦滚动区，dark 与 Portal 共用同一规则。InputGroup、Tags 等复合输入只装饰一处可见边界，PIN/OTP 随当前活动格移动，不让外层与内部输入重复发光；需要显式指定可见边界时使用 data-milk-focus-surface。
+
+共享 assets/focus-controller.ts 的 initFocusBorder() 与 assets/milk-focus.css 接管焦点装饰；仅对成功装饰的目标关闭额外 outline 与 Tailwind ring，控制器未初始化、不可装饰或已清理时仍保留可见键盘 outline 回退。prefers-reduced-motion 停止流动并保留静态亮边，forced-colors 使用系统 Highlight，焦点不依赖动画才可辨。原有光标、选中、错误提示、ARIA、键盘导航和焦点恢复保持，集成和清理见 [交互规范](motion-and-network.md)。
 
 图片使用 3px 白色 rim、圆角和较清晰的柔软投影，保留图像内容辨识与替代文本。真实图像用 img 和明确尺寸，需要统一图形内容时可灰阶处理；不把产品图片全部换成装饰图形。
 

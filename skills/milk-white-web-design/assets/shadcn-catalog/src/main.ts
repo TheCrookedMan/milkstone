@@ -7,10 +7,13 @@ import App from './App.vue'
 import { initTheme } from './theme-controller'
 import { initPressFeedback } from './press-controller'
 import { initRevealMotion } from './reveal-controller'
+import { initFocusBorder } from './focus-controller'
 import './style.css'
 initTheme()
 const disposePressFeedback = initPressFeedback()
 import.meta.hot?.dispose(disposePressFeedback)
+const disposeFocusBorder = initFocusBorder()
+import.meta.hot?.dispose(disposeFocusBorder)
 createApp(App).mount('#app')
 const disposeRevealMotion = initRevealMotion(document.getElementById('app')!)
 import.meta.hot?.dispose(disposeRevealMotion)

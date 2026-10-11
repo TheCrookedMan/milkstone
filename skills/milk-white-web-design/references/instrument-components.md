@@ -3,7 +3,7 @@
 
 文字像刻印、Tab 像凹槽中的拨片、数值像仪表读数。浅灰表面以深蓝灰实心字、字重、排版和刻度表达刻印感，文字保持清楚；主按钮使用深色字，正文与读数保持可读对比。大字号数字可用等宽字，普通中文保持正常字重。
 
-实体按键采用紧凑胶囊外形、1px 半透明白边与浅灰凸面，左上白色高光和右下灰色柔影形成浮起感。按钮使用 --milk-button-shadow，悬浮使用 --milk-hover-shadow，按压切到 --milk-pressed 并保留小幅位移；小型功能槽使用 --milk-control-shadow。Tabbar 整体为 recessed 凹槽，选中拨片使用 raised 表面与按钮外浮阴影，未选中项融入槽面；输入及读数窗同样使用内凹表面与阴影。刻度、文字和明确位置反馈区分状态，不再绘制硬侧面底座；milk-relief 类仅作兼容，depth 为 0。按钮与 Tab 的键盘焦点使用独立 #6b7c93 outline；输入、下拉和复合输入容器使用内部材质与状态反馈，不显示最外层 outline、ring 或焦点边框变色，见 [焦点规范](design-system.md)。Reka Tabs 负责 roving focus、左右键、选中与内容语义，不手写无键盘行为的 role=tab。
+实体按键采用紧凑胶囊外形、1px 半透明白边与浅灰凸面，左上白色高光和右下灰色柔影形成浮起感。按钮使用 --milk-button-shadow，悬浮使用 --milk-hover-shadow，按压切到 --milk-pressed 并保留小幅位移；小型功能槽使用 --milk-control-shadow。Tabbar 整体为 recessed 凹槽，选中拨片使用 raised 表面与按钮外浮阴影，未选中项融入槽面；输入及读数窗同样使用内凹表面与阴影。刻度、文字和明确位置反馈区分状态，不再绘制硬侧面底座；milk-relief 类仅作兼容，depth 为 0。按钮、Tab、输入与下拉聚焦时沿已有边框内侧显示统一荧光流动效果，复合输入仅装饰一处可见边界，原有实体材质及几何保持；成功接管时取消额外外围 outline／ring，未接管时保留可见键盘 outline 回退，见 [焦点规范](design-system.md)。Reka Tabs 负责 roving focus、左右键、选中与内容语义，不手写无键盘行为的 role=tab。
 
 旋钮 SVG 仅是原生 range 的读数，键盘与辅助技术操作 range。刻度以亮度和长度区分主次并标明范围。开关使用 checkbox + role=switch，保留可见名称；灰阶状态灯配文字与明确的开关位置。不要在全部留白里重复刻度装饰。
 

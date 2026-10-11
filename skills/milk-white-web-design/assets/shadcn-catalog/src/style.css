@@ -6,6 +6,7 @@
 @import "./styles/milk-motion.css";
 @import "./styles/shadcn-theme.css";
 @import "./styles/shadcn-metrics.css";
+@import "./styles/milk-focus.css";
 .catalog-shell{max-width:1240px;margin:auto;padding:50px 40px 80px}
 .catalog-intro{padding:20px 0 35px}.catalog-intro h1{font-size:38px;font-weight:500;margin:12px 0}
 .catalog-intro p{color:var(--milk-muted)}.eyebrow{font-size:11px;letter-spacing:2px;color:var(--milk-muted)}

@@ -10,9 +10,12 @@ import './styles/main.css'
 import { initTheme } from './theme-controller'
 import { initPressFeedback } from '../skills/milk-white-web-design/assets/press-controller'
 import { initRevealMotion } from '../skills/milk-white-web-design/assets/reveal-controller'
+import { initFocusBorder } from '../skills/milk-white-web-design/assets/focus-controller'
 initTheme()
 const disposePressFeedback = initPressFeedback()
 import.meta.hot?.dispose(disposePressFeedback)
+const disposeFocusBorder = initFocusBorder()
+import.meta.hot?.dispose(disposeFocusBorder)
 createApp(App).use(createPinia()).use(router).mount('#app')
 const disposeRevealMotion = initRevealMotion(document.getElementById('app')!)
 import.meta.hot?.dispose(disposeRevealMotion)

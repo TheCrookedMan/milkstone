@@ -99,7 +99,7 @@
 }
 
 /* Soft raised surfaces share upper-left highlights and lower-right shading.
-   Inputs and tab wells use inset roles; keyboard focus retains its own outline. */
+   The shared focus border adds light without changing these material roles. */
 button[data-slot] { cursor:pointer; text-shadow:none }
 [data-slot=calendar-prev-button], [data-slot=calendar-next-button], [data-slot=pagination-item], [data-slot=range-calendar-prev-button], [data-slot=range-calendar-next-button] { border-color:transparent }
 :is([data-slot=button],[data-mono-button]), [data-slot=questionnaire-next], [data-slot=questionnaire-previous], [data-slot=questionnaire-submit] {
@@ -181,8 +181,6 @@ button[data-slot] { cursor:pointer; text-shadow:none }
 [data-slot=tooltip-content] kbd { --milk-border-surface:var(--milk-surface-recessed); color:var(--milk-color-555555) }
 :is([data-slot=empty-description],[data-slot=item-description],[data-slot=field-description]) a:hover { color:var(--milk-ink) }
 .paper-chart-tooltip { color:var(--milk-ink); --milk-border-surface:var(--milk-surface-panel); border-color:transparent; box-shadow:var(--milk-floating-shadow) }
-:is([data-slot],[data-mono-button]):focus-visible { outline:2px solid var(--milk-focus); outline-offset:3px }
-[data-slot=attachment]:focus-within { outline:2px solid var(--milk-focus); outline-offset:3px }
 [data-slot=table-container] { width:100%; min-width:0 }
 /* Unovis installs local dark defaults on its SVG component roots. Keep data
    geometry and labels on semantic roles in both modes. */
@@ -219,11 +217,6 @@ button[data-slot] { cursor:pointer; text-shadow:none }
 [data-sonner-toast] [data-description] { color:var(--milk-muted)!important }
 [data-sonner-toast] button { transform:none; text-shadow:none; padding:6px 10px; border:var(--milk-border-width) solid transparent; --milk-border-surface:var(--milk-surface-raised)!important; color:var(--milk-ink)!important; border-radius:10px; box-shadow:var(--shadcn-raised-shadow)!important }
 [data-sonner-toast] button:not(:disabled):active { --milk-border-surface:var(--milk-surface-recessed)!important; box-shadow:var(--shadcn-inset-shadow)!important }
-[data-sonner-toast] button:focus-visible,
-:is([data-slot=dialog-content],[data-slot=alert-dialog-content],[data-slot=sheet-content],[data-slot=drawer-content]) > button:focus-visible {
-  outline:2px solid var(--milk-focus)!important;
-  outline-offset:3px;
-}
 :is([data-slot=toast-close],[data-slot=sidebar-menu-button]):not(:disabled):active,
 :is([data-slot=dialog-content],[data-slot=alert-dialog-content],[data-slot=sheet-content],[data-slot=drawer-content]) > button:not(:disabled):active {
   --milk-border-surface:var(--milk-surface-recessed);
@@ -410,9 +403,8 @@ button[data-slot] { cursor:pointer; text-shadow:none }
 .shadcn-demo .layer-option { box-shadow:var(--milk-button-shadow) }
 .shadcn-demo .layer-option.is-selected, .shadcn-demo .layer-option:active, .shadcn-demo .reaction-button[aria-pressed=true], .shadcn-demo .reaction-button:active { box-shadow:var(--milk-pressed) }
 
-/* Field focus stays inside its material. Ordinary buttons, tabs and links retain
-   the keyboard outline above. Invalid fields also lose focus rings while their
-   attributes, messages and unfocused error states remain unchanged. */
+/* Focus keeps the inset material; milk-focus.css owns the luminous border and
+   removes extra rings only while the shared controller paints a visible owner. */
 :where(
   [data-slot=input], [data-slot=textarea], [data-slot=native-select], [data-slot=select-trigger],
   [data-slot=combobox-input], [data-slot=combobox-trigger], [data-slot=combobox-anchor],
@@ -426,11 +418,6 @@ button[data-slot] { cursor:pointer; text-shadow:none }
 :where([data-slot=input-group],[data-slot=tags-input],[data-slot=command-input-wrapper],[data-slot=questionnaire-choice]):focus-within,
 [data-slot=input-otp-slot][data-active=true],
 [data-slot=tags-input-item][data-state=active] {
-  outline:none!important;
-  outline-offset:0!important;
-  --tw-ring-shadow:0 0 transparent!important;
-  --tw-ring-offset-shadow:0 0 transparent!important;
-  --tw-ring-offset-width:0px!important;
   --milk-border-surface:linear-gradient(145deg,var(--milk-depth),var(--milk-inset));
   border-color:transparent!important;
   box-shadow:var(--milk-pressed)!important;
@@ -439,44 +426,28 @@ button[data-slot] { cursor:pointer; text-shadow:none }
 /* Search lanes and composite fields own the inset; their unframed children do not
    draw another box. The OTP input is an invisible editor behind the visible slots. */
 :where([data-slot=input-group-control],[data-slot=tags-input-input],[data-slot=command-input],[data-slot=questionnaire-choice-input],input[data-slot=input-otp]):is(:focus,:focus-visible) {
-  outline:none!important;
-  outline-offset:0!important;
-  --tw-ring-shadow:0 0 transparent!important;
-  --tw-ring-offset-shadow:0 0 transparent!important;
-  --tw-ring-offset-width:0px!important;
   box-shadow:none!important;
 }
 :where([data-slot=input-group],[data-slot=tags-input],[data-slot=command-input-wrapper]) :is(input,textarea):is(:focus,:focus-visible) { box-shadow:none!important }
 
-/* Floating dropdown panels keep their normal elevation without a focus outline. */
+/* Floating dropdown panels keep their normal elevation when focused. */
 :where(
   [data-slot=select-content], [data-slot=combobox-content], [data-slot=combobox-list],
   [data-slot=dropdown-menu-content], [data-slot=dropdown-menu-sub-content],
   [data-slot=context-menu-content], [data-slot=context-menu-sub-content],
   [data-slot=menubar-content], [data-slot=menubar-sub-content]
 ):is(:focus,:focus-visible) {
-  outline:none!important;
-  outline-offset:0!important;
-  --tw-ring-shadow:0 0 transparent!important;
-  --tw-ring-offset-shadow:0 0 transparent!important;
-  --tw-ring-offset-width:0px!important;
   border-color:transparent!important;
   box-shadow:var(--milk-floating-shadow)!important;
 }
 
-/* Menu choices communicate keyboard focus with their highlighted background and
-   selection indicator, without an additional outline around each option. */
+/* Menu choices retain selection backgrounds beneath the shared focus border. */
 :where(
   [data-slot=select-item], [data-slot=combobox-item], [data-slot=command-item],
   [data-slot=dropdown-menu-item], [data-slot=dropdown-menu-checkbox-item], [data-slot=dropdown-menu-radio-item],
   [data-slot=context-menu-item], [data-slot=context-menu-checkbox-item], [data-slot=context-menu-radio-item],
   [data-slot=menubar-item], [data-slot=menubar-checkbox-item], [data-slot=menubar-radio-item]
 ):is(:focus,:focus-visible) {
-  outline:none!important;
-  outline-offset:0!important;
-  --tw-ring-shadow:0 0 transparent!important;
-  --tw-ring-offset-shadow:0 0 transparent!important;
-  --tw-ring-offset-width:0px!important;
   box-shadow:none!important;
 }
 

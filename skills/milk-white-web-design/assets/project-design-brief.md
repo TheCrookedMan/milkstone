@@ -15,7 +15,7 @@
 
 ## 设计决策
 
-记录画布、灰白材料、文本、焦点与状态令牌，字体、密度、容器、断点和反馈。light 基准为 canvas #e9eaee、panel #ebedf1、raised #eef0f4、light #f4f5f8、inset #e4e6eb、depth #dfe2e8；正文 #2e3540、次字 #5b6573、焦点 #6b7c93。采用浅灰柔和拟物：Card 圆角浮起、按钮紧凑胶囊，左上白高光、右下灰柔影，输入和 Tabbar 凹槽内凹、选中 Tab 浮起。普通外框与结构边界 1px 半透明白，图片专用 3px 白 rim 和较清晰柔软投影。八类阴影按外浮、小外浮、内凹与浮层复用，具体数值以 assets/milk-tokens.css 为准。milk-relief 类保留兼容，depth 为 0，不创建伪元素硬底座或 isolation 结构。极轻纸纹不干扰读数，输入、下拉与复合输入容器用内部材质及状态提示表达焦点，正常边框/柔影保持且无外圈 outline、ring 或焦点边框变色；普通按钮、Tab 与链接保留键盘 outline，dark 与 Portal 同样遵循，园区柔焦、扫描灯、星体光晕和电流光尾保持内容含义。
+记录画布、灰白材料、文本、焦点与状态令牌，字体、密度、容器、断点和反馈。light 基准为 canvas #e9eaee、panel #ebedf1、raised #eef0f4、light #f4f5f8、inset #e4e6eb、depth #dfe2e8；正文 #2e3540、次字 #5b6573、焦点回退 #6b7c93。采用浅灰柔和拟物：Card 圆角浮起、按钮紧凑胶囊，左上白高光、右下灰柔影，输入和 Tabbar 凹槽内凹、选中 Tab 浮起。普通外框与结构边界 1px 半透明白，图片专用 3px 白 rim 和较清晰柔软投影。八类阴影按外浮、小外浮、内凹与浮层复用，具体数值以 assets/milk-tokens.css 为准。milk-relief 类保留兼容，depth 为 0，不创建伪元素硬底座或 isolation 结构。极轻纸纹不干扰读数，获取焦点的控件沿已有边框内侧显示统一冷白蓝荧光流动效果，不改变正常边框几何或柔影；复合输入仅装饰一处可见边界，PIN/OTP 跟随活动格。成功接管时取消额外外围 outline／ring，未接管时保留可见键盘 outline 回退，dark 与 Portal 同样遵循，详见 [焦点规范](../references/design-system.md)。园区柔焦、扫描灯、星体光晕和电流光尾保持内容含义。
 
 记录 light／dark 切换入口与选择记忆。两模式共用设计、材料角色及默认、悬浮、按压、焦点、选中、禁用和错误状态行为。dark 采用对应深色背景、主题及文本配色；保持左上受光、右下投影，凸面亮于基底、凹槽暗于基底、选中 Tab 浮起，按角色校准材质颜色与透明度以维持相同感知深度。阴影方向/偏移/模糊/扩展、渐变位置、圆角、尺寸、字体、间距、边框宽度及布局保持。通过源码控制器、html data-theme 与语义令牌统一 DOM、Portal、图表及工作流；Canvas/WebGL 中星体、建筑与发光保持自然照明，不做全场反色，不使用整页 filter。localStorage 键 milk-design-theme，变化事件 milk-theme-change，接口见 [双模式主题](../references/theme-modes.md)。
 

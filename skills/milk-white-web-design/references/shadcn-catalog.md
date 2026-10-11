@@ -33,11 +33,11 @@ pnpm dev
 
 将 shadcn 的 background、foreground、card、popover、primary、secondary、muted、accent、border、input、ring 与 chart 系列映射到 [浅灰柔和拟物设计令牌](design-system.md)。两模式复用同一套组件状态样式，接入上游组件时去除与此规则冲突的 `dark:` 材质和 ring 差异，黑版通过同一语义令牌体系校准颜色与透明度，不能让凸面变凹或将输入槽变为外浮。画布使用 #e9eaee 与极轻随机纸纹，#ebedf1 面板、#eef0f4 凸面及 #e4e6eb 凹槽协调过渡，深蓝灰文字保持可读。选中拨片与主操作通过较亮凸面和柔影浮起；图形数据可保持灰阶。错误与完成状态同时有图标与说明，不依赖彩色。图表用亮度、线型和图例区分数据。
 
-Card、按钮、TabsList、Input、Textarea、Select、面板与 Portal 普通外框采用 1px 半透明白边，图片区专用 3px 白色 rim；页面、列表和表格现有结构边界复用普通边框。复用 --milk-border-width、--milk-border-color 和 --milk-border-gradient，圆角外框可用 padding-box/border-box，无圆角单边结构线可用同源 border-image，不为文字布局新增外框。Card 使用外浮柔影，Button 与选中的 TabsTrigger 使用小尺度外浮柔影；TabsList 为 recessed 凹槽，未选中 Tab 融入槽面，Input、Textarea 与读数窗使用内凹表面及阴影。八类阴影按角色复用 milk-tokens.css，左上白色高光和右下灰色投影形成柔和层次。milk-relief 及角色类保留兼容，depth 为 0，不再绘制伪元素硬底座或 isolation 结构。按压保留表面变化与小幅位移，文字按主题切换并保持清楚。Input、Textarea、Select、Combobox、InputGroup、Tags 和 PIN/OTP 等输入容器聚焦时取消最外层 outline、Tailwind ring 与焦点边框变色，正常边框和柔影保持，通过内部 inset 材质、光标与选中/状态提示表达焦点；普通 Button、TabsTrigger 和链接保留键盘 outline。此规则同样覆盖 dark 与 Portal，保留 Reka 键盘、ARIA 和焦点管理。Dialog、Popover、Dropdown、Tooltip、Sheet 和通知的 Portal 根继承相同规范，随 html[data-theme] 同步；Unovis 非 CSS 取色按文本、网格与数据系列角色读取当前主题，不对已解析 CSS 令牌重复取反。
+Card、按钮、TabsList、Input、Textarea、Select、面板与 Portal 普通外框采用 1px 半透明白边，图片区专用 3px 白色 rim；页面、列表和表格现有结构边界复用普通边框。复用 --milk-border-width、--milk-border-color 和 --milk-border-gradient，圆角外框可用 padding-box/border-box，无圆角单边结构线可用同源 border-image，不为文字布局新增外框。Card 使用外浮柔影，Button 与选中的 TabsTrigger 使用小尺度外浮柔影；TabsList 为 recessed 凹槽，未选中 Tab 融入槽面，Input、Textarea 与读数窗使用内凹表面及阴影。八类阴影按角色复用 milk-tokens.css，左上白色高光和右下灰色投影形成柔和层次。milk-relief 及角色类保留兼容，depth 为 0，不再绘制伪元素硬底座或 isolation 结构。按压保留表面变化与小幅位移，文字按主题切换并保持清楚。Button、TabsTrigger、链接、Input、Textarea、Select、Combobox 与菜单项聚焦时，在已有边框内显示统一荧光流动效果，不改变原边框几何和柔影。InputGroup、Tags 等复合输入仅选一个可见边界，PIN/OTP 跟随活动格。成功装饰时取消额外 outline 与 Tailwind ring，未接管时保留可见键盘 outline 回退；减少动态效果显示静态亮边，强制颜色模式使用 Highlight，详见 [焦点规范](design-system.md)。此规则同样覆盖 dark 与 Portal，保留 Reka 键盘、ARIA 和焦点管理。Dialog、Popover、Dropdown、Tooltip、Sheet 和通知的 Portal 根继承相同规范，随 html[data-theme] 同步；Unovis 非 CSS 取色按文本、网格与数据系列角色读取当前主题，不对已解析 CSS 令牌重复取反。
 
 ## 字阶、密度与组合
 
-所有基础组件及其组合使用同一套字阶与间距，而非只给展示卡片套上材质。统一实现位于根工程 `src/styles/shadcn-metrics.css`，打包时同步到 `assets/shadcn-catalog/src/styles/`。该文件只定义排版、内边距、尺寸和布局节奏，材质、阴影、焦点与按压行为继续交给 `shadcn-theme.css`、`milk-tokens.css` 和共享 press controller，避免状态样式互相覆盖。
+所有基础组件及其组合使用同一套字阶与间距，而非只给展示卡片套上材质。统一实现位于根工程 `src/styles/shadcn-metrics.css`，打包时同步到 `assets/shadcn-catalog/src/styles/`。该文件只定义排版、内边距、尺寸和布局节奏，材质与阴影继续交给 `shadcn-theme.css`、`milk-tokens.css`，焦点与按压复用 `milk-focus.css` 及共享 focus／press controller，避免状态样式互相覆盖。
 
 | 角色 | 字号 / 行高 | 字重 |
 | --- | --- | --- |

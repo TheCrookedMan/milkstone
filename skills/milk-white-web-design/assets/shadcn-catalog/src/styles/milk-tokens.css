@@ -63,7 +63,7 @@ body{margin:0;background-color:var(--milk-canvas);background-image:var(--milk-pa
 a{color:inherit;text-decoration:none}button,input,textarea,select{font:inherit}
 button,a,input{-webkit-tap-highlight-color:transparent}button{cursor:pointer}
 button:disabled{cursor:not-allowed;opacity:.45}
-:focus-visible{outline:3px solid var(--milk-focus);outline-offset:5px}
+:focus-visible{outline:2px solid var(--milk-focus);outline-offset:2px}
 :where(button:not([data-slot]):not(.shadcn-gallery button):not([data-slot] button)),.pill{border-radius:var(--milk-control);border:var(--milk-border-width) solid transparent;background:var(--milk-surface-raised) padding-box,var(--milk-border-gradient) border-box;padding:13px 23px;color:var(--milk-ink);box-shadow:var(--milk-button-shadow);text-shadow:none;font-weight:500}
 :where(button:not([data-slot]):not(.shadcn-gallery button):not([data-slot] button)):hover,.pill:hover{box-shadow:var(--milk-hover-shadow)}
 :where(button:not([data-slot]):not(.shadcn-gallery button):not([data-slot] button)):active,.pill:active{background:var(--milk-surface-recessed) padding-box,var(--milk-border-gradient) border-box;box-shadow:var(--milk-pressed)}
@@ -79,8 +79,7 @@ small,.muted{color:var(--milk-muted)}
 .engraved,.eyebrow{text-shadow:none}
 input:not([type=range]):not([type=checkbox]),textarea,select{box-shadow:var(--milk-control-shadow)}
 
-/* Fields keep focus inside their material surface, without an outer outline. */
-:where(input,textarea,select):is(:focus,:focus-visible){outline:none;outline-offset:0}
+/* Focus decoration lives in milk-focus.css; inset surfaces keep their depth. */
 :is(input:not([data-slot]):not([type=checkbox]):not([type=radio]):not([type=range]),textarea:not([data-slot]),select:not([data-slot])):is(:focus,:focus-visible){box-shadow:var(--milk-pressed)}
 :is(input[type=range],input[type=checkbox],input[type=radio]):focus-visible{accent-color:var(--milk-focus)}
 :where(input[type=range]):is(:focus,:focus-visible){box-shadow:none}
