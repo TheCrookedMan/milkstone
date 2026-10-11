@@ -14,6 +14,9 @@
 }
 /* Keep a native keyboard fallback until the controller has drawn its light. */
 :focus-visible { outline:2px solid var(--milk-focus)!important; outline-offset:2px!important }
+/* Main is a skip-navigation destination, not a control surface. Keep focus
+   semantics without outlining the page; descendant controls keep their light. */
+main:is(:focus,:focus-visible),
 [data-milk-focus-source]:is(:focus,:focus-visible),
 [data-milk-focus-owner],
 [data-milk-focus-owner]:focus-within,

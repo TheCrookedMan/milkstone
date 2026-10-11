@@ -128,7 +128,7 @@ export function initFocusBorder(): () => void {
   function draw(): boolean {
     let focused = doc.activeElement
     while (focused?.shadowRoot?.activeElement) focused = focused.shadowRoot.activeElement
-    if (!focused || focused === doc.body || focused === doc.documentElement || !focused.isConnected
+    if (!focused || focused === doc.body || focused === doc.documentElement || focused.matches('main') || !focused.isConnected
       || focused.matches(':disabled,[disabled],[aria-disabled="true"],[data-disabled]') || focused.closest('[inert]')) {
       hide()
       return false
