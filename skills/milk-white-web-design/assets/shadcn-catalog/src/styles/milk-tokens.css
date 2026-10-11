@@ -123,8 +123,8 @@ input:not([type=range]):not([type=checkbox]),textarea,select{box-shadow:var(--mi
   --milk-floating-shadow:-8px -8px 22px rgba(89,101,119,.20),12px 16px 30px rgba(0,0,0,.60),3px 4px 9px rgba(0,0,0,.30);
 }
 
-/* Milk is a warm light palette. Legacy color aliases keep domain controls on
-   the same material roles; dimensions and light/shadow geometry stay shared. */
+/* Milk keeps the shared material roles and upper-left light source, with
+   compact contact shadows that give the warm faces a firmer physical edge. */
 :root[data-theme="milk"] {
   color-scheme:light;
   --milk-color-e9eaee:#f4f1ea; --milk-color-e5e7ec:#f0ece3; --milk-color-ebedf1:#f7f4ee;
@@ -140,6 +140,14 @@ input:not([type=range]):not([type=checkbox]),textarea,select{box-shadow:var(--mi
   --milk-color-a8b1c133:#9e948133; --milk-color-a8b1c166:#9e948166;
   --milk-ambient-light:rgba(255,254,248,.38);
   --milk-border-gradient:linear-gradient(145deg,rgba(255,255,253,.84),rgba(255,255,253,.30));
+  --milk-shadow:-3px -3px 5px rgba(255,255,253,.88),3px 4px 7px rgba(137,126,105,.28),1px 2px 1px rgba(137,126,105,.26);
+  --milk-card-shadow:-3px -3px 5px rgba(255,255,253,.92),3px 4px 7px rgba(137,126,105,.26),1px 2px 1px rgba(137,126,105,.30),inset 0 1px 0 rgba(255,255,253,.96),inset 0 -1px 0 rgba(137,126,105,.16);
+  --milk-card-hover-shadow:-3px -3px 6px rgba(255,255,253,.96),4px 5px 8px rgba(137,126,105,.30),1px 2px 1px rgba(137,126,105,.30),inset 0 1px 0 rgba(255,255,253,.98),inset 0 -1px 0 rgba(137,126,105,.18);
+  --milk-button-shadow:-1px -1px 2px rgba(255,255,253,.96),2px 2px 3px rgba(137,126,105,.32),0 1px 1px rgba(137,126,105,.30),inset 0 1px 0 rgba(255,255,253,.98),inset 0 -1px 0 rgba(137,126,105,.20);
+  --milk-hover-shadow:-2px -2px 3px rgba(255,255,253,.98),2px 3px 4px rgba(137,126,105,.34),0 1px 1px rgba(137,126,105,.30),inset 0 1px 0 rgba(255,255,253,.98),inset 0 -1px 0 rgba(137,126,105,.22);
+  --milk-pressed:inset 2px 2px 3px rgba(137,126,105,.36),inset -1px -1px 2px rgba(255,255,253,.90);
+  --milk-control-shadow:inset 2px 2px 3px rgba(137,126,105,.30),inset -1px -1px 2px rgba(255,255,253,.86);
+  --milk-floating-shadow:-3px -3px 6px rgba(255,255,253,.86),5px 7px 12px rgba(137,126,105,.30),1px 2px 2px rgba(137,126,105,.28),inset 0 1px 0 rgba(255,255,253,.96);
   --milk-switch-on-surface:linear-gradient(145deg,#b6cdc2,#d2dfd5); --milk-switch-on-ink:#335349;
   --milk-scroll-thumb:#8b877a; --milk-scroll-thumb-hover:#777366; --milk-scroll-thumb-active:#676356;
   --milk-scroll-thumb-shadow:inset 1px 1px 1px rgba(255,254,248,.7),1px 1px 2px rgba(104,95,75,.18);

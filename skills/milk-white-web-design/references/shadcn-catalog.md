@@ -29,7 +29,7 @@ pnpm dev
 
 ## 统一柔和拟物主题
 
-以下材料以默认 light 为基准，dark 使用对应深色主题，milk 使用牛奶柔白、暖白受光面与浅暖灰凹槽，材质颜色与透明度按相近感知深度校准；保持左上受光、右下投影、凸面较亮、凹槽较暗以及相同边框宽度、阴影几何和交互几何，见 [三种主题](theme-modes.md)。
+以下材料以默认 light 为基准，dark 使用对应深色主题，milk 使用牛奶柔白、暖白受光面与浅暖灰凹槽，材质颜色与透明度按相近感知深度校准；保持左上受光、右下投影、凸面较亮、凹槽较暗以及相同边框宽度和交互几何；light 与 dark 保持阴影几何，milk 使用更短、更凝实的投影和接触影，见 [三种主题](theme-modes.md)。
 
 将 shadcn 的 background、foreground、card、popover、primary、secondary、muted、accent、border、input、ring 与 chart 系列映射到 [浅灰柔和拟物设计令牌](design-system.md)。三种风格复用同一套组件状态样式，接入上游组件时去除与此规则冲突的 `dark:` 材质和 ring 差异，黑版与乳白版通过同一语义令牌体系校准颜色与透明度，不能让凸面变凹或将输入槽变为外浮。画布使用 #e9eaee 与极轻随机纸纹，#ebedf1 面板、#eef0f4 凸面及 #e4e6eb 凹槽协调过渡，深蓝灰文字保持可读。选中拨片与主操作通过较亮凸面和柔影浮起；图形数据可保持灰阶。错误与完成状态同时有图标与说明，不依赖彩色。图表用亮度、线型和图例区分数据。Switch 开启采用低饱和玉绿色槽面与“开”，关闭采用中性灰槽面与“关”，同时保留拨片位置，避免仅依赖灰度或颜色；三种风格通过 --milk-switch-on-surface／--milk-switch-on-ink 与 --milk-switch-off-surface／--milk-switch-off-ink 校准清晰的状态对比，原有凹槽、凸面和阻尼几何保持一致。装饰状态文字不改变可访问名称，真实状态仍由 Reka 的 aria-checked 表达。
 
@@ -63,7 +63,7 @@ Card、按钮、TabsList、Input、Textarea、Select、面板与 Portal 普通�
 
 Textarea、Sidebar、Table／Data Table、Message Scroller 与浮层的 scroll／auto 区域采用共享纸感滚动条：12px 凹槽轨道、圆角浮起滑块、白高光与微投影，悬浮加深、拖拽压实，light／dark／milk 同向受光，横纵轴及 Portal 一致。原生使用 milk-tokens.css 的 thin／scrollbar-color 回退与受支持的 ::-webkit-scrollbar 完整样式；ScrollArea 自绘条在 shadcn-theme.css 复用相同材质，按 Reka 的 hover／scroll 语义显现，保留滑块拖拽、DOM 测量及键盘行为。仅隐藏 Reka 视口原生条等明确用途的局部滚动条，不改原有 overflow 或用 hidden／clip 裁切内容。区域边界和标签保持可辨，滚轮、触控与键盘仍能访问全部内容，独立非交互滚动区按需提供 tabindex="0" 和可访问名称，不覆盖基础组件自身焦点语义。
 
-这些规则适用于 light、dark 及 Portal 内的组件，几何、层级与受光方向一致。保留基础组件的 props、插槽、尺寸变体和用户传入 `class` 的扩展能力；共享选择器按语义或组件标记作用，不通过全局 `!important` 锁死业务布局。覆盖上游默认密度时同时检查嵌套组合，避免 InputGroup 按钮、Calendar 日期、Sidebar 操作和表格工具栏被放大两次。
+这些规则适用于 light、dark、milk 及 Portal 内的组件，布局几何、层级与受光方向一致。保留基础组件的 props、插槽、尺寸变体和用户传入 `class` 的扩展能力；共享选择器按语义或组件标记作用，不通过全局 `!important` 锁死业务布局。覆盖上游默认密度时同时检查嵌套组合，避免 InputGroup 按钮、Calendar 日期、Sidebar 操作和表格工具栏被放大两次。
 
 ## 复用与交互
 

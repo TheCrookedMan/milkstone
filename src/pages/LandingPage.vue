@@ -8,7 +8,7 @@ const swatches = [{name:'受光面',token:'--milk-light'},{name:'浮起面',toke
 const themeProfiles = {
   light: {name:'纸感白',description:'冷灰纸白作底，灰白表面轻轻浮起。清爽的中性色层次，让内容安静展开。',colors:['#f4f5f8','#eef0f4','#e9eaee','#e4e6eb']},
   dark: {name:'石墨黑',description:'深炭灰作底，浅石墨表面受光。保留明亮的上缘与深色凹槽，让夜间界面仍有分量。',colors:['#333841','#2a2e35','#1c1f24','#181b20']},
-  milk: {name:'牛奶乳白',description:'以牛奶般的柔白铺底，暖白高光托起表面，浅暖灰收进凹槽。带一点温度，保留清楚而柔和的实体层次。',colors:['#fffefa','#fbf9f4','#f4f1ea','#e9e4da']},
+  milk: {name:'牛奶乳白',description:'以牛奶般的柔白铺底，暖白高光勾出受光边，短而凝实的暖灰投影托起卡片与按键。阴影贴近表面，轮廓更清楚，凹槽仍然柔和内收。',colors:['#fffefa','#fbf9f4','#f4f1ea','#e9e4da']},
 }
 const themeSpec = computed(() => themeProfiles[theme.value])
 import { defineAsyncComponent } from 'vue'

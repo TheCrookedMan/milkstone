@@ -1,5 +1,5 @@
 # 交互与动效
-下述颜色以默认 light 为基准。dark 使用对应深色主题，milk 使用牛奶柔白、暖白高光与浅暖灰凹槽，均按角色校准材质颜色和透明度，保持相同凸起与凹槽感、边框宽度、阴影偏移与模糊和交互位移；高光继续受光、暗部继续遮光，切换不重置交互或动画相位，见 [三种主题](theme-modes.md)。
+下述颜色以默认 light 为基准。dark 使用对应深色主题，milk 使用牛奶柔白、暖白高光与浅暖灰凹槽，均按角色校准材质颜色和透明度，保持相同凸起与凹槽的光照关系、边框宽度和交互位移；light 与 dark 的阴影几何保持，milk 收紧偏移与模糊并增加紧密接触影；高光继续受光、暗部继续遮光，切换不重置交互或动画相位，见 [三种主题](theme-modes.md)。
 
 Card 使用圆角灰白表面与外浮柔影，按钮采用紧凑胶囊；普通边框为 1px 半透明白，图片区保留 3px 白色 rim。左上白色高光与右下灰色投影表现柔和浮起。Card 悬浮使用 --milk-card-hover-shadow，小按钮悬浮使用 --milk-hover-shadow，按压切换 --milk-pressed 并保留小幅位移；输入、读数窗和功能槽使用内凹表面。Tabbar 整体为凹槽，选中拨片浮起，未选中项融入槽面。阴影参数复用统一令牌，不再使用伪元素硬底座；milk-relief 仅保留兼容，depth 为 0。焦点使用已有边框内的稳定内侧轨道与柔和渐变光带，成功装饰时不再叠加外围 outline 或 ring；控件原有表面、边框几何与阴影保持，未接管时保留可见键盘 outline 回退，见 [焦点规范](design-system.md)。纸纹静态且极轻，disabled 降低不透明度且不可触发，loading 保留可读文字、阻止重复操作并向读屏报告状态。园区柔焦、扫描灯、星体光晕和电流光尾继续保留。
 
@@ -15,7 +15,7 @@ Card 使用圆角灰白表面与外浮柔影，按钮采用紧凑胶囊；普通
 
 悬浮波纹复用 assets/hover-controller.ts 与 assets/milk-hover.css，在应用入口调用一次 initHoverRipple()，返回清理函数接入卸载与 HMR dispose。指针进入启用的 button、a.pill、summary、role="button" 或 data-milk-press-target 时，从进入点扩散三道低对比细波纹，总长 1500ms，错开 120ms，平滑渐入渐出；持续停留不循环，移出以 180ms 衰减，再进入可重播。装饰在原圆角表面内裁剪，保留文字、材质、按压反馈与焦点流光，不改背景、transform、布局或业务事件；异步按钮和 Portal 由同一委托入口承接。data-milk-hover-ignore 可退出，data-milk-press-ignore、禁用／inert、拖拽节点、滑杆及编辑区不触发；触摸、无悬浮能力、减少动态效果和 forced-colors 不播放。波纹结束即停止绘制循环，失焦、后台和取消时停止当前波纹，卸载时移除装饰并释放监听。光色使用 milk-hover.css 中的主题令牌，三种风格保持相同扩散几何和时序。
 
-Carousel 的单张展示可启用 `effect="material"`，使用与 Embla 同版本的 `embla-carousel-fade` 8.6.0 实现原位交替。旧项逐渐收起表面高光与投影，变平、轻微下沉并模糊淡出；下一项在相同位置从模糊透明恢复清晰，高光与柔影随之浮起。材质进度跟随 Fade 的实际不透明度，最虚状态约 blur(5px)、下移 4px、scale(.985)，完整实体恢复原尺寸与位置；不另起计时器或 RAF，连续点击、反向和触摸拖动继续使用同一 Embla 状态。Card 或 `data-carousel-surface` 表面通过暂停的 relief 关键帧采样平面到 `--milk-card-shadow` 的深度；内部独立浮起装饰可标记 `data-carousel-relief="object"`，同步收放 `--milk-shadow`，避免旧卡已经淡出而内部投影仍然浮起。light／dark／milk 复用相同进度、几何与阴影角色，主题切换不重启动画。
+Carousel 的单张展示可启用 `effect="material"`，使用与 Embla 同版本的 `embla-carousel-fade` 8.6.0 实现原位交替。旧项逐渐收起表面高光与投影，变平、轻微下沉并模糊淡出；下一项在相同位置从模糊透明恢复清晰，高光与柔影随之浮起。材质进度跟随 Fade 的实际不透明度，最虚状态约 blur(5px)、下移 4px、scale(.985)，完整实体恢复原尺寸与位置；不另起计时器或 RAF，连续点击、反向和触摸拖动继续使用同一 Embla 状态。Card 或 `data-carousel-surface` 表面通过暂停的 relief 关键帧采样平面到 `--milk-card-shadow` 的深度；内部独立浮起装饰可标记 `data-carousel-relief="object"`，同步收放 `--milk-shadow`，避免旧卡已经淡出而内部投影仍然浮起。light／dark／milk 复用相同进度、运动几何与阴影角色，各主题的阴影终态取自当前令牌，主题切换不重启动画。
 
 该模式面向单张占满视口的内容，保留真实 slide DOM、插槽、Embla API 和 `init-api`；只有活动项接受焦点及交互，其他项隐藏于辅助技术，不能只靠 opacity 隐藏。默认 `effect="slide"` 保留上游滑动与多张并排行为，接入示例见 [组件集](shadcn-catalog.md)。减少动态效果时立即显示选中项的完整实体，不播放模糊、缩放或淡入淡出；重新初始化和卸载时还原插件管理的样式、可访问状态与监听。
 
