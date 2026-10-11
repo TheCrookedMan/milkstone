@@ -70,17 +70,18 @@ async function liveServer(t, config, fetchImpl) {
   return { base, post }
 }
 
-test('vendored Hairline engine, bench and tools retain their original bytes', async () => {
+test('vendored Hairline engine, bench and tools retain pinned a2217852 upstream bytes', async () => {
   const expected = {
-    'kernel.js': '3a034d39d7486984b10992e2786cbc83551dbed3718351f69cf1d54d81ce8718',
-    'bench.html': '4d14a7cca8cb9c672c299ff04e47ce781192f3a83d173d0ca09344a3787d70d9',
+    'kernel.js': '2d8be507ceb523581dbfe813f636d1118ca49bf9e62840f66d8ddf55867999ad',
+    'bench.html': '0870fd54e137be0f7635cd309b48a4703a791cfca5915bf22d46b941ebc33278',
     'build.mjs': '7907c722890a9758ed4b479e819f9f8c12b9df3c4a59fa050577b235eee233e7',
-    'validate.mjs': '6ebd6268dea478d076e50029f55dbf57df11cfb772a5253862347f66de767db8',
+    'validate.mjs': 'a60ad12271cdf3faf0ee4b84131d2474481ab9196360956ba8383c17928378ff',
   }
   for (const [name, hash] of Object.entries(expected)) {
     const bytes = await readFile(new URL(`../server/hairline-runtime/${name}`, import.meta.url))
     assert.equal(createHash('sha256').update(bytes).digest('hex'), hash, `${name} must stay untouched`)
   }
+  assert.equal(await readFile(new URL('../src/components/shadcn-gallery/hairline/runtime/kernel.js', import.meta.url), 'utf8'), await readFile(new URL('../server/hairline-runtime/kernel.js', import.meta.url), 'utf8'), 'interactive and generated figures use the same pinned kernel')
 })
 
 test('DeepSeek defaults provide a model address without pretending that generation is configured', async () => {

@@ -5,12 +5,16 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import HairlineEmptyArt from './HairlineEmptyArt.vue'
 import HairlineGeneratedPreview from './HairlineGeneratedPreview.vue'
-import { builtinArtwork, downloadHairlineFile, hairlineEndpoint, hairlineRequest, useHairlineLibrary, validateHairlineArtwork, type HairlineArtwork, type HairlineCapabilities } from './hairline-library'
+import { downloadHairlineFile, hairlineEndpoint, hairlineRequest, hairlineScenes, isBuiltinArtwork, useHairlineLibrary, validateHairlineArtwork, type HairlineArtwork, type HairlineCapabilities, type HairlineScene } from './hairline-library'
 
 defineProps<{ compact?: boolean }>()
 const id = useId()
 const library = useHairlineLibrary()
-const { artworks, selected, storageWarning } = library
+const { artworks, savedCount, storageWarning } = library
+const activeScene = ref<HairlineScene>('people')
+const selected = computed(() => library.getSceneArtwork(activeScene.value))
+const activeSceneLabel = computed(() => hairlineScenes.find(scene => scene.id === activeScene.value)!.label)
+const boundScenes = (artwork: HairlineArtwork) => hairlineScenes.filter(scene => library.sceneSelections.value[scene.id] === artwork.id).map(scene => scene.label).join('、')
 const prompt = ref('一个圆角名册架，留着尚未放入姓名卡片的空槽；指针靠近时卡槽轻轻抬起。')
 const endpoint = ref(new URL('/api/hairline', window.location.origin).href)
 const token = ref('')
@@ -63,7 +67,7 @@ async function generate() {
   if (!text || text.length > 2_000) { error.value = '请用 1–2000 个字符描述想要的物件和回应。'; return }
   const existing = library.findPrompt(text)
   if (existing) {
-    try { library.select(existing.id); candidate.value = null; previewReady.value = false; error.value = ''; message.value = '已复用图库中的同提示词作品，没有调用模型。' }
+    try { library.select(existing.id); library.selectForScene(activeScene.value, existing.id); candidate.value = null; previewReady.value = false; error.value = ''; message.value = `已复用同提示词作品，并应用到「${activeSceneLabel.value}」。` }
     catch (value) { error.value = explain(value) }
     return
   }
@@ -81,7 +85,7 @@ async function generate() {
     if (current !== operation) return
     if (!response || typeof response.reused !== 'boolean' || !response.artwork) throw new Error('生成服务返回的作品格式不正确。')
     candidate.value = validateHairlineArtwork(response.artwork)
-    message.value = response.reused ? '服务复用了已生成作品，正在确认预览。' : '线稿已生成，正在确认明暗两种预览。'
+    message.value = response.reused ? '服务复用了已生成作品，正在确认预览。' : '线稿已生成，正在确认线稿预览。'
   } catch (value) {
     if (current !== operation) return
     error.value = explain(value)
@@ -101,16 +105,16 @@ function ready(artwork: HairlineArtwork) {
   if (candidate.value?.id !== artwork.id) return
   candidate.value = artwork
   previewReady.value = true
-  message.value = '明暗线稿已可用。保存后可在页面和 Empty 组件中复用。'
+  message.value = '线稿预览已可用。保存后可用于所选空状态场景。'
 }
 function previewError(value: string) { candidate.value = null; previewReady.value = false; error.value = value; message.value = '此次预览失败，结果未保存。' }
 function save() {
   if (!candidate.value || !previewReady.value) return
-  try { library.save(candidate.value); message.value = '已保存到此浏览器的图库，并应用到空状态组件。'; candidate.value = null; previewReady.value = false; clearError() }
+  try { library.save(candidate.value, activeScene.value); message.value = `已保存到此浏览器的图库，并应用到「${activeSceneLabel.value}」。`; candidate.value = null; previewReady.value = false; clearError() }
   catch (value) { error.value = explain(value) }
 }
 function choose(artwork: HairlineArtwork) {
-  try { library.select(artwork.id); message.value = `已使用「${artwork.name}」，无需重新生成。`; clearError() }
+  try { library.select(artwork.id); library.selectForScene(activeScene.value, artwork.id); message.value = `已将「${artwork.name}」应用到「${activeSceneLabel.value}」。`; clearError() }
   catch (value) { error.value = explain(value) }
 }
 function remove(artwork: HairlineArtwork) {
@@ -146,6 +150,12 @@ onBeforeUnmount(() => { operation++; controller?.abort(); token.value = '' })
       <div class="studio-settings-footer"><p>默认接入 DeepSeek。使用者在自己的生成服务中配置模型与密钥，也可改用其他兼容服务。<a href="https://github.com/TheCrookedMan/milkstone/blob/main/skills/milk-white-web-design/references/hairline-generation-service.md" target="_blank" rel="noopener noreferrer">查看配置说明 ↗</a></p><Button type="button" variant="outline" size="sm" :disabled="!!busy" @click="connect">{{ busy === 'checking' ? '正在连接…' : '测试连接' }}</Button></div>
     </div>
 
+    <fieldset class="studio-scene-picker">
+      <legend>应用场景</legend>
+      <div class="studio-actions"><Button v-for="scene in hairlineScenes" :key="scene.id" type="button" size="sm" variant="outline" :aria-pressed="activeScene === scene.id" @click="activeScene = scene.id">{{ scene.label }}</Button></div>
+      <p>每种空状态可以单独选图；保存或使用线稿只更新当前场景。</p>
+    </fieldset>
+
     <form class="studio-prompt" @submit.prevent="generate">
       <label :for="`${id}-prompt`">描述你需要的空状态线稿</label>
       <Textarea :id="`${id}-prompt`" v-model="prompt" maxlength="2000" rows="3" placeholder="例如：一个空置的圆角名册架，指针靠近时卡槽轻轻抬起。" :disabled="!!busy" />
@@ -156,23 +166,35 @@ onBeforeUnmount(() => { operation++; controller?.abort(); token.value = '' })
     <p v-if="storageWarning" class="studio-error" role="status">{{ storageWarning }}</p>
     <p class="studio-status" role="status" aria-live="polite">{{ message }}</p>
 
-    <div v-if="candidate" class="studio-result">
-      <HairlineGeneratedPreview :key="candidate.id" :artwork="candidate" @ready="ready" @error="previewError" />
-      <div class="studio-result-copy"><h4>{{ candidate.name }}</h4><p>{{ candidate.means }}</p><small>模型 · {{ candidate.model ?? '生成服务' }} · 已通过静态校验</small><div class="studio-actions"><Button type="button" size="sm" :disabled="!previewReady" @click="save">保存并使用</Button><Button type="button" variant="outline" size="sm" :disabled="!previewReady" @click="download(candidate)">下载 HTML</Button></div></div>
+    <div v-if="!candidate" class="studio-selected">
+      <HairlineEmptyArt :artwork="selected" interactive play />
+      <div><span class="studio-eyebrow">{{ activeSceneLabel }}</span><h4>{{ selected.name }}</h4><p>{{ selected.means }}</p><small>移入探索形状，移开后继续轻缓演示；也可暂停后自由探索。</small></div>
     </div>
 
-    <div class="studio-library-heading"><div><h4>可复用线稿</h4><p>{{ artworks.length - 1 }} / 24 幅已保存 · 保存在此浏览器</p></div><div class="studio-actions"><Button type="button" size="sm" variant="outline" @click="downloadHairlineFile('milkstone-hairline-library.json', library.exportJson(), 'application/json')">导出图库</Button><Button type="button" size="sm" variant="outline" @click="importInput?.click()">导入图库</Button><input ref="importInput" class="studio-import-input" type="file" accept="application/json,.json" tabindex="-1" aria-label="导入 Hairline 图库 JSON" @change="importLibrary"></div></div>
+    <div v-if="candidate" class="studio-result">
+      <HairlineGeneratedPreview :key="candidate.id" :artwork="candidate" @ready="ready" @error="previewError" />
+      <div class="studio-result-copy"><h4>{{ candidate.name }}</h4><p>{{ candidate.means }}</p><small>模型 · {{ candidate.model ?? '生成服务' }} · 已通过静态校验</small><div class="studio-actions"><Button type="button" size="sm" :disabled="!previewReady" @click="save">保存并用于{{ activeSceneLabel }}</Button><Button type="button" variant="outline" size="sm" :disabled="!previewReady" @click="download(candidate)">下载 HTML</Button></div></div>
+    </div>
+
+    <div class="studio-library-heading"><div><h4>可复用线稿</h4><p>{{ savedCount }} / 24 幅已保存 · 保存在此浏览器</p></div><div class="studio-actions"><Button type="button" size="sm" variant="outline" @click="downloadHairlineFile('milkstone-hairline-library.json', library.exportJson(), 'application/json')">导出图库</Button><Button type="button" size="sm" variant="outline" @click="importInput?.click()">导入图库</Button><input ref="importInput" class="studio-import-input" type="file" accept="application/json,.json" tabindex="-1" aria-label="导入 Hairline 图库 JSON" @change="importLibrary"></div></div>
     <div class="studio-library">
       <article v-for="artwork in artworks" :key="artwork.id" class="studio-artwork" :data-selected="selected.id === artwork.id">
         <HairlineEmptyArt :artwork="artwork" />
-        <div class="studio-artwork-copy"><h5>{{ artwork.name }}</h5><p>{{ artwork.means }}</p><span>{{ artwork.model ? `模型 · ${artwork.model}` : '内置线稿' }}</span></div>
-        <div class="studio-actions"><Button type="button" size="sm" variant="outline" :aria-pressed="selected.id === artwork.id" @click="choose(artwork)">{{ selected.id === artwork.id ? '正在使用' : '使用线稿' }}</Button><Button type="button" size="sm" variant="ghost" @click="download(artwork)">下载</Button><Button v-if="artwork.id !== builtinArtwork.id" type="button" size="sm" variant="ghost" :aria-label="`删除线稿 ${artwork.name}`" @click="remove(artwork)">删除</Button></div>
+        <div class="studio-artwork-copy"><h5>{{ artwork.name }}</h5><p>{{ artwork.means }}</p><span>{{ artwork.model ? `模型 · ${artwork.model}` : '内置线稿' }}</span><span v-if="boundScenes(artwork)">用于 {{ boundScenes(artwork) }}</span></div>
+        <div class="studio-actions"><Button type="button" size="sm" variant="outline" :aria-pressed="selected.id === artwork.id" @click="choose(artwork)">{{ selected.id === artwork.id ? '本场景正在使用' : '用于当前场景' }}</Button><Button type="button" size="sm" variant="ghost" @click="download(artwork)">下载</Button><Button v-if="!isBuiltinArtwork(artwork.id)" type="button" size="sm" variant="ghost" :aria-label="`删除线稿 ${artwork.name}`" @click="remove(artwork)">删除</Button></div>
       </article>
     </div>
   </section>
 </template>
 
 <style scoped>
+.studio-scene-picker { display: grid; gap: 12px; min-width: 0; margin: 0 0 20px; padding: 0; border: 0; }
+.studio-scene-picker legend { margin-bottom: 8px; font-size: 14px; line-height: 1.5; }
+.studio-scene-picker p,.studio-selected p,.studio-selected small { margin: 0; color: var(--milk-muted); font-size: 12px; line-height: 1.65; }
+.studio-selected { display: flex; align-items: center; gap: 24px; margin: 24px 0; padding: 20px; border-radius: 20px; background: var(--milk-surface-recessed); box-shadow: var(--milk-pressed); }
+.studio-selected > div { display: grid; min-width: 0; gap: 8px; }
+.studio-selected h4 { margin: 0; font-size: 16px; line-height: 1.5; font-weight: 600; }
+.studio-scene-picker button[aria-pressed=true] { background: var(--milk-surface-recessed); box-shadow: var(--milk-pressed); }
 .studio-import-input { display: none !important; }
 .hairline-prompt-studio { min-width: 0; color: var(--milk-ink); }
 .studio-heading,.studio-settings-footer,.studio-prompt-footer,.studio-library-heading { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
@@ -208,6 +230,6 @@ onBeforeUnmount(() => { operation++; controller?.abort(); token.value = '' })
 .studio-artwork > .studio-actions { align-self: stretch; margin-top: auto; }
 .is-compact .studio-heading,.is-compact .studio-library-heading,.is-compact .studio-prompt-footer,.is-compact .studio-settings-footer { align-items: flex-start; flex-direction: column; }
 .is-compact .studio-library { grid-template-columns: minmax(0,1fr); }
-.is-compact .studio-result { flex-direction: column; align-items: flex-start; padding: 16px; }
-@media(max-width:680px) { .studio-heading,.studio-settings-footer,.studio-prompt-footer,.studio-library-heading { align-items: flex-start; flex-direction: column; } .studio-result { flex-direction: column; align-items: flex-start; padding: 16px; } .studio-library { grid-template-columns: minmax(0,1fr); } }
+.is-compact .studio-selected,.is-compact .studio-result { flex-direction: column; align-items: flex-start; padding: 16px; }
+@media(max-width:680px) { .studio-heading,.studio-settings-footer,.studio-prompt-footer,.studio-library-heading { align-items: flex-start; flex-direction: column; } .studio-selected,.studio-result { flex-direction: column; align-items: flex-start; padding: 16px; } .studio-library { grid-template-columns: minmax(0,1fr); } }
 </style>

@@ -3,7 +3,7 @@
 
 shadcn-vue 目录以根工程 `src/` 为开发来源，打包同步至独立 `assets/shadcn-catalog/`。完整基础组件库的复制、依赖与主题说明见 [shadcn-vue 组件目录](shadcn-catalog.md)。
 
-Empty 的 Prompt 生成、预览与本浏览器图库属于独立可选能力：复制对应目录时保留相邻 Hairline 资源和隔离绘制器，静态页面可直接使用已保存图。需要生成新图时另外运行 `assets/hairline-service/` 中的 Node API，模型密钥只保留在服务端；前端与服务不共享环境密钥文件。复用路径、接口和保存边界见 [空状态插图](empty-state-illustrations.md) 与 [生成服务](hairline-generation-service.md)。
+Empty 的场景图库、卡片内互动与可选 Prompt 生成：复制对应目录时保留相邻 Hairline 资源、图库和隔离绘制器；静态页面可直接使用三种场景默认图及已保存作品。`HairlineEmptyArt` 默认使用静态 SVG，`interactive` 启用可见隔离画布，`play` 启用自动 tour，按 `scene` 分别选择 data／people／search 作品。需要生成新图时另外运行 `assets/hairline-service/` 中的 Node API，模型密钥只保留在服务端；前端与服务不共享环境密钥文件。复用路径、接口和保存边界见 [空状态插图](empty-state-illustrations.md) 与 [生成服务](hairline-generation-service.md)。
 
 全部组件默认 light 采用浅灰柔和拟物表面，milk-white-web-design 和 milk-tokens.css 保留兼容标识。普通外框与已有结构边界复用 --milk-border-width、--milk-border-color 和 --milk-border-gradient，使用 1px 半透明白边；图片区专用 3px 白色 rim。圆角闭合外框可用 padding-box/border-box，无圆角单边结构线可用同源 border-image，不为文字布局额外套框。Card 圆角浮起，按钮紧凑胶囊，输入及读数窗内凹，Tabbar 为凹槽并让选中拨片浮起。左上白色高光与右下灰色柔影、协调的灰白表面共同表达实体层级；按角色复用八类真实阴影，数值以 milk-tokens.css 为准。milk-relief 及 control/card/tabbar 类保留兼容，depth 为 0，不再创建 ::before/::after 硬底座或 isolation 结构。焦点遵循 [输入框焦点边界](design-system.md)：仅真实输入框在已有边框内显示柔和渐变流光，复合输入只在编辑器聚焦时装饰一处可见边界，内部按钮聚焦不亮起，所有主题和 Portal 同样适用。输入框成功装饰时取消额外外圈，未接管时仅输入框保留静态键盘边界回退；按钮、链接、Tabs、Select、开关、滑杆和容器等其他元素不新增焦点 outline、ring、边框变色或流光，正常材质及选中状态保持。极轻纸纹不影响读数；SVG、图表和 Canvas/WebGL 内容保持可读，园区柔焦、扫描灯层、星体光晕和电流光尾继续保留。设计令牌见 [设计系统](design-system.md)。
 
@@ -21,9 +21,9 @@ Empty 的 Prompt 生成、预览与本浏览器图库属于独立可选能力：
 
 这些组件使用 useId，最低 Vue 3.5；Vue Flow 自身 peer 范围较宽，不代表示例兼容 Vue 3.3/3.4。旧工程可替换 ID 生成策略，或在用户允许下升级 Vue。
 
-WorkflowStudio.vue 按需复制时须一并保留相邻 ../workflow-model.mjs 和 ../workflow-model.d.mts；独立项目仍建议复制整个 assets。
+WorkflowStudio.vue 按需复制时须一并保留相邻 ../workflow-model.mjs、../workflow-model.d.mts、../graph-motion.mjs 和 ../graph-motion.d.mts；独立项目仍建议复制整个 assets。
 
-RelationStudio.vue 导入相邻 StellarGraph.vue，后者导入 StellarSurface.vue；按需复制时保留这三个文件。独立星空保留 StellarGraph.vue 与 StellarSurface.vue。球面渲染使用浏览器原生 Canvas/WebGL，提供 Canvas 2D 回退，无新增 npm 依赖或外部纹理；具体运动与生命周期见 [动态关系与星空](stellar-relations.md)。
+RelationStudio.vue 导入相邻 StellarGraph.vue，后者导入 StellarSurface.vue；按需复制时保留这三个文件及父目录的 graph-motion.mjs、graph-motion.d.mts。独立星空保留 StellarGraph.vue 与 StellarSurface.vue。球面渲染使用浏览器原生 Canvas/WebGL，提供 Canvas 2D 回退，无新增 npm 依赖或外部纹理；具体运动与生命周期见 [动态关系与星空](stellar-relations.md)。
 
 CampusRadar.vue 可单独复制到 Vue 工程，样式令牌仍取自 milk-tokens.css。以 `<CampusRadar />` 嵌入有可用宽度的容器；不需要 Three.js、图片下载、地图 SDK 或额外 npm 依赖。示例是程序生成的园区场景，接入真实楼栋与监测数据时需另设业务适配层；投影与扫描时序见 [园区雷达扫描](campus-radar.md)。
 

@@ -33,18 +33,20 @@ Milkstone 将可运行的页面、可编辑的组件源码和可供 Agent 复用
 | --- | --- |
 | **shadcn-vue 组件目录** | 70 项交互演示，支持中英文搜索、分类筛选；按钮、Card、表单、Tabs、表格、日历、导航、浮层等共享材质与排版规范 |
 | **实体控件** | 刻度旋钮、蚀刻标签、胶囊按键、凹槽导航、开关及轻压回弹反馈 |
-| **空状态插图** | 自定义 Prompt 经大模型生成 Hairline 等距线稿、明暗预览与自包含交互 HTML；已有图可保存到本浏览器图库、直接复用及 JSON 导入导出；生成需另行配置可选 API 服务 |
+| **空状态插图** | 数据、用户、搜索三种场景默认图与独立选图；卡片内互动、指针接管自动演示和三主题取色；Prompt 经大模型生成等距线稿，可保存、复用、JSON 导入导出及下载交互 HTML，生成需配置可选 API 服务 |
 | **数据图表** | ECharts 折线与柱形切换、系列显隐、数据明细；组件目录另含 Unovis Chart 和 TanStack Data Table |
-| **关系与星空** | 神经网络、章鱼图、星空三种模式；沿路径移动的电流光点、轨道、自转、公转及五类可配置星体皮肤 |
+| **关系与星空** | 神经网络、章鱼图、星空三种模式；悬停或选中目标沿真实祖先路径逐跳响应，保留电流光点；星空提供轨道、自转、公转及五类可配置星体皮肤 |
 | **园区雷达** | 原生 Canvas 2D 柔焦等距建筑、粒子、XYZ 坐标、每五秒一圈的扫描和楼层亮起效果 |
-| **节点工作流** | Vue Flow 节点拖动、连线、参数编辑、JSON 导入导出及本地拓扑模拟 |
+| **节点工作流** | Vue Flow 节点拖动、连线、参数编辑和 JSON 导入导出；本地模拟按拓扑传播边信号，汇聚节点等待输入到齐 |
 | **Agent Skill** | 设计、架构、交互和验收规范，可复用源码、三个独立示例以及技能安装与导出工具 |
 
 70 项组件以 **2026-10-09 核对的 shadcn-vue 官方目录**为基准；本地来源、版本与适配方式记录在[组件来源清单](docs/shadcn-registry-source.json)中。
 
 星体使用程序生成的 WebGL 球面材质，并提供 Canvas 2D 回退。工作流支持明确的 **ComfyUI Workflow JSON 0.4 子集**，详见[格式与接入范围](skills/milk-white-web-design/references/workflow-editor.md)。
 
-空状态组件可根据用户 Prompt 调用大模型，按 Hairline Create 的图形接口生成等距线稿。服务只生成图形源码，固定引擎和交互页面保持原样；通过静态校验后，由隔离绘制器生成明暗预览。满意的图形可保存复用，选择已有图无需再次调用模型。附带空托盘和已保存图库不依赖生成服务；新图生成需配置模型服务，不能用静态站点代替模型接口。接入、保存与验收范围见[空状态插图规范](skills/milk-white-web-design/references/empty-state-illustrations.md)。
+空状态组件为暂无数据、暂无用户、搜索无结果分别提供「空图表」「空名册架」「空白寻迹」，原有空托盘保留可选。每个场景可独立选择已有作品；卡片内图形轻微展开或抬升，指针进入与焦点聚焦时接管自动演示，方向键探索、Home 归位。后台或离屏卸载互动画布，返回后从静止重载；减少动态效果关闭自动演示。静态 SVG 继续用于轻量展示与缩略图。
+
+新图可根据用户 Prompt 调用大模型，按 Hairline Create 的图形接口生成等距线稿。模型只编写图形源码，通过固定静态校验后，在隔离 iframe 中绘制三种主题预览；源码不在父页面执行。满意的图形可保存复用，选择已有图无需再次调用模型。内置图和已保存图库不依赖生成服务；新图生成需配置模型服务。接入、保存与验收范围见[空状态插图规范](skills/milk-white-web-design/references/empty-state-illustrations.md)，绘制与交互规则见[线框动效](skills/milk-white-web-design/references/hairline-motion.md)。
 
 ## 快速开始
 
@@ -131,7 +133,7 @@ pnpm preview
 | 工程基础 | Vue 3、TypeScript、Vite 8、Tailwind CSS 4、Vue Router |
 | UI 与可访问交互 | 本地 shadcn-vue 源码、Reka UI、VueUse、Lucide |
 | 数据与图形 | ECharts、Unovis、TanStack Table、SVG、Canvas 2D、原生 WebGL |
-| 可选线稿生成 | 独立 Node.js API、OpenAI 兼容模型、Hairline 固定引擎与静态校验、隔离预览、服务缓存与本浏览器图库 |
+| 线稿与可选生成 | Hairline 固定引擎、SVG 几何与交互、隔离画布、场景图库；独立 Node.js API、OpenAI 兼容模型、静态校验与服务缓存 |
 | 节点编辑 | Vue Flow 与独立的 ComfyUI 格式适配器 |
 | 状态与动效 | Vue 响应式状态、已注册的 Pinia 入口、主题控制器、共享按压、悬浮波纹、焦点循光及滚动渐入控制器，GSAP 按需编排 |
 | Agent 交付 | SKILL.md、参考规范、可复用资产、Node.js 安装器、ZIP / tar.gz 归档 |

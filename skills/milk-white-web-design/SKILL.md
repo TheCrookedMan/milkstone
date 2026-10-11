@@ -14,9 +14,9 @@ description: 创建、改造或评审浅灰纸底与细微纹理、左上白高�
 - 设计页面、令牌和控件时读取 [设计系统](references/design-system.md)，复制 [CSS 令牌](assets/milk-tokens.css)，参考 [组件示例](assets/vue-panel/src/App.vue) 与 [实体相框图片](assets/FramedImage.vue)。
 - 实现白色／黑色／乳白风格切换时读取 [三种主题](references/theme-modes.md)，保留源码主题控制、选择记忆与绘制器同源取色。
 - 使用 shadcn-vue 或展示完整基础组件库时读取 [shadcn-vue 组件目录](references/shadcn-catalog.md)，复用本地源码、交互语义和浅灰柔和拟物主题。
-- 需要暂无数据、暂无用户或无搜索结果的简洁等距线稿时读取 [空状态插图](references/empty-state-illustrations.md)；根据用户 Prompt 动态生成时另读 [Hairline 模型服务](references/hairline-generation-service.md)，复用可选服务资产与隔离绘制器，已有图保存复用。人工新建交互图形可调用可用的 `hairline-create`，文字和操作仍由页面组件承接。
+- 需要暂无数据、暂无用户或无搜索结果的简洁等距线稿时读取 [空状态插图](references/empty-state-illustrations.md)，按场景复用作品；卡片内互动、自动演示与线框造型读取 [线框动效](references/hairline-motion.md)。根据用户 Prompt 动态生成时另读 [Hairline 模型服务](references/hairline-generation-service.md)，复用可选服务资产与隔离绘制器。人工新建交互图形可调用可用的 `hairline-create`，文字和操作仍由页面组件承接。
 - 需要实体 Tabbar、旋钮、开关和刻印读数时读取 [实体控件](references/instrument-components.md)，使用 [控件示例](assets/components/InstrumentControls.vue)。
-- 需要图表或关系图时读取 [数据可视化](references/data-visualization.md)，复用 [ECharts 图表](assets/components/ChartStudio.vue) 与 [神经／章鱼／星空图](assets/components/RelationStudio.vue)。
+- 需要图表或关系图时读取 [数据可视化](references/data-visualization.md)，复用 [ECharts 图表](assets/components/ChartStudio.vue) 与 [神经／章鱼／星空图](assets/components/RelationStudio.vue)；沿真实依赖路径响应与汇聚动效见 [线框动效](references/hairline-motion.md)。
 - 需要电流光点、球面星体、太阳日冕及自转与公转设置时读取 [动态关系与星空](references/stellar-relations.md)，独立集成时保留 [星体组件](assets/components/StellarGraph.vue) 与相邻 `StellarSurface.vue`。
 - 需要虚化园区／小区建筑、漂浮粒子、XYZ 坐标与扫描亮层时读取 [园区雷达扫描](references/campus-radar.md)，复用 [园区组件](assets/components/CampusRadar.vue)。
 - 需要节点编辑或 ComfyUI 数据交换时读取 [工作流编辑](references/workflow-editor.md)，复用 [工作台](assets/components/WorkflowStudio.vue)。
@@ -38,6 +38,6 @@ light 基准：画布 #e9eaee、面板 #ebedf1、凸面 #eef0f4、浅亮面 #f4f
 
 overflow 为 scroll／auto 的区域使用细而低调的纸感滚动条：凹槽轨道、圆角浮起滑块、白色高光与微投影，悬浮加深、拖拽压实；三种风格保持同向光照，横纵轴及 Portal 一致，覆盖 Textarea、Sidebar、Table、Message 与 ScrollArea。不改原有 overflow，保留拖拽、滚轮、触控与键盘访问，具体令牌与原生回退见 [设计系统](references/design-system.md)。
 
-空状态线稿优先复用已保存图形；需要新图时以用户 Prompt 调用真实大模型，模型仅编写 Hairline figure，固定 kernel、bench、组装器与校验器不改写。生成服务独立部署，模型密钥留在服务器，前端不接收模型密钥；已有图库与静态页面可在无模型服务时继续使用。服务端不执行模型返回的 JavaScript，静态校验通过后才交付隔离绘制器；不将静态验证称为八画面视觉验收。失败保留已有图形并提示实际原因，不回退为模板假成功。保存位置、JSON 复用和部署边界见空状态与模型服务参考。
+空状态线稿按 data／people／search 场景选择默认图或已保存作品，各场景覆盖独立记住。静态快照用于缩略图，互动在隔离 iframe 中绘制，指针与焦点接管自动演示；旧作品和旧图库可继续使用。需要新图时以用户 Prompt 调用真实大模型，模型仅编写 Hairline figure，固定 kernel、bench、组装器与校验器不由模型改写。生成服务独立部署，模型密钥留在服务器，前端不接收模型密钥；已有图库与静态页面可在无模型服务时继续使用。服务端不执行模型返回的 JavaScript，静态校验通过后才交付隔离绘制器，生成源码不进入父页面执行环境；不将静态验证称为八画面视觉验收。失败保留已有图形并提示实际原因，不回退为模板假成功。保存位置、JSON 复用和部署边界见空状态与模型服务参考。
 
 交付设计和可运行结果，运行适合改动的类型检查、构建及浏览器验证。只完成文档时不宣称应用已运行；不自动部署或替换用户已安装技能。

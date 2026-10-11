@@ -1,8 +1,12 @@
 import { computed, readonly, ref } from 'vue'
 import { sanitizeHairlineSvg } from './hairline-sanitize'
-import builtinLight from './hairline/empty-tray.svg?raw'
-import builtinDark from './hairline/empty-tray-dark.svg?raw'
-import builtinHtml from './hairline/hairline-empty-tray.html?raw'
+import { builtinArtworks, defaultSceneArtworkIds, isBuiltinArtwork } from './hairline-builtins'
+export { builtinArtworks, isBuiltinArtwork } from './hairline-builtins'
+
+export type HairlineScene = 'data' | 'people' | 'search'
+export const hairlineScenes: ReadonlyArray<{ id: HairlineScene; label: string }> = [
+  { id: 'data', label: '暂无数据' }, { id: 'people', label: '暂无用户' }, { id: 'search', label: '无搜索结果' },
+]
 
 export interface HairlineArtwork {
   id: string
@@ -18,6 +22,7 @@ export interface HairlineArtwork {
   validation: 'static'
   lightSvg?: string
   darkSvg?: string
+  milkSvg?: string
 }
 
 export interface HairlineCapabilities { configured: boolean; model: string | null; runtimeVersion: string; requiresToken: boolean }
@@ -29,13 +34,24 @@ const maxLibraryLength = 4_000_000
 const builtinId = 'milkstone-empty-tray'
 const saved = ref<HairlineArtwork[]>([])
 const selectedId = ref(builtinId)
+const sceneSelections = ref<Record<HairlineScene, string>>({ ...defaultSceneArtworkIds })
 const storageWarning = ref('')
 let hydrated = false
 
-export const builtinArtwork: HairlineArtwork = {
-  id: builtinId, name: '空托盘', means: '空托盘已准备好，等第一条内容到来。', prompt: '一个尚未放入内容的等距圆角空托盘。',
-  source: '', html: builtinHtml, previewHtml: '', createdAt: '2026-10-10T00:00:00.000Z', model: null,
-  runtimeVersion: 'bundled', validation: 'static', lightSvg: builtinLight, darkSvg: builtinDark,
+export const builtinArtwork = builtinArtworks.find(item => item.id === builtinId)!
+
+function knownArtwork(id: string, artworks: HairlineArtwork[]) {
+  return isBuiltinArtwork(id) || artworks.some(item => item.id === id)
+}
+
+function readScenes(value: unknown, artworks: HairlineArtwork[], fallback = defaultSceneArtworkIds): Record<HairlineScene, string> {
+  if (value !== undefined && (!value || typeof value !== 'object' || Array.isArray(value))) throw new Error('场景配置格式不正确。')
+  const input = (value ?? {}) as Record<string, unknown>
+  return Object.fromEntries(hairlineScenes.map(({ id }) => {
+    const selection = input[id] ?? fallback[id]
+    if (typeof selection !== 'string') throw new Error('场景配置格式不正确。')
+    return [id, knownArtwork(selection, artworks) ? selection : defaultSceneArtworkIds[id]]
+  })) as Record<HairlineScene, string>
 }
 
 export function normalizeHairlinePrompt(prompt: string): string { return prompt.trim().replace(/\s+/g, ' ') }
@@ -49,7 +65,7 @@ export function validateHairlineArtwork(value: unknown, requireSvg = false): Hai
     return text
   }
   const id = bounded('id', 100)
-  if (!/^[a-zA-Z\d_-]+$/.test(id) || id === builtinId) throw new Error('作品标识不正确。')
+  if (!/^[a-zA-Z\d_-]+$/.test(id) || isBuiltinArtwork(id)) throw new Error('作品标识不正确。')
   const createdAt = bounded('createdAt', 40)
   if (!Number.isFinite(Date.parse(createdAt))) throw new Error('作品时间不正确。')
   if (item.validation !== 'static' || (item.model !== null && (typeof item.model !== 'string' || item.model.length > 160))) throw new Error('作品验证信息不正确。')
@@ -61,6 +77,7 @@ export function validateHairlineArtwork(value: unknown, requireSvg = false): Hai
   }
   if (item.lightSvg !== undefined) artwork.lightSvg = sanitizeHairlineSvg(item.lightSvg)
   if (item.darkSvg !== undefined) artwork.darkSvg = sanitizeHairlineSvg(item.darkSvg)
+  if (item.milkSvg !== undefined) artwork.milkSvg = sanitizeHairlineSvg(item.milkSvg)
   if (requireSvg && (!artwork.lightSvg || !artwork.darkSvg)) throw new Error('作品还没有通过明暗线稿预览，请先完成预览。')
   return artwork
 }
@@ -76,15 +93,17 @@ function hydrate() {
     if (payload?.version !== 1 || !Array.isArray(payload.artworks) || payload.artworks.length > maxSavedArtworks || typeof payload.selectedId !== 'string') throw new Error('图库格式不正确。')
     const artworks = payload.artworks.map((item: unknown) => validateHairlineArtwork(item, true))
     if (new Set(artworks.map((item: HairlineArtwork) => item.id)).size !== artworks.length) throw new Error('图库中有重复标识。')
+    const scenes = readScenes(payload.sceneSelections, artworks)
     saved.value = artworks
-    selectedId.value = artworks.some((item: HairlineArtwork) => item.id === payload.selectedId) ? payload.selectedId : builtinId
+    selectedId.value = knownArtwork(payload.selectedId, artworks) ? payload.selectedId : builtinId
+    sceneSelections.value = scenes
   } catch {
     storageWarning.value = '已保存图库无法读取，当前使用内置线稿。原有存储未被覆盖。'
   }
 }
 
-function persist(artworks: HairlineArtwork[], selection: string) {
-  const serialized = JSON.stringify({ version: 1, selectedId: selection, artworks })
+function persist(artworks: HairlineArtwork[], selection: string, scenes = sceneSelections.value) {
+  const serialized = JSON.stringify({ version: 1, selectedId: selection, sceneSelections: scenes, artworks })
   if (serialized.length > maxLibraryLength) throw new Error('图库已超出本地容量，请先导出并删除部分作品。')
   try { window.localStorage.setItem(hairlineStorageKey, serialized) }
   catch { throw new Error('浏览器存储空间不足或不可用。请先导出作品，当前操作尚未保存。') }
@@ -93,7 +112,8 @@ function persist(artworks: HairlineArtwork[], selection: string) {
 
 export function useHairlineLibrary() {
   hydrate()
-  const artworks = computed(() => [builtinArtwork, ...saved.value])
+  const artworks = computed(() => [...builtinArtworks, ...saved.value])
+  const savedCount = computed(() => saved.value.length)
   const selected = computed(() => artworks.value.find(item => item.id === selectedId.value) ?? builtinArtwork)
   function select(id: string) {
     if (!artworks.value.some(item => item.id === id)) return
@@ -101,25 +121,38 @@ export function useHairlineLibrary() {
     try { persist(saved.value, id) }
     catch { storageWarning.value = '线稿已应用到当前页面，但浏览器无法记住选择。请导出图库备份，刷新后可能恢复原选图。' }
   }
-  function save(value: HairlineArtwork) {
+  function getSceneArtwork(scene: HairlineScene): HairlineArtwork {
+    return artworks.value.find(item => item.id === sceneSelections.value[scene]) ?? builtinArtworks.find(item => item.id === defaultSceneArtworkIds[scene])!
+  }
+  function selectForScene(scene: HairlineScene, id: string) {
+    if (!hairlineScenes.some(item => item.id === scene) || !knownArtwork(id, saved.value)) return
+    sceneSelections.value = { ...sceneSelections.value, [scene]: id }
+    try { persist(saved.value, selectedId.value) }
+    catch { storageWarning.value = '线稿已应用到当前场景，但浏览器无法记住选择。请导出图库备份，刷新后可能恢复原选图。' }
+  }
+  function save(value: HairlineArtwork, scene?: HairlineScene) {
     const artwork = validateHairlineArtwork(value, true)
     const existing = saved.value.filter(item => item.id !== artwork.id)
     if (existing.length >= maxSavedArtworks) throw new Error(`图库最多保存 ${maxSavedArtworks} 幅作品，请先导出并删除部分作品。`)
     const next = [artwork, ...existing]
-    persist(next, artwork.id)
+    const scenes = scene ? { ...sceneSelections.value, [scene]: artwork.id } : sceneSelections.value
+    persist(next, artwork.id, scenes)
     saved.value = next
     selectedId.value = artwork.id
+    sceneSelections.value = scenes
   }
   function remove(id: string) {
-    if (id === builtinId) return
+    if (isBuiltinArtwork(id)) return
     const next = saved.value.filter(item => item.id !== id)
     const selection = selectedId.value === id ? builtinId : selectedId.value
-    persist(next, selection)
+    const scenes = readScenes(sceneSelections.value, next)
+    persist(next, selection, scenes)
     saved.value = next
     selectedId.value = selection
+    sceneSelections.value = scenes
   }
   function findPrompt(prompt: string) { return artworks.value.find(item => normalizeHairlinePrompt(item.prompt) === normalizeHairlinePrompt(prompt)) }
-  function exportJson() { return JSON.stringify({ version: 1, selectedId: selectedId.value, artworks: saved.value }, null, 2) }
+  function exportJson() { return JSON.stringify({ version: 1, selectedId: selectedId.value, sceneSelections: sceneSelections.value, artworks: saved.value }, null, 2) }
   function importJson(text: string) {
     if (text.length > maxLibraryLength) throw new Error('导入文件过大。')
     const payload = JSON.parse(text)
@@ -130,13 +163,15 @@ export function useHairlineLibrary() {
     incoming.forEach(item => merged.set(item.id, item))
     if (merged.size > maxSavedArtworks) throw new Error(`合并后超过 ${maxSavedArtworks} 幅，请先删除部分作品。`)
     const next = [...merged.values()]
-    const selection = next.some(item => item.id === payload.selectedId) ? payload.selectedId : selectedId.value
-    persist(next, selection)
+    const selection = knownArtwork(payload.selectedId, next) ? payload.selectedId : selectedId.value
+    const scenes = readScenes(payload.sceneSelections, next, sceneSelections.value)
+    persist(next, selection, scenes)
     saved.value = next
     selectedId.value = selection
+    sceneSelections.value = scenes
     return incoming.length
   }
-  return { artworks, selected, storageWarning: readonly(storageWarning), select, save, remove, findPrompt, exportJson, importJson }
+  return { artworks, selected, savedCount, sceneSelections: readonly(sceneSelections), storageWarning: readonly(storageWarning), getSceneArtwork, selectForScene, select, save, remove, findPrompt, exportJson, importJson }
 }
 
 export function hairlineEndpoint(value: string): string {

@@ -127,5 +127,6 @@ hairline({
   means: "Three empty trays: the tray under the pointer lifts gently, with its neighbours following by distance.",
   rules: [1, 2, 4, 5, 6, 7, 8, 9, 10],
   range: [24, 40, 60],
+  tour: [[180, 120], [220, 160], [240, 210], null],
   mount,
 });

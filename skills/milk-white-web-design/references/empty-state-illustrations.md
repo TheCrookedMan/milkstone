@@ -10,7 +10,7 @@
 
 1. 页面将 Prompt 提交给配置好的生成 API。API 调用 OpenAI 兼容大模型，只要求返回 figure JavaScript；固定 `kernel.js`、`bench.html`、组装器和静态校验器由服务提供。
 2. 服务不执行模型返回的 JavaScript。组装和静态校验失败时最多进行一次修复；仍失败则返回错误，不交付不合格图形，也不换成预设图形假装成功。同一规范化 Prompt、模型和运行时命中的服务缓存可直接复用。
-3. 客户端在隔离绘制环境中生成浅色／暗色 SVG 预览。用户确认后保存到本浏览器图库；选择已有图直接显示，不调用模型。图库支持 JSON 导出与导入，完整交互图可下载为自包含 HTML。
+3. 客户端在隔离绘制环境中生成白色／黑色／乳白 SVG 预览，并可在卡片内试用交互。用户确认后保存到本浏览器图库；选择已有图直接显示，不调用模型。图库支持 JSON 导出与导入，完整交互图可下载为自包含 HTML。
 
 模型密钥只保留在服务端环境变量中，默认使用 DeepSeek，用户可更换 OpenAI 兼容服务和模型。页面填写包含 `/api/hairline` 的完整生成服务 URL 及服务访问令牌，访问令牌只在当前会话内存中保留；它不是模型密钥。服务未配置、无访问权限、网络或模型请求失败、静态校验失败以及浏览器保存失败分别给出实际状态，保留当前可用图形。完整启动、接口和部署方式见 [Hairline 生成服务](hairline-generation-service.md)。
 
@@ -18,15 +18,16 @@
 
 自动生成结果的 `validation` 为 `static`，只表示通过固定静态校验。预览可供用户检查构图与含义，但不代表 Hairline 原技能要求的静止、交互、缩略图、强度两端和明暗共八画面已经人工验收；发布为正式插图时按下文流程补充检查，明确未完成项。
 
-## 已附示例与复用
+## 场景图库与原位互动
 
-首个图形是空托盘：盘体完整呈现，缺少的是其中的内容。它可作为通用占位图，由页面标题区分暂无数据、暂无用户或搜索无结果。
+三种场景各有离线可用的默认图：`data` 使用「空图表」，`people` 使用「空名册架」，`search` 使用「空白寻迹」。原有「空托盘」作为第四幅内置可选图保留。默认图形与用户生成的作品都可以复用，各场景选择独立保存；内置图不占 24 个用户作品名额。已有 v1 图库导入仍可用，初始化时没有场景映射则采用对应默认图，导入旧 JSON 时保留当前场景选择；没有 `milkSvg` 的旧作品在乳白中回退浅色快照。保存与场景选择只在本浏览器持久化，迁移时导出图库 JSON。
 
-- 应用内使用 [HairlineEmptyArt.vue](../assets/shadcn-catalog/src/components/shadcn-gallery/HairlineEmptyArt.vue) 承载 [浅色 SVG](../assets/shadcn-catalog/src/components/shadcn-gallery/hairline/empty-tray.svg) 与 [暗色 SVG](../assets/shadcn-catalog/src/components/shadcn-gallery/hairline/empty-tray-dark.svg) 的静止缩略图，复制组件时保留相邻 `hairline/` 目录，并沿用模板的 `@/theme-controller`。普通 Empty 展示使用这个轻量版本，不加载交互引擎；milk 沿用浅色线稿，周围的容器与文字使用乳白主题令牌。
-- 需要查看指针反馈时，单独打开 [Hairline 交互 HTML](../assets/shadcn-catalog/src/components/shadcn-gallery/hairline/hairline-empty-tray.html)。它是自包含演示，保留原始引擎和页面；使用 `?theme=light` 或 `?theme=dark` 选择其原生主题。Hairline 引擎仅提供这两种原生主题；从乳白页面打开时明确回退为 `?theme=light`，保留浅色线稿与固定引擎，不传入未支持的 milk 参数或整图反色。
-- [empty-tray.js](../assets/shadcn-catalog/src/components/shadcn-gallery/hairline/empty-tray.js) 是可继续编辑和重新生成的图形源文件。它与 HTML、SVG 一起分发；修改时仍执行 `hairline-create` 的原始构建与验证流程，并保留 [Hairline 许可](../assets/shadcn-catalog/src/components/shadcn-gallery/hairline/LICENSE.txt)。
+- [HairlineEmptyArt.vue](../assets/shadcn-catalog/src/components/shadcn-gallery/HairlineEmptyArt.vue) 负责 Empty 中的图形承载，静态 SVG 用于缩略图与轻量占位；按场景读取作品，保留相邻 `hairline/` 目录和主题控制器。
+- 卡片内互动使用与生成预览相同的隔离绘制边界，只展示固定宿主根据 source 组装的图形画布，不嵌入作品的 html／previewHtml。指针进入或键盘聚焦时暂停自动 tour，让用户接管；方向键探索、Home 归位，离开并失焦后恢复演示。后台或离屏卸载 iframe 并显示静态快照，恢复时从静止重新挂载；减少动态效果关闭自动 tour，手动探索即时更新。三种主题的线稿颜色实时取自页面角色，几何与手势不变。
+- [Hairline 交互 HTML](../assets/shadcn-catalog/src/components/shadcn-gallery/hairline/hairline-empty-tray.html) 保留自包含 bench 与原生明暗主题，供独立打开或下载；应用内主题桥接不改写固定 bench，也不把整个 bench 缩进 Empty 卡片。
+- [empty-tray.js](../assets/shadcn-catalog/src/components/shadcn-gallery/hairline/empty-tray.js) 是空托盘的可编辑源文件。它与 HTML、SVG 一起分发；修改时仍执行图形构建、校验和视觉检查，并保留 [Hairline 许可](../assets/shadcn-catalog/src/components/shadcn-gallery/hairline/LICENSE.txt)。
 
-空托盘是离线可用的起始图形，不代表其他用户 Prompt 已经生成。普通 Empty 使用静态缩略图，不承诺悬停、旋转或拖动；需要指针反馈时打开完整交互图。业务标题与操作仍由 Empty 组件完成，不把整页交互演示缩成不可读的卡片内嵌页面。
+内置场景图不代表用户的新 Prompt 已经生成。图形互动不承接业务创建、邀请或搜索操作，标题、说明与按钮仍由 Empty 组件提供。指针稳定命中、物理反馈、自动演示与绘制层次的具体规则见 [线框动效](hairline-motion.md)。
 
 ## 状态与文案
 
@@ -38,7 +39,18 @@
 | 尚无用户 | 空置的席位、名册槽位 | 暂无用户／邀请用户 |
 | 搜索无结果 | 放大镜下的空白纸面、空筛网 | 未找到相关结果／清除筛选 |
 
-表中是选题方向，不表示三个图形已经生成，也不要求每个场景使用独立插图。标题说明当前状态，正文给出原因或下一步；按钮只提供已实现且当前用户可执行的操作。演示中的创建、邀请或重置须明确为本地演示。
+表中给出适合继续扩展的物件方向；内置三种场景图提供起点，用户也可为多个场景选择同一已保存作品。标题说明当前状态，正文给出原因或下一步；按钮只提供已实现且当前用户可执行的操作。演示中的创建、邀请或重置须明确为本地演示。
+
+图库调用使用 `getSceneArtwork(scene)` 与 `selectForScene(scene, id)`；`save(artwork, scene)` 可在保存后应用到指定场景。保留旧的全局 `selected`、`select(id)` 与 `save(artwork)` 用法，既有调用无需迁移。删除生成作品后，引用它的场景分别恢复默认图，不影响其他场景。`savedCount` 只计算用户作品，容量上限为 24。
+
+```vue
+<!-- 默认静态；只有 interactive 启用可见的隔离画布，play 启用自动演示。 -->
+<HairlineEmptyArt scene="data" />
+<HairlineEmptyArt scene="people" interactive play />
+<HairlineEmptyArt scene="search" interactive play />
+```
+
+`scene` 类型为 `HairlineScene`，取值 `data | people | search`；不传时兼容原有全局选图。`interactive` 与 `play` 都是可选布尔参数，未声明 interactive 不加载可见互动绘制器。play 使用作品的 tour，旧作品缺少 tour 时使用内核 `HL.LAP`。
 
 ## 用 `hairline-create` 人工制作与完整验收
 
@@ -54,6 +66,6 @@
 
 插图不代替空状态的标题、说明和按钮。常规占位图区建议宽 160–200px，保持原始纵横比，窄屏随容器缩小；图与标题间隔 16px，标题与说明间隔 8px，正文与操作间隔 24px。标题采用组件内 18px 字阶，说明 14px，辅助注记 12px，按钮复用现有 44px／36px 规格。父级 Card 仍使用统一内边距和材料令牌，不为每一条说明再套实体面板。
 
-周围的 Card、按钮和输入框沿用 [设计系统](design-system.md) 与 [三种主题](theme-modes.md)，线稿保持克制，不通过整页反色或额外浮雕把细线变成厚重轮廓。应用内静态缩略图由承载组件接入主题；独立 Hairline HTML 使用原生主题参数，保持固定引擎与页面不变。分别检查纸白、石墨与乳白背景的可读性，不用 UI 投影规则改写插图自身的线条层级。
+周围的 Card、按钮和输入框沿用 [设计系统](design-system.md) 与 [三种主题](theme-modes.md)，线稿保持克制，不通过整页反色或额外浮雕把细线变成厚重轮廓。应用内静态快照与互动绘制器接入同一主题角色；独立 Hairline HTML 使用原生主题参数，固定引擎与 bench 不由模型改写。分别检查纸白、石墨与乳白背景的可读性，不用 UI 投影规则改写插图自身的线条层级。
 
-若标题已完整传达状态，插图作为装饰，不重复播报；有独立意义时提供简短替代说明。业务操作始终是可访问按钮或链接，键盘用户不必操作插图才能理解状态或继续。减少动态效果时保留完整静止图，离屏暂停并在卸载时清理图形；无 JavaScript 或交互不可用时，标题、说明和下一步仍可读可用。状态切换不无故抢夺焦点，不让持续图形读数成为 live region。
+若标题已完整传达状态，静态插图作为装饰，不重复播报；可交互画布提供名称与方向键／Home 操作说明。业务操作始终是可访问按钮或链接，键盘用户不必操作插图才能理解状态或继续。减少动态效果时取消连续动作，离屏或后台卸载互动 iframe，返回后重新挂载；无 JavaScript 或交互不可用时，静态图、标题、说明和下一步仍可读可用。状态切换不无故抢夺焦点，只有主动探索时更新图形读数，不持续播报自动 tour。

@@ -1,4 +1,4 @@
-/* hairline kernel sha256:8e2abcbdf63c7755195ee942c39e9c8ea6a539d1147e986dd1c153559121f075 */
+/* hairline kernel sha256:3a19aa2640ba8c6c306184d05fddfbd4f3323a6ebd9217dd3cbb38e9db74991c */
 /*
  * HL: everything a figure may call. Read this index; the code under it is the
  * package's src/core, unchanged, and a figure should not need to read it.
@@ -69,6 +69,8 @@
  * The bench's business, not a figure's
  *   css(lightDark)
  *   inject(root)
+ *   tour(stage, stops, onStop)             an unseen pointer that walks the stops, [x, y] in viewBox units or null to leave, and gives way to a real one; onStop(i) on each arrival; returns {stop}
+ *   LAP                                    the default stops: a diamond around the centre, then a leave
  *
  * Classes, on path, polygon, ellipse and line. They are the whole palette; a
  * figure sets no colour, width or fill of its own.

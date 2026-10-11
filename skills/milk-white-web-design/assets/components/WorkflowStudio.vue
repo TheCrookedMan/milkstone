@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, useId, watch } from 'vue'
-import { Handle, Position, VueFlow, useVueFlow, type Connection } from '@vue-flow/core'
+import { BaseEdge, getSmoothStepPath, Handle, Position, VueFlow, useVueFlow, type Connection, type EdgeProps } from '@vue-flow/core'
 import '@vue-flow/core/dist/style.css'
 import '@vue-flow/core/dist/theme-default.css'
 import { connectGraph, createDefaultWorkflow, exportWorkflow, importWorkflow, validateGraph, type WorkflowGraph, type WorkflowNode } from '../workflow-model.mjs'
+import { executionSnapshot, executionTimeline, type ExecutionTimeline } from '../graph-motion.mjs'
 
 const flowId = `milk-workflow-${useId()}`
 const { fitView, zoomIn, zoomOut } = useVueFlow(flowId)
@@ -12,9 +13,26 @@ const selectedId = ref('5')
 graph.value.nodes.find((node) => node.id === selectedId.value)!.selected = true
 const selected = computed(() => graph.value.nodes.find((node) => node.id === selectedId.value))
 const running = ref(false)
+const studioElement = ref<HTMLElement>()
+const reducedMotion = ref(false)
+const inView = ref(true)
+const pageVisible = ref(true)
+const clockAvailable = computed(() => inView.value && pageVisible.value)
+const motionState = computed(() => !running.value ? 'idle' : !pageVisible.value ? 'background' : !inView.value ? 'offscreen' : reducedMotion.value ? 'reduced-motion' : 'running')
 const notice = ref('拖动节点安排步骤，连接同类端口，选中后编辑参数。')
 const progress = ref(0)
-let runToken = 0
+const edgeStates = ref<Record<string, 'idle' | 'running' | 'done'>>({})
+let simulation: ExecutionTimeline | undefined
+let elapsed = 0
+let previousTime: number | undefined
+let animationFrame = 0
+let eventTimer = 0
+let motionQuery: MediaQueryList | undefined
+let intersection: IntersectionObserver | undefined
+let mounted = false
+let fitFrame = 0
+type SignalTrack = { id: string; path: SVGPathElement; packet: SVGGElement; length: number }
+let signalTracks: SignalTrack[] = []
 const mobile = ref(typeof window !== 'undefined' && window.matchMedia('(max-width: 760px)').matches)
 let media: MediaQueryList | undefined
 const onMediaChange = () => { mobile.value = media?.matches ?? false }
@@ -47,14 +65,109 @@ watch(mobile, async (isMobile) => {
   if (isMobile) return
   await nextTick()
   // Let Vue Flow's ResizeObserver refresh its viewport dimensions before fitting.
-  window.requestAnimationFrame(() => window.requestAnimationFrame(() => { void fitView({ padding: 0.13 }) }))
+  if (!mounted) return
+  cancelAnimationFrame(fitFrame)
+  fitFrame = window.requestAnimationFrame(() => { fitFrame = window.requestAnimationFrame(() => { if (mounted) void fitView({ padding: 0.13 }) }) })
 })
+const updateMotion = () => { reducedMotion.value = motionQuery?.matches ?? false }
+const updateVisibility = () => { pageVisible.value = document.visibilityState !== 'hidden' }
+watch([clockAvailable, reducedMotion], syncSimulationClock, { flush: 'post' })
+watch(() => JSON.stringify([graph.value.nodes.map(({ id }) => id), graph.value.edges.map(({ id, source, target }) => [id, source, target])]), () => {
+  if (running.value) cancelRun('工作流结构已改变，本地模拟已停止，请重新运行。')
+  edgeStates.value = {}
+  progress.value = 0
+  for (const node of graph.value.nodes) node.data.status = 'idle'
+}, { flush: 'sync' })
 onMounted(() => {
+  mounted = true
   media = window.matchMedia('(max-width: 760px)')
   onMediaChange()
   media.addEventListener('change', onMediaChange)
+  motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
+  updateMotion(); updateVisibility()
+  motionQuery.addEventListener('change', updateMotion)
+  document.addEventListener('visibilitychange', updateVisibility)
+  if (studioElement.value) {
+    intersection = new IntersectionObserver((entries) => { inView.value = entries.some(({ isIntersecting }) => isIntersecting) }, { threshold: 0 })
+    intersection.observe(studioElement.value)
+  }
 })
-onBeforeUnmount(() => { runToken++; media?.removeEventListener('change', onMediaChange) })
+onBeforeUnmount(() => {
+  mounted = false
+  stopSimulationClock()
+  cancelAnimationFrame(fitFrame)
+  simulation = undefined; signalTracks = []
+  intersection?.disconnect()
+  media?.removeEventListener('change', onMediaChange)
+  motionQuery?.removeEventListener('change', updateMotion)
+  document.removeEventListener('visibilitychange', updateVisibility)
+})
+
+function signalPath(edge: Pick<EdgeProps, 'sourceX' | 'sourceY' | 'sourcePosition' | 'targetX' | 'targetY' | 'targetPosition'>) {
+  return getSmoothStepPath({ ...edge, borderRadius: 16 })[0]
+}
+function collectSignals() {
+  const element = studioElement.value
+  signalTracks = element ? Array.from(element.querySelectorAll<SVGPathElement>('.workflow-signal-route')).flatMap((path) => {
+    const packet = path.parentElement?.querySelector<SVGGElement>('.workflow-signal-packet')
+    return packet ? [{ id: path.dataset.edgeId!, path, packet, length: path.getTotalLength() }] : []
+  }) : []
+}
+function paintSimulation() {
+  if (!simulation) return
+  const snapshot = executionSnapshot(simulation, elapsed)
+  for (const node of graph.value.nodes) {
+    const status = snapshot.nodes.get(node.id) ?? 'idle'
+    if (node.data.status !== status) node.data.status = status
+  }
+  progress.value = snapshot.completed
+  const nextEdgeStates: typeof edgeStates.value = {}
+  for (const [id, signal] of snapshot.edges) nextEdgeStates[id] = signal.state
+  if (Object.keys(nextEdgeStates).some((id) => edgeStates.value[id] !== nextEdgeStates[id])) edgeStates.value = nextEdgeStates
+  for (const track of signalTracks) {
+    const signal = snapshot.edges.get(track.id)
+    const visible = !reducedMotion.value && signal?.state === 'running'
+    track.packet.style.opacity = visible ? String(Math.min(1, signal.progress * 7, (1 - signal.progress) * 7)) : '0'
+    if (visible) {
+      const head = track.path.getPointAtLength(track.length * signal.progress)
+      track.packet.setAttribute('transform', `translate(${head.x.toFixed(2)} ${head.y.toFixed(2)})`)
+    }
+  }
+  const activeLabels = graph.value.nodes.filter(({ data }) => data.status === 'running').map(({ data }) => data.label)
+  notice.value = activeLabels.length ? `本地模拟：检查 ${activeLabels.join('、')}…` : '本地模拟：沿连接传递节点结果…'
+  if (snapshot.done) {
+    running.value = false
+    stopSimulationClock()
+    notice.value = '本地模拟完成：已按依赖检查节点与参数。未连接生成后端，未生成图像。'
+  }
+}
+function stopSimulationClock() {
+  cancelAnimationFrame(animationFrame); window.clearTimeout(eventTimer)
+  animationFrame = 0; eventTimer = 0; previousTime = undefined
+}
+function tickSimulation(time: number) {
+  animationFrame = 0; eventTimer = 0
+  if (!running.value || !clockAvailable.value || !simulation) { previousTime = undefined; return }
+  if (previousTime !== undefined) elapsed += Math.max(0, time - previousTime)
+  previousTime = time
+  paintSimulation()
+  if (!running.value) return
+  if (reducedMotion.value) {
+    const boundary = simulation.boundaries.find((at) => at > elapsed) ?? simulation.duration
+    eventTimer = window.setTimeout(() => tickSimulation(performance.now()), Math.max(1, boundary - elapsed))
+  } else animationFrame = requestAnimationFrame(tickSimulation)
+}
+function syncSimulationClock() {
+  stopSimulationClock()
+  if (!running.value || !clockAvailable.value) return
+  previousTime = performance.now()
+  paintSimulation()
+  if (!running.value) return
+  if (reducedMotion.value && simulation) {
+    const boundary = simulation.boundaries.find((at) => at > elapsed) ?? simulation.duration
+    eventTimer = window.setTimeout(() => tickSimulation(performance.now()), Math.max(1, boundary - elapsed))
+  } else animationFrame = requestAnimationFrame(tickSimulation)
+}
 
 function nodePreview(node: WorkflowNode['data']) {
   const values = node.raw.widgets_values
@@ -98,33 +211,32 @@ function applyWidgetJson() {
     notice.value = 'JSON 参数已应用。'
   } catch (error) { notice.value = (error as Error).message }
 }
-function cancelRun() {
-  runToken++
+function cancelRun(message = '本地模拟已停止。') {
+  stopSimulationClock()
+  simulation = undefined
   running.value = false
+  edgeStates.value = {}
+  for (const track of signalTracks) track.packet.style.opacity = '0'
   for (const node of graph.value.nodes) if (node.data.status === 'running') node.data.status = 'idle'
-  notice.value = '本地模拟已停止。'
+  notice.value = message
 }
 async function run() {
+  if (running.value) return
   try {
     if (!graph.value.nodes.length) throw new Error('请先添加节点或重置工作流。')
-    const order = validateGraph(graph.value)
-    const token = ++runToken
+    validateGraph(graph.value)
+    simulation = executionTimeline(graph.value.nodes.map(({ id }) => id), graph.value.edges)
+    elapsed = 0
     running.value = true
     progress.value = 0
+    edgeStates.value = {}
     graph.value.nodes.forEach((node) => { node.data.status = 'idle' })
-    for (const id of order) {
-      if (token !== runToken) return
-      const node = graph.value.nodes.find((item) => item.id === id)!
-      node.data.status = 'running'
-      notice.value = `本地模拟：检查 ${node.data.label}…`
-      await new Promise((resolve) => window.setTimeout(resolve, 260))
-      if (token !== runToken) return
-      node.data.status = 'done'
-      progress.value++
-    }
-    running.value = false
-    notice.value = '本地模拟完成：已遍历节点顺序与参数。未连接生成后端，未生成图像。'
-  } catch (error) { running.value = false; notice.value = (error as Error).message }
+    const plan = simulation
+    await nextTick()
+    if (!mounted || !running.value || simulation !== plan) return
+    collectSignals()
+    syncSimulationClock()
+  } catch (error) { cancelRun((error as Error).message) }
 }
 async function reset() {
   cancelRun()
@@ -134,9 +246,10 @@ async function reset() {
   progress.value = 0
   notice.value = '示例工作流已重置。'
   await nextTick()
-  if (!mobile.value) void fitView({ padding: 0.13 })
+  if (mounted && !mobile.value) void fitView({ padding: 0.13 })
 }
 function addPrompt() {
+  if (running.value || graph.value.nodes.length >= 100) return
   const template = createDefaultWorkflow().nodes.find((node) => node.id === '2')!
   const id = Math.max(0, ...graph.value.nodes.map((node) => Number(node.id) || 0)) + 1
   template.id = String(id); template.data.raw.id = id
@@ -146,6 +259,7 @@ function addPrompt() {
   notice.value = '已添加提示词节点；可连接 CLIP 输入与 CONDITIONING 输出。'
 }
 function removeSelected() {
+  if (running.value) return
   const id = selectedId.value
   graph.value.edges = graph.value.edges.filter((edge) => edge.source !== id && edge.target !== id)
   graph.value.nodes = graph.value.nodes.filter((node) => node.id !== id)
@@ -165,7 +279,7 @@ async function loadJson() {
     showImport.value = false
     notice.value = `已导入 ${imported.nodes.length} 个节点、${imported.edges.length} 条连接。未知节点以通用参数卡呈现。`
     await nextTick()
-    if (!mobile.value) void fitView({ padding: 0.13 })
+    if (mounted && !mobile.value) void fitView({ padding: 0.13 })
   } catch (error) { notice.value = `导入失败：${(error as Error).message}` }
 }
 async function loadFile(event: Event) {
@@ -190,8 +304,8 @@ function download() {
 </script>
 
 <template>
-  <section class="workflow-studio milk-relief milk-relief-card" aria-label="MILK 工作流编辑器">
-    <div class="workflow-topline"><span class="engraved-label">WORKFLOW / 04</span><span class="workflow-mode"><i />本地工作流演示</span></div>
+  <section ref="studioElement" class="workflow-studio milk-relief milk-relief-card" aria-label="MILK 工作流编辑器" :data-motion-state="motionState">
+    <div class="workflow-topline"><span class="engraved-label">WORKFLOW / 04</span><span class="workflow-mode"><i />{{ running ? '依赖路径传播中 · 本地模拟' : '本地工作流演示' }}</span></div>
     <div class="workflow-toolbar" role="toolbar" aria-label="工作流操作">
       <button class="wf-button wf-primary" type="button" @click="running ? cancelRun() : run()"><span aria-hidden="true">{{ running ? '■' : '▶' }}</span>{{ running ? '停止模拟' : '运行模拟' }}</button>
       <button class="wf-button" type="button" :disabled="running || graph.nodes.length >= 100" @click="addPrompt">＋ 添加提示词</button>
@@ -209,8 +323,12 @@ function download() {
       <div v-show="!mobile" class="workflow-canvas">
         <div class="canvas-ruler" aria-hidden="true"><span>00</span><span>25</span><span>50</span><span>75</span><span>100</span></div>
         <VueFlow :id="flowId" v-model:nodes="graph.nodes" v-model:edges="graph.edges" :default-edge-options="edgeOptions" :min-zoom="0.3" :max-zoom="1.6" :fit-view-on-init="true" :zoom-on-scroll="false" :pan-on-scroll="false" :nodes-draggable="!running" :nodes-connectable="!running" :edges-updatable="false" :is-valid-connection="null" :delete-key-code="running ? null : ['Backspace', 'Delete']" @connect="connect" @node-click="({ node }) => selectNode(node.id)">
+          <template #edge-smoothstep="edge">
+            <BaseEdge :id="edge.id" class="workflow-signal-route" :class="`signal-${edgeStates[edge.id] ?? 'idle'}`" :data-edge-id="edge.id" :path="signalPath(edge)" :marker-start="edge.markerStart" :marker-end="edge.markerEnd" :interaction-width="edge.interactionWidth" />
+            <g class="workflow-signal-packet" aria-hidden="true"><circle class="signal-halo" r="6"/><circle class="signal-shell" r="3.2"/><circle class="signal-core" r="1.4"/></g>
+          </template>
           <template #node-milk="{ id, data, selected: isSelected }">
-            <div class="workflow-node milk-relief milk-relief-card" :class="[{ 'is-selected': isSelected || selectedId === id }, `is-${data.status}`]">
+            <div class="workflow-node milk-relief milk-relief-card" :class="[{ 'is-selected': isSelected || selectedId === id }, `is-${data.status}`]" :data-node-id="id" :data-node-status="data.status">
               <div class="node-header"><span class="node-index">{{ id.padStart(2, '0') }}</span><strong>{{ data.label }}</strong><span class="node-led" :aria-label="data.status" /></div>
               <div class="node-type">{{ data.classType }}</div>
               <div class="node-ports" :style="{ minHeight: `${Math.max(data.raw.inputs?.length ?? 0, data.raw.outputs?.length ?? 0, 1) * 24}px` }">
@@ -225,7 +343,7 @@ function download() {
         <span class="canvas-hint">拖动平移 · 端口连线 · 选中后方向键移动</span>
       </div>
       <div v-if="mobile" class="workflow-mobile-list" aria-label="工作流节点列表">
-        <button v-for="node in graph.nodes" :key="node.id" type="button" class="mobile-node" :class="{ active: selectedId === node.id }" :aria-pressed="selectedId === node.id" @click="selectNode(node.id)"><span class="node-index">{{ node.id.padStart(2, '0') }}</span><span><strong>{{ node.data.label }}</strong><small>{{ node.data.classType }}</small></span><span class="mobile-state">{{ node.data.status === 'done' ? '✓' : node.data.status === 'running' ? '…' : '›' }}</span></button>
+        <button v-for="node in graph.nodes" :key="node.id" type="button" class="mobile-node" :class="[{ active: selectedId === node.id }, `is-${node.data.status}`]" :aria-pressed="selectedId === node.id" :data-node-id="node.id" :data-node-status="node.data.status" @click="selectNode(node.id)"><span class="node-index">{{ node.id.padStart(2, '0') }}</span><span><strong>{{ node.data.label }}</strong><small>{{ node.data.classType }}</small></span><span class="mobile-state">{{ node.data.status === 'done' ? '✓' : node.data.status === 'running' ? '…' : '›' }}</span></button>
       </div>
       <aside class="workflow-inspector milk-relief milk-relief-card" aria-label="节点参数面板"><div class="inspector-content">
         <div class="inspector-heading"><span class="engraved-label">NODE / INSPECTOR</span><span>{{ selectedId ? `#${selectedId.padStart(2, '0')}` : '—' }}</span></div>
@@ -254,7 +372,7 @@ function download() {
         <details class="wf-details"><summary class="milk-relief milk-relief-control">连接列表 · {{ graph.edges.length }}</summary><div v-for="edge in graph.edges" :key="edge.id" class="edge-row"><span>#{{ edge.source }} → #{{ edge.target }}<small>{{ edge.data?.portType }}</small></span><button class="wf-button" type="button" :disabled="running" :aria-label="`移除连接 ${edge.id}`" @click="graph.edges = graph.edges.filter(item => item.id !== edge.id)">×</button></div></details>
       </div></aside>
     </div>
-    <div class="workflow-status"><span class="status-count">{{ String(progress).padStart(2, '0') }} / {{ String(graph.nodes.length).padStart(2, '0') }}</span><p role="status" aria-live="polite">{{ notice }}</p><span class="backend-label">未连接生成后端</span></div>
+    <div class="workflow-status"><span class="status-count">{{ String(progress).padStart(2, '0') }} / {{ String(graph.nodes.length).padStart(2, '0') }}</span><p role="status" aria-live="polite">{{ notice }}<span v-if="running && !clockAvailable" class="simulation-pause">{{ !pageVisible ? '后台暂停，返回后继续。' : '离屏暂停，进入视图后继续。' }}</span><span v-else-if="running && reducedMotion" class="simulation-pause">减少动态效果：仅显示执行状态。</span></p><span class="backend-label">未连接生成后端</span></div>
   </section>
 </template>
 
@@ -466,6 +584,10 @@ function download() {
 @media(max-width:760px){.inspector-content{max-height:none;padding:22px 18px}.workflow-status{border-radius:0 0 15px 15px}}
 .workflow-studio :is(input:not([type=range]):not([type=checkbox]):not([type=radio]),textarea,select,[role=combobox]):is(:focus,:focus-visible){outline:none;outline-offset:0;border-color:transparent;box-shadow:var(--milk-pressed)}
 .wf-field:focus-within,.workflow-import:focus-within{outline:none;outline-offset:0;box-shadow:none}
+
+/* Signals belong to actual directed edges; resting geometry remains editable. */
+.workflow-signal-route{transition:stroke .24s ease,stroke-width .24s ease}.workflow-canvas :deep(.workflow-signal-route.signal-running){stroke:var(--milk-color-6b7c93);stroke-width:2.8}.workflow-canvas :deep(.workflow-signal-route.signal-done){stroke:var(--milk-color-606060)}.workflow-signal-packet{opacity:0;pointer-events:none}.signal-halo{fill:var(--milk-color-6b7c93);opacity:.15}.signal-shell{fill:var(--milk-color-6b7c93);stroke:var(--milk-emission,#fbfcff);stroke-width:.7}.signal-core{fill:var(--milk-emission,#fbfcff)}.workflow-node{transition:transform .58s cubic-bezier(.22,.7,.25,1),box-shadow .58s ease}.workflow-node.is-running{transform:translateY(-4px);box-shadow:var(--milk-card-hover-shadow)}.workflow-node.is-running .node-header strong{color:var(--milk-ink,var(--milk-color-2e3540))}.is-running .node-led{background:var(--milk-color-6b7c93);box-shadow:0 0 0 3px color-mix(in srgb,var(--milk-color-6b7c93) 12%,transparent)}.is-done .node-led{background:var(--milk-color-606060)}.mobile-node.is-running{background:var(--milk-surface-raised) padding-box,var(--milk-border-gradient) border-box;box-shadow:var(--milk-card-hover-shadow)}.simulation-pause{display:block;margin-top:3px;color:var(--milk-color-6b7c93)}
+@media(prefers-reduced-motion:reduce){.workflow-node,.workflow-signal-route{transition:none}.workflow-node.is-running{transform:none}}
 
 /* Hold the pressed material through the shared damped return lifecycle. */
 .workflow-studio :is(.wf-button,.mobile-node,summary)[data-milk-press="down"]:not(:disabled):not([aria-disabled="true"]){background:var(--milk-surface-recessed) padding-box,var(--milk-border-gradient) border-box;box-shadow:var(--milk-pressed)}

@@ -4,14 +4,8 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import HairlineEmptyArt from './shadcn-gallery/HairlineEmptyArt.vue'
 import HairlinePromptStudio from './shadcn-gallery/HairlinePromptStudio.vue'
-import { builtinArtwork, useHairlineLibrary } from './shadcn-gallery/hairline-library'
-import illustrationUrl from './shadcn-gallery/hairline/hairline-empty-tray.html?url'
-import { useTheme } from '../theme-controller'
 
 const id = useId()
-const { isDark } = useTheme()
-const { selected } = useHairlineLibrary()
-const interactiveUrl = computed(() => selected.value.id === builtinArtwork.id ? `${illustrationUrl}?theme=${isDark.value ? 'dark' : 'light'}` : undefined)
 const records = ref<string[]>([])
 const members = ref<string[]>([])
 const emptyQuery = '轨道之外'
@@ -37,7 +31,7 @@ function toggleQuery() {
       <article class="empty-state-example panel" :aria-labelledby="`${id}-data-title`">
         <span class="empty-state-label">DATA / 01</span>
         <div class="empty-state-body">
-          <HairlineEmptyArt v-if="!records.length" />
+          <HairlineEmptyArt v-if="!records.length" scene="data" interactive play />
           <ul v-else class="empty-state-list" aria-label="本地演示记录">
             <li v-for="(record, index) in records" :key="record"><span>{{ String(index + 1).padStart(2, '0') }}</span><div><strong>{{ record }}</strong><small>仅保存在当前页面</small></div></li>
           </ul>
@@ -53,7 +47,7 @@ function toggleQuery() {
       <article class="empty-state-example panel" :aria-labelledby="`${id}-users-title`">
         <span class="empty-state-label">PEOPLE / 02</span>
         <div class="empty-state-body">
-          <HairlineEmptyArt v-if="!members.length" />
+          <HairlineEmptyArt v-if="!members.length" scene="people" interactive play />
           <ul v-else class="empty-state-list" aria-label="本地演示成员">
             <li v-for="(member, index) in members" :key="member"><span>{{ String(index + 1).padStart(2, '0') }}</span><div><strong>{{ member }}</strong><small>本地展示用成员</small></div></li>
           </ul>
@@ -73,7 +67,7 @@ function toggleQuery() {
           <Input :id="`${id}-search`" v-model="query" type="search" placeholder="筛选演示构件" autocomplete="off" />
         </div>
         <div class="empty-state-body">
-          <HairlineEmptyArt v-if="!matches.length" />
+          <HairlineEmptyArt v-if="!matches.length" scene="search" interactive play />
           <ul v-else class="empty-state-list" aria-label="筛选后的演示构件">
             <li v-for="(name, index) in matches" :key="name"><span>{{ String(index + 1).padStart(2, '0') }}</span><div><strong>{{ name }}</strong><small>本地演示构件</small></div></li>
           </ul>
@@ -88,8 +82,7 @@ function toggleQuery() {
     </div>
 
     <div class="empty-state-footnote" data-milk-reveal>
-      <p>选择已保存的线稿即可复用；新的提示词由模型生成，预览通过后再保存到图库。</p>
-      <a v-if="interactiveUrl" :href="interactiveUrl" target="_blank" rel="noopener noreferrer">打开内置交互插图 ↗</a>
+      <p>数据、成员与搜索各有自己的留白图形。指针靠近即可互动，也可用提示词生成并替换其中一个场景。</p>
     </div>
   </div>
 </template>

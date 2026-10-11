@@ -48,11 +48,22 @@ export function createPreview({ id, source, kernel }) {
       const svg = HL.mk('svg',{viewBox:'0 0 400 320','aria-hidden':'true'},stage);
       handle = figure.mount({stage,svg,read:document.getElementById('read')}, figure.range[1]);
       await new Promise(resolve => setTimeout(resolve, 1100));
-      document.documentElement.dataset.theme = 'light'; await frame();
+      const palettes = {
+        light: {plate:'#ebedf1',hi:'#2e3540',edge:'#8e97a4',mid:'#b4bbc6',lo:'#d2d7df'},
+        dark: {plate:'#1d2025',hi:'#e2e7ef',edge:'#79818c',mid:'#505863',lo:'#343b45'},
+        milk: {plate:'#f7f4ee',hi:'#48473f',edge:'#8d8a80',mid:'#b7b2a7',lo:'#ddd7cb'}
+      };
+      const palette = mode => {
+        document.documentElement.dataset.theme = mode === 'dark' ? 'dark' : 'light';
+        for (const [key,value] of Object.entries(palettes[mode])) stage.style.setProperty('--hairline-'+key,value);
+      };
+      palette('light'); await frame();
       const lightSvg = snapshot(svg);
-      document.documentElement.dataset.theme = 'dark'; await frame();
+      palette('dark'); await frame();
       const darkSvg = snapshot(svg);
-      report({lightSvg,darkSvg});
+      palette('milk'); await frame();
+      const milkSvg = snapshot(svg);
+      report({lightSvg,darkSvg,milkSvg});
     } catch { failed(); }
   };
   addEventListener('pagehide', () => handle?.destroy?.(), {once:true});
@@ -60,5 +71,5 @@ export function createPreview({ id, source, kernel }) {
   const scripts = [kernel, adapter, source]
   const hashes = scripts.map(code => `'sha256-${createHash('sha256').update(code).digest('base64')}'`).join(' ')
   // The caller must also set iframe sandbox="allow-scripts" without same-origin.
-  return `<!doctype html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src ${hashes}; style-src 'unsafe-inline'; img-src data:; connect-src 'none'; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'"><meta name="referrer" content="no-referrer"><style>html,body{margin:0;width:400px;height:320px;overflow:hidden}#stage{width:400px;height:320px;position:relative}#stage svg{display:block;width:400px;height:320px}#read{display:none}</style></head><body><div id="stage"></div><output id="read">rest</output><script>${kernel}</script><script>${adapter}</script><script type="module">${source}</script></body></html>`
+  return `<!doctype html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src ${hashes}; style-src 'unsafe-inline'; img-src data:; connect-src 'none'; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'"><meta name="referrer" content="no-referrer"><style>html,body{margin:0;width:400px;height:320px;overflow:hidden}#stage{width:400px;height:320px;position:relative}#stage svg{display:block;width:400px;height:320px}#stage *{transition:none!important}#read{display:none}</style></head><body><div id="stage"></div><output id="read">rest</output><script>${kernel}</script><script>${adapter}</script><script type="module">${source}</script></body></html>`
 }

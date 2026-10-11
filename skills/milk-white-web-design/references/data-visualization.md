@@ -9,9 +9,9 @@
 | 组件 | 实现 | 页面可操作项 | 复制依赖 |
 | --- | --- | --- | --- |
 | `assets/components/ChartStudio.vue` | Apache ECharts 6.0.0，按需导入折线、柱图、坐标系、提示与 SVG renderer | 折线 / 柱图切换；逐系列显示 / 隐藏；图上数据提示；原生展开完整数据表 | Vue 3.5+、`echarts@6.0.0` |
-| `assets/components/RelationStudio.vue` | Vue + 原生 SVG，组合 `StellarGraph.vue` 与 Canvas/WebGL `StellarSurface.vue` | 神经／章鱼图电流光点；星空完整轨道；暂停；节点选择；星体皮肤和转速设置 | Vue 3.5+，无新增渲染包 |
+| `assets/components/RelationStudio.vue` | Vue + 原生 SVG，组合 `StellarGraph.vue` 与 Canvas/WebGL `StellarSurface.vue` | 神经／章鱼图电流光点与祖先路径逐跳响应；星空完整轨道；暂停；节点选择；星体皮肤和转速设置 | Vue 3.5+，无新增渲染包 |
 
-这些组件不依赖项目根目录的 UI 封装；复制完整 `assets/components` 后可直接导入。单独复制 RelationStudio 时同时保留相邻 StellarGraph.vue 和 StellarSurface.vue。组件最外层使用 `.panel`；导入 `assets/milk-tokens.css` 提供面板与按钮基础外观。其余样式封装在各自 SFC 的 scoped style 中。面板是无远程接口的可运行示例；替换示例数组时，指标、图表与数据表应继续共用同一数据源。星体表面的渲染 props 见 [动态关系与星空](stellar-relations.md)。
+这些组件不依赖项目根目录的 UI 封装；复制完整 `assets/components` 及其相邻支持模块后可直接导入。单独复制 RelationStudio 时同时保留 StellarGraph.vue、StellarSurface.vue 与父目录的 `graph-motion.mjs`、`graph-motion.d.mts`。组件最外层使用 `.panel`；导入 `assets/milk-tokens.css` 提供面板与按钮基础外观。其余样式封装在各自 SFC 的 scoped style 中。面板是无远程接口的可运行示例；替换示例数组时，指标、图表与数据表应继续共用同一数据源。星体表面的渲染 props 见 [动态关系与星空](stellar-relations.md)。
 
 ```sh
 pnpm add echarts@6.0.0
@@ -46,7 +46,9 @@ ECharts 需在已具宽高的 DOM 上 `init`，通过 `setOption` 更新。示�
 
 图节点采用灰白圆形表面与半透明白色套圈，用柔和高光、投影、尺寸与刻度构造表现层级。中心节点略大，灰色选中环与关联线共同反馈状态；文字保持深蓝灰实心字且清楚。电流光点保留白色亮核、灰色轮廓与光尾，不引入彩色线条。图形点击与下方原生按钮完成相同选择，详情通过 polite 状态区更新。每个实例通过 Vue useId 保持内容光效 filter、marker 与无障碍描述的 ID 唯一。
 
-神经和章鱼连线的电流光点沿真实路径从源到目标移动。星空模式将中心与分支呈现为有不同皮肤的星体，支持自转与围绕主体公转；具体组件、控制与生命周期见 [动态关系与星空](stellar-relations.md)。这些动画表达关系方向与层次，示例速度和轨道不代表真实天体测量。
+神经和章鱼连线的电流光点沿真实路径从源到目标移动。悬停或选中目标时，根据真实有向边提取根到目标的全部祖先路径，按层级逐跳抬升与高亮；共享依赖不会丢掉分支。指针命中以静止节点中心判断，离开后恢复当前选中路径，键盘可通过下方按钮完成同一选择。路径响应复用已有循环与暂停状态，不为每个节点再建立 RAF；具体造型与交互原则见 [线框动效](hairline-motion.md)。
+
+星空模式将中心与分支呈现为有不同皮肤的星体，支持自转与围绕主体公转；具体组件、控制与生命周期见 [动态关系与星空](stellar-relations.md)。这些动画表达关系方向与层次，示例速度和轨道不代表真实天体测量。
 
 窄屏中关系图保持可读最小宽度，在自己的画布内横向滚动；页面本身不得横向溢出。图下按钮自动换行，详情保持正文尺寸。节点很多时使用分层、过滤、折叠与查找，避免将上百个节点压进一个固定尺寸画布。
 

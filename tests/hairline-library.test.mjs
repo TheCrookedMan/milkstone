@@ -18,6 +18,12 @@ function execute(name, dependencies, globals = {}) {
   return module.exports
 }
 
+function builtinHarness() {
+  const source = readFileSync(new URL('hairline-builtins.ts', folder), 'utf8')
+  const dependencies = Object.fromEntries([...source.matchAll(/from '(\.\/hairline\/[^']+\?raw)'/g)].map(([, name]) => [name, { default: readFileSync(new URL(name.slice(0, -4), folder), 'utf8') }]))
+  return execute('hairline-builtins.ts', dependencies)
+}
+
 function libraryHarness({ initial = null, denied = false, timers = {}, fetchImpl = null } = {}) {
   let value = initial
   const writes = []
@@ -30,9 +36,7 @@ function libraryHarness({ initial = null, denied = false, timers = {}, fetchImpl
       if (typeof value !== 'string' || !value.startsWith('<svg')) throw new Error('invalid svg')
       return value
     } },
-    './hairline/empty-tray.svg?raw': { default: '<svg viewBox="0 0 400 320"/>' },
-    './hairline/empty-tray-dark.svg?raw': { default: '<svg viewBox="0 0 400 320"/>' },
-    './hairline/hairline-empty-tray.html?raw': { default: '<!doctype html><html></html>' },
+    './hairline-builtins': builtinHarness(),
   }, {
     window: { localStorage: { getItem: () => value, setItem: (_key, next) => {
       if (denied) throw new Error('quota')
@@ -51,7 +55,7 @@ function artwork(id = 'figure-1', prompt = '空置的名册架') {
 test('saved artwork persists, is reused by normalized prompt and survives a new library instance', () => {
   const first = libraryHarness()
   first.store.save(artwork('figure-1', '  空置的\n名册架  '))
-  assert.equal(first.store.artworks.value.length, 2)
+  assert.equal(first.store.artworks.value.length, 5)
   assert.equal(first.store.selected.value.id, 'figure-1')
   assert.equal(first.store.findPrompt('空置的 名册架').id, 'figure-1')
   assert.equal(first.requests.length, 0, 'local reuse never calls the model')
@@ -59,9 +63,9 @@ test('saved artwork persists, is reused by normalized prompt and survives a new 
   assert.equal(second.store.selected.value.id, 'figure-1')
   second.store.remove('figure-1')
   assert.equal(second.store.selected.value.id, 'milkstone-empty-tray')
-  assert.equal(second.store.artworks.value.length, 1)
+  assert.equal(second.store.artworks.value.length, 4)
   second.store.remove('milkstone-empty-tray')
-  assert.equal(second.store.artworks.value.length, 1)
+  assert.equal(second.store.artworks.value.length, 4)
 })
 
 test('failed or unpreviewed artwork cannot enter the saved library', () => {
@@ -69,14 +73,14 @@ test('failed or unpreviewed artwork cannot enter the saved library', () => {
   const withoutPreview = artwork()
   delete withoutPreview.darkSvg
   assert.throws(() => store.save(withoutPreview), /预览/)
-  assert.equal(store.artworks.value.length, 1)
+  assert.equal(store.artworks.value.length, 4)
   assert.equal(writes.length, 0)
 })
 
 test('storage failure is atomic and reports a recoverable quota error', () => {
   const { store, writes } = libraryHarness({ denied: true })
   assert.throws(() => store.save(artwork()), /存储空间不足/)
-  assert.equal(store.artworks.value.length, 1)
+  assert.equal(store.artworks.value.length, 4)
   assert.equal(store.selected.value.id, 'milkstone-empty-tray')
   assert.equal(writes.length, 0)
 })
@@ -85,7 +89,7 @@ test('malformed stored data is not overwritten and invalid imports preserve usab
   const malformed = JSON.stringify({ version: 1, selectedId: 'bad', artworks: [{ id: 'bad' }] })
   const { store, writes, stored } = libraryHarness({ initial: malformed })
   assert.match(store.storageWarning.value, /无法读取/)
-  assert.equal(store.artworks.value.length, 1)
+  assert.equal(store.artworks.value.length, 4)
   assert.equal(stored(), malformed)
   assert.throws(() => store.importJson(JSON.stringify({ version: 1, selectedId: 'bad', artworks: [artwork('bad<script>')] })), /标识/)
   assert.equal(writes.length, 0)
@@ -100,7 +104,60 @@ test('JSON export/import merges reusable artwork without a model call and enforc
   assert.equal(second.requests.length, 0)
   for (let i = 2; i <= 24; i++) second.store.save(artwork(`figure-${i}`, `prompt ${i}`))
   assert.throws(() => second.store.save(artwork('figure-25')), /最多保存 24/)
-  assert.equal(second.store.artworks.value.length, 25, 'one builtin plus twenty-four saved artworks')
+  assert.equal(second.store.artworks.value.length, 28, 'four builtins plus twenty-four saved artworks')
+})
+
+test('semantic scenes start with distinct builtins and keep overrides across reloads and JSON transfers', () => {
+  const first = libraryHarness()
+  assert.deepEqual(['data', 'people', 'search'].map(scene => first.store.getSceneArtwork(scene).id), ['milkstone-empty-plot', 'milkstone-empty-roster', 'milkstone-empty-loupe'])
+  assert.equal(first.store.savedCount.value, 0)
+  first.store.save({ ...artwork(), milkSvg: '<svg viewBox="0 0 400 320"/>' }, 'people')
+  assert.equal(first.store.savedCount.value, 1)
+  assert.equal(first.store.getSceneArtwork('people').id, 'figure-1')
+  assert.equal(first.store.getSceneArtwork('data').id, 'milkstone-empty-plot')
+  first.store.selectForScene('search', 'figure-1')
+  const reloaded = libraryHarness({ initial: first.stored() })
+  assert.equal(reloaded.store.getSceneArtwork('people').id, 'figure-1')
+  assert.equal(reloaded.store.getSceneArtwork('search').id, 'figure-1')
+  assert.equal(reloaded.store.selected.value.milkSvg, '<svg viewBox="0 0 400 320"/>')
+  const imported = libraryHarness()
+  imported.store.importJson(first.store.exportJson())
+  assert.equal(imported.store.getSceneArtwork('people').id, 'figure-1')
+  imported.store.remove('figure-1')
+  assert.equal(imported.store.getSceneArtwork('people').id, 'milkstone-empty-roster')
+  assert.equal(imported.store.getSceneArtwork('search').id, 'milkstone-empty-loupe')
+  assert.equal(imported.store.savedCount.value, 0)
+  for (const builtin of imported.store.artworks.value) imported.store.remove(builtin.id)
+  assert.equal(imported.store.artworks.value.length, 4, 'every builtin is protected')
+})
+
+test('legacy v1 libraries retain old selection while semantic scenes fall back independently', () => {
+  const legacy = JSON.stringify({ version: 1, selectedId: 'figure-1', artworks: [artwork()] })
+  const { store } = libraryHarness({ initial: legacy })
+  assert.equal(store.selected.value.id, 'figure-1')
+  assert.equal(store.getSceneArtwork('people').id, 'milkstone-empty-roster')
+  store.selectForScene('people', 'figure-1')
+  store.importJson(legacy)
+  assert.equal(store.getSceneArtwork('people').id, 'figure-1', 'a legacy import preserves current scene bindings')
+  const dangling = libraryHarness({ initial: JSON.stringify({ version: 1, selectedId: 'figure-1', artworks: [artwork()], sceneSelections: { data: 'missing', people: 'figure-1' } }) })
+  assert.equal(dangling.store.getSceneArtwork('data').id, 'milkstone-empty-plot')
+  assert.equal(dangling.store.getSceneArtwork('search').id, 'milkstone-empty-loupe')
+  assert.equal(dangling.store.getSceneArtwork('people').id, 'figure-1')
+})
+
+test('scene saves are atomic and invalid scene payloads cannot overwrite usable library state', () => {
+  const denied = libraryHarness({ denied: true })
+  assert.throws(() => denied.store.save(artwork(), 'data'), /存储空间不足/)
+  assert.equal(denied.store.savedCount.value, 0)
+  assert.equal(denied.store.getSceneArtwork('data').id, 'milkstone-empty-plot')
+  const harness = libraryHarness()
+  harness.store.save(artwork(), 'people')
+  const before = harness.stored()
+  assert.throws(() => harness.store.importJson(JSON.stringify({ version: 1, selectedId: 'figure-1', artworks: [], sceneSelections: { people: 4 } })), /场景配置/)
+  assert.equal(harness.stored(), before)
+  harness.store.selectForScene('data', 'not-present')
+  assert.equal(harness.store.getSceneArtwork('data').id, 'milkstone-empty-plot')
+  for (const id of ['milkstone-empty-plot', 'milkstone-empty-roster', 'milkstone-empty-loupe', 'milkstone-empty-tray']) assert.throws(() => harness.module.validateHairlineArtwork(artwork(id)), /标识/)
 })
 
 test('artwork shapes and generation service URLs have strict bounds', () => {
@@ -136,7 +193,7 @@ test('existing and builtin artwork remain usable when browser storage becomes un
 test('duplicate IDs in imports are rejected without changing the saved library', () => {
   const { store, writes } = libraryHarness()
   assert.throws(() => store.importJson(JSON.stringify({ version: 1, selectedId: 'figure-1', artworks: [artwork(), artwork()] })), /重复作品标识/)
-  assert.equal(store.artworks.value.length, 1)
+  assert.equal(store.artworks.value.length, 4)
   assert.equal(writes.length, 0)
 })
 
