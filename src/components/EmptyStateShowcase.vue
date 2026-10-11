@@ -3,12 +3,15 @@ import { computed, ref, useId } from 'vue'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import HairlineEmptyArt from './shadcn-gallery/HairlineEmptyArt.vue'
+import HairlinePromptStudio from './shadcn-gallery/HairlinePromptStudio.vue'
+import { builtinArtwork, useHairlineLibrary } from './shadcn-gallery/hairline-library'
 import illustrationUrl from './shadcn-gallery/hairline/hairline-empty-tray.html?url'
 import { useTheme } from '../theme-controller'
 
 const id = useId()
 const { isDark } = useTheme()
-const interactiveUrl = computed(() => `${illustrationUrl}?theme=${isDark.value ? 'dark' : 'light'}`)
+const { selected } = useHairlineLibrary()
+const interactiveUrl = computed(() => selected.value.id === builtinArtwork.id ? `${illustrationUrl}?theme=${isDark.value ? 'dark' : 'light'}` : undefined)
 const records = ref<string[]>([])
 const members = ref<string[]>([])
 const emptyQuery = '轨道之外'
@@ -29,6 +32,7 @@ function toggleQuery() {
 
 <template>
   <div class="empty-state-showcase">
+    <HairlinePromptStudio class="empty-state-studio" />
     <div class="empty-state-grid" data-milk-reveal-group>
       <article class="empty-state-example panel" :aria-labelledby="`${id}-data-title`">
         <span class="empty-state-label">DATA / 01</span>
@@ -84,14 +88,15 @@ function toggleQuery() {
     </div>
 
     <div class="empty-state-footnote" data-milk-reveal>
-      <p>同一只空托盘，承接不同的留白。静态线稿用于页面占位，完整交互图可单独打开。</p>
-      <a :href="interactiveUrl" target="_blank" rel="noopener noreferrer">打开交互插图 ↗</a>
+      <p>选择已保存的线稿即可复用；新的提示词由模型生成，预览通过后再保存到图库。</p>
+      <a v-if="interactiveUrl" :href="interactiveUrl" target="_blank" rel="noopener noreferrer">打开内置交互插图 ↗</a>
     </div>
   </div>
 </template>
 
 <style scoped>
 .empty-state-showcase { min-width: 0; color: var(--milk-ink); }
+.empty-state-studio { margin-bottom: 32px; }
 .empty-state-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
 .empty-state-example { display: flex; min-width: 0; flex-direction: column; gap: 16px; padding: 24px; border-radius: 24px; }
 .empty-state-label { color: var(--milk-muted); font: 12px/1.5 'IBM Plex Sans', monospace; letter-spacing: 1.4px; }

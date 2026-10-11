@@ -86,6 +86,8 @@ ECharts/Unovis 等非 CSS 取色通过同一控制器按文本、网格和数据
 - loading／empty／partial／error／unavailable／forbidden 明确，刷新失败保留可用旧数据及时间，不把错误变成空列表。
 - 路由和菜单过滤仅是体验，真实权限由后端校验。VITE 变量公开，不存服务密钥、账户凭证和私人数据。
 
+Empty 的 Prompt 生成采用可选 Node API 与 OpenAI 兼容模型适配器，前端仅提交 Prompt 和生成服务访问令牌，模型密钥由服务端持有。固定 Hairline 运行时与静态校验不交给模型改写；模型源码不在服务端执行，前端通过隔离绘制器输出受控 SVG。用户挑选的图形保存到本浏览器图库，服务缓存复用相同 Prompt 的生成结果，两者不等同于账号云同步。无服务时已有图照常可用，失败不回退假生成，具体合同见 [生成服务](hairline-generation-service.md)。
+
 ## 工程与部署
 
 默认 Vite index.html。附件的 app.html、输出目录、双锁文件是原项目事实而非全局要求。选择一种包管理器及锁文件，提供 dev／typecheck／build，按业务风险添加必要测试。

@@ -15,6 +15,8 @@ Milkstone 于 2026-10-09 从项目维护者提供的本地 neural-web-landing �
 
 2026-10-10 使用已安装的 `hairline-create` 制作空托盘示例。Hairline 的固定引擎与演示页面版权为 `Copyright (c) 2026 Lucas Marques`，适用 [随图保留的 MIT 许可](../assets/shadcn-catalog/src/components/shadcn-gallery/hairline/LICENSE.txt)。自包含 HTML 保留原始 kernel 和 bench；明暗 SVG 是该图形静止姿态的渲染快照。空托盘几何、Vue 承载与业务空状态组合由 Milkstone 编写。复用方法见 [空状态插图](empty-state-illustrations.md)。
 
+Prompt 生成服务进一步复用 Hairline 的固定运行时、规则、组装和静态校验资源，随 [hairline-service](../assets/hairline-service/) 一起保留原始许可。模型只生成图形层，不能将第三方引擎、演示页面或校验器声明为 Milkstone 原创；自动生成的新图仍需区分静态验证与完整视觉验收。服务适配、隔离预览和图库管理是 Milkstone 的接入实现，模型提供方与模型输出的使用条款由实际接入方另行确认。
+
 # 来源、范围与许可
 
 提炼日期：2026-10-09。

@@ -39,7 +39,7 @@ export const skillOverview = {
         { name: 'TanStack Table', version: dependencies['@tanstack/vue-table'], role: '处理表格排序、筛选和分页，让内容易于查找。' },
         { name: 'Vue Flow', version: dependencies['@vue-flow/core'], role: '节点拖动、连线与参数编辑，支持 ComfyUI 0.4 子集导入导出及本地模拟。' },
         { name: 'SVG / Canvas / WebGL', version: '浏览器原生', role: '绘制电流路径、轨道星体与园区扫描；星体支持 Canvas 2D 回退。' },
-        { name: 'hairline-create', version: '可选 Agent Skill', role: '制作等距线稿空状态插图；已附空托盘静态图与独立交互示例。', kind: '生成技能 · 使用附图无需安装' },
+        { name: 'hairline-create', version: 'Prompt 生成 · 可复用图库', role: '模型按提示词生成等距线稿，经固定引擎校验与预览后保存；已有作品直接复用。', kind: '生成需连接模型服务 · 复用无需调用模型' },
       ],
     },
     {
@@ -62,7 +62,7 @@ export const skillOverview = {
     { index: '03', title: '关系与星空', description: '沿电流追寻关联，循轨道探索星体。', href: '#relations' },
     { index: '04', title: '园区雷达', description: '柔焦楼群与 XYZ 坐标，五秒一圈的逐层光扫。', href: '#campus' },
     { index: '05', title: '节点工作流', description: '连接节点、调整参数，预演一条流程。', href: '#workflow' },
-    { index: '06', title: '空状态插图', description: '用空托盘线稿承接留白，给出可以继续的操作。', href: '#empty-states' },
+    { index: '06', title: '空状态插图', description: '按提示词生成线稿，保存为图库，在不同空状态中复用。', href: '#empty-states' },
     { index: '07', title: '运行与使用', description: '从本地启动到组件接入，找到下一步。', href: '#skill-guide' },
   ],
   commands: [

@@ -18,6 +18,8 @@ import { type ChartConfig, ChartContainer, ChartCrosshair, ChartTooltip, ChartTo
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty'
 import HairlineEmptyArt from './HairlineEmptyArt.vue'
+import HairlinePromptStudio from './HairlinePromptStudio.vue'
+import { useHairlineLibrary } from './hairline-library'
 import { Item, ItemActions, ItemContent, ItemDescription, ItemMedia, ItemTitle } from '@/components/ui/item'
 import { Kbd, KbdGroup } from '@/components/ui/kbd'
 import { Marker, MarkerContent, MarkerIcon } from '@/components/ui/marker'
@@ -39,6 +41,8 @@ const attachmentVisible = ref(true)
 const cardSaved = ref(false)
 const collapsedOpen = ref(false)
 const emptyRecords = ref<string[]>([])
+const emptyStudioOpen = ref(false)
+const { selected: emptyArtwork } = useHairlineLibrary()
 const itemPinned = ref(false)
 const bubbleLiked = ref(false)
 const progress = ref(64)
@@ -225,7 +229,9 @@ function submitQuestionnaire(event: Event) {
     <EmptyContent>
       <ul v-if="emptyRecords.length" class="empty-demo-records" aria-label="演示记录"><li v-for="record in emptyRecords" :key="record">{{ record }}</li></ul>
       <Button size="sm" variant="outline" type="button" @click="emptyRecords = emptyRecords.length ? [] : ['纸面样本记录']">{{ emptyRecords.length ? '重置为空状态' : '添加演示记录' }}</Button>
-      <p class="demo-caption" role="status">{{ emptyRecords.length }} 条演示记录 · Hairline 静态占位图</p>
+      <p class="demo-caption" role="status">{{ emptyRecords.length }} 条演示记录 · {{ emptyArtwork.name }}</p>
+      <Button type="button" variant="ghost" size="sm" :aria-expanded="emptyStudioOpen" @click="emptyStudioOpen = !emptyStudioOpen">{{ emptyStudioOpen ? '收起线稿工坊' : '自定义线稿' }}</Button>
+      <HairlinePromptStudio v-if="emptyStudioOpen" compact class="w-full text-left" />
     </EmptyContent>
   </Empty>
 

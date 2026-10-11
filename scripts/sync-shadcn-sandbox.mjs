@@ -6,6 +6,11 @@ import { fileURLToPath } from 'node:url'
 const root = fileURLToPath(new URL('..', import.meta.url))
 const target = join(root, 'skills/milk-white-web-design/assets/shadcn-catalog')
 const manifest = JSON.parse(await readFile(join(root, 'package.json'), 'utf8'))
+const serviceTarget = join(root, 'skills/milk-white-web-design/assets/hairline-service')
+await mkdir(serviceTarget, { recursive: true })
+for (const file of ['hairline-server.mjs', 'hairline-service.mjs', 'hairline-preview.mjs', '.env.example', 'hairline-runtime']) {
+  await cp(join(root, 'server', file), join(serviceTarget, file), { recursive: true })
+}
 const selected = [
   'vue', 'reka-ui', '@vueuse/core', '@lucide/vue', 'lucide-vue-next',
   '@internationalized/date', '@unovis/vue', '@unovis/ts', '@tanstack/vue-table',
@@ -58,7 +63,8 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineConfig({
   plugins:[vue(), tailwindcss()],
   resolve:{ alias:{ '@':new URL('./src', import.meta.url).pathname } },
-  server:{host:'127.0.0.1'}, preview:{host:'127.0.0.1'}
+  server:{host:'127.0.0.1',proxy:{'/api/hairline':'http://127.0.0.1:4341'}},
+  preview:{host:'127.0.0.1',proxy:{'/api/hairline':'http://127.0.0.1:4341'}}
 })\n`)
 await writeFile(join(target, 'index.html'), `<!doctype html>\n<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light dark"><meta name="theme-color" content="#e9eaee"><title>MILK / 纸面组件集</title><script>try{const saved=localStorage.getItem('milk-design-theme');const mode=['light','dark','milk'].includes(saved)?saved:'light';document.documentElement.dataset.theme=mode;document.documentElement.style.colorScheme=mode==='dark'?'dark':'light';document.querySelector('meta[name=theme-color]')?.setAttribute('content',({light:'#e9eaee',dark:'#1c1f24',milk:'#f4f1ea'})[mode])}catch{}</script></head><body><div id="app"></div><script type="module" src="/src/main.ts"></script></body></html>\n`)
 await writeFile(join(target, 'src/main.ts'), `import { createApp } from 'vue'

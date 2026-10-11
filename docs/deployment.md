@@ -1,6 +1,6 @@
 # 在线发布
 
-Milkstone 是静态 Vue / Vite 网站，无需数据库、服务端密钥或后端运行时。落地页、组件演示、使用指南、Hairline 交互 HTML 和三个 Agent Skill 下载包均由同一次构建产出。
+Milkstone 的 Vue / Vite 页面可独立静态部署。落地页、组件演示、使用指南、附带 Hairline 交互 HTML 和三个 Agent Skill 下载包均由同一次构建产出。自定义 Prompt 生成空状态线稿是可选扩展，需要另行运行 Node API 并配置真实大模型；已有图库和静态展示不依赖该服务。
 
 现有演示入口：[国内站](https://milkstone.dipp.cc/)（1Panel / OpenResty）与 [GitHub Pages](https://thecrookedman.github.io/milkstone/)。
 
@@ -82,6 +82,44 @@ pnpm build --base=/
 6. 发布后通过域名检查 HTTPS、首页及 Hash 路由，确认 JS、CSS、图片、字体和独立 HTML 均正常加载，再核对三个 Skill 下载返回 200 且内容匹配本次构建。
 
 当前服务器采用静态文件发布，推送 GitHub 或 Gitee 不会自动更新此站点。后续版本重复构建、备份、上传和核对步骤；需要自动发布时另行配置部署流程。
+
+## 可选：Hairline 模型生成 API
+
+静态发布不会启动模型服务，也不会自动提供模型密钥。GitHub Pages 可连接独立 HTTPS API；1Panel 自有服务器可以在现有静态站点旁运行 `server/hairline-server.mjs`，让浏览器通过同域 `/api/hairline/` 访问。生成服务和固定运行时也随 Skill 的 `assets/hairline-service/` 分发。
+
+在网站公开目录之外保存服务源码、环境配置和可写缓存，使用 Node.js 24.x 和自己的进程管理方式持续运行服务。环境文件示例：
+
+```dotenv
+NODE_ENV=production
+HAIRLINE_HOST=127.0.0.1
+HAIRLINE_PORT=4341
+HAIRLINE_MODEL_BASE_URL=https://your-model-provider.example/v1
+HAIRLINE_MODEL_API_KEY=your-server-side-api-key
+HAIRLINE_MODEL=your-model-name
+HAIRLINE_ACCESS_TOKEN=your-private-service-access-token
+HAIRLINE_ALLOWED_ORIGINS=https://milkstone.dipp.cc,https://thecrookedman.github.io
+HAIRLINE_DATA_DIR=/path/outside/public-web-root/hairline-data
+```
+
+启动入口为 `node --env-file=/path/to/private-hairline.env server/hairline-server.mjs`；保持固定运行时文件相对位置，确保进程有权限写入缓存目录。不要将模型密钥放入 `VITE_*`，不要把环境文件或服务缓存上传到 `dist/`。页面填写的访问令牌只用于生成 API 的 Bearer 认证，与提供方模型密钥不同。
+
+在 1Panel 的目标网站中添加 `/api/hairline/` 路径反向代理，后端地址为 `http://127.0.0.1:4341`，将请求路径完整传给服务。对应 OpenResty 配置形态为：
+
+```nginx
+location /api/hairline/ {
+    proxy_pass http://127.0.0.1:4341;
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_read_timeout 180s;
+}
+```
+
+`proxy_pass` 后不附加 URI，避免把 `/api/hairline/` 前缀删掉。使用面板已有的反向代理功能或配置编辑器时，先检查实际生成的配置，测试成功后再重载；静态资源和原有网站入口保持现有规则。模型端点耗时较长时，按提供方与服务超时调整代理读超时。
+
+同域站点使用默认 API 地址；GitHub Pages 在页面中填写独立 API 的 HTTPS 基址，并将 `https://thecrookedman.github.io` 加入允许来源，Origin 不带 `/milkstone/`。跨域请求需要服务正确返回 CORS 响应，API 必须支持 HTTPS。
+
+发布后先访问 `/api/hairline/capabilities` 确认服务可用，再验证未授权生成被拒绝、真实 Prompt 能生成并预览、相同 Prompt 命中缓存、图形保存和导入导出正常。模型未配置或调用失败应如实显示，不能用已有图形冒充新生成。具体变量、静态校验与视觉验收边界见 [Hairline 生成服务](../skills/milk-white-web-design/references/hairline-generation-service.md)。此配置说明不表示公开演示站已配置模型提供方。
 
 ## 可选：Vercel
 

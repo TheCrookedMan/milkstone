@@ -1,11 +1,16 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useTheme } from '@/theme-controller'
-import lightArt from './hairline/empty-tray.svg?url'
-import darkArt from './hairline/empty-tray-dark.svg?url'
+import { type HairlineArtwork, useHairlineLibrary } from './hairline-library'
+import { hairlineSvgUrl } from './hairline-sanitize'
 
+const props = defineProps<{ artwork?: HairlineArtwork }>()
 const { theme } = useTheme()
-const source = computed(() => theme.value === 'dark' ? darkArt : lightArt)
+const { selected } = useHairlineLibrary()
+const source = computed(() => {
+  const artwork = props.artwork ?? selected.value
+  return hairlineSvgUrl((theme.value === 'dark' ? artwork.darkSvg : artwork.lightSvg) ?? '')
+})
 </script>
 
 <template>

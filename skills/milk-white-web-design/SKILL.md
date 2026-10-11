@@ -14,7 +14,7 @@ description: 创建、改造或评审浅灰纸底与细微纹理、左上白高�
 - 设计页面、令牌和控件时读取 [设计系统](references/design-system.md)，复制 [CSS 令牌](assets/milk-tokens.css)，参考 [组件示例](assets/vue-panel/src/App.vue) 与 [实体相框图片](assets/FramedImage.vue)。
 - 实现白色／黑色／乳白风格切换时读取 [三种主题](references/theme-modes.md)，保留源码主题控制、选择记忆与绘制器同源取色。
 - 使用 shadcn-vue 或展示完整基础组件库时读取 [shadcn-vue 组件目录](references/shadcn-catalog.md)，复用本地源码、交互语义和浅灰柔和拟物主题。
-- 需要暂无数据、暂无用户或无搜索结果的简洁等距线稿时读取 [空状态插图](references/empty-state-illustrations.md)；新建交互图形可调用可用的 `hairline-create`，文字和操作仍由页面组件承接。
+- 需要暂无数据、暂无用户或无搜索结果的简洁等距线稿时读取 [空状态插图](references/empty-state-illustrations.md)；根据用户 Prompt 动态生成时另读 [Hairline 模型服务](references/hairline-generation-service.md)，复用可选服务资产与隔离绘制器，已有图保存复用。人工新建交互图形可调用可用的 `hairline-create`，文字和操作仍由页面组件承接。
 - 需要实体 Tabbar、旋钮、开关和刻印读数时读取 [实体控件](references/instrument-components.md)，使用 [控件示例](assets/components/InstrumentControls.vue)。
 - 需要图表或关系图时读取 [数据可视化](references/data-visualization.md)，复用 [ECharts 图表](assets/components/ChartStudio.vue) 与 [神经／章鱼／星空图](assets/components/RelationStudio.vue)。
 - 需要电流光点、球面星体、太阳日冕及自转与公转设置时读取 [动态关系与星空](references/stellar-relations.md)，独立集成时保留 [星体组件](assets/components/StellarGraph.vue) 与相邻 `StellarSurface.vue`。
@@ -37,5 +37,7 @@ light 基准：画布 #e9eaee、面板 #ebedf1、凸面 #eef0f4、浅亮面 #f4f
 按钮用 button，导航用链接，弹窗使用可访问对话框。仅输入框获取焦点时在已有边框内显示低饱和彩色渐变流光，不改变尺寸、圆角和原有实体材质。范围包括文本、搜索、邮件、密码、数字及日期等输入、Textarea、contenteditable、PIN/OTP 活动格和 Command/Combobox 的真实输入；复合输入仅在编辑器聚焦时装饰一处可见边界，内部按钮聚焦不亮起。按钮、链接、Tabs、Select 触发器、Checkbox/Radio/Switch、Slider/Range、滚动区和页面容器均不新增焦点 outline、ring、边框变色或流光，保留正常材质边框、阴影和选中状态。输入框装饰未接管时保留静态键盘边界回退，成功接管时去掉额外外围 outline／ring；减少动态效果为静态亮边，强制颜色模式使用 Highlight，所有主题与 Portal 一致，详见 [焦点规范](references/design-system.md)。按钮悬浮时在原表面内轻柔扩散一次波纹，保留材质和按压反馈；禁用、触摸及减少动态效果不播放，复用共享悬浮控制器。保留键盘、ARIA 与焦点恢复行为。演示数据明确标注，真实接口失败不得回退为假成功。
 
 overflow 为 scroll／auto 的区域使用细而低调的纸感滚动条：凹槽轨道、圆角浮起滑块、白色高光与微投影，悬浮加深、拖拽压实；三种风格保持同向光照，横纵轴及 Portal 一致，覆盖 Textarea、Sidebar、Table、Message 与 ScrollArea。不改原有 overflow，保留拖拽、滚轮、触控与键盘访问，具体令牌与原生回退见 [设计系统](references/design-system.md)。
+
+空状态线稿优先复用已保存图形；需要新图时以用户 Prompt 调用真实大模型，模型仅编写 Hairline figure，固定 kernel、bench、组装器与校验器不改写。生成服务独立部署，模型密钥留在服务器，前端不接收模型密钥；已有图库与静态页面可在无模型服务时继续使用。服务端不执行模型返回的 JavaScript，静态校验通过后才交付隔离绘制器；不将静态验证称为八画面视觉验收。失败保留已有图形并提示实际原因，不回退为模板假成功。保存位置、JSON 复用和部署边界见空状态与模型服务参考。
 
 交付设计和可运行结果，运行适合改动的类型检查、构建及浏览器验证。只完成文档时不宣称应用已运行；不自动部署或替换用户已安装技能。

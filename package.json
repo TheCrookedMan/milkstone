@@ -10,6 +10,7 @@
     "typecheck": "vue-tsc --noEmit",
     "build": "vite build",
     "preview": "vite preview",
+    "hairline:serve": "node --env-file-if-exists=.env.hairline server/hairline-server.mjs",
     "skill:pack": "node scripts/package-skill.mjs",
     "predev": "pnpm skill:pack",
     "prebuild": "pnpm skill:pack",

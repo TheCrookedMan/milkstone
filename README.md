@@ -33,7 +33,7 @@ Milkstone 将可运行的页面、可编辑的组件源码和可供 Agent 复用
 | --- | --- |
 | **shadcn-vue 组件目录** | 70 项交互演示，支持中英文搜索、分类筛选；按钮、Card、表单、Tabs、表格、日历、导航、浮层等共享材质与排版规范 |
 | **实体控件** | 刻度旋钮、蚀刻标签、胶囊按键、凹槽导航、开关及轻压回弹反馈 |
-| **空状态插图** | Hairline 等距线稿空托盘，明暗静态插图与自包含交互 HTML；暂无数据、暂无用户和筛选无结果的本地操作演示 |
+| **空状态插图** | 自定义 Prompt 经大模型生成 Hairline 等距线稿、明暗预览与自包含交互 HTML；已有图可保存到本浏览器图库、直接复用及 JSON 导入导出；生成需另行配置可选 API 服务 |
 | **数据图表** | ECharts 折线与柱形切换、系列显隐、数据明细；组件目录另含 Unovis Chart 和 TanStack Data Table |
 | **关系与星空** | 神经网络、章鱼图、星空三种模式；沿路径移动的电流光点、轨道、自转、公转及五类可配置星体皮肤 |
 | **园区雷达** | 原生 Canvas 2D 柔焦等距建筑、粒子、XYZ 坐标、每五秒一圈的扫描和楼层亮起效果 |
@@ -44,7 +44,7 @@ Milkstone 将可运行的页面、可编辑的组件源码和可供 Agent 复用
 
 星体使用程序生成的 WebGL 球面材质，并提供 Canvas 2D 回退。工作流支持明确的 **ComfyUI Workflow JSON 0.4 子集**，详见[格式与接入范围](skills/milk-white-web-design/references/workflow-editor.md)。
 
-空状态示例复用 Hairline 的等距线稿语言，普通页面仅加载静态 SVG。需要制作新的物件与指针交互时，可使用已安装的 `hairline-create`；使用附带插图无需安装该技能。生成和接入方法见[空状态插图规范](skills/milk-white-web-design/references/empty-state-illustrations.md)。
+空状态组件可根据用户 Prompt 调用大模型，按 Hairline Create 的图形接口生成等距线稿。服务只生成图形源码，固定引擎和交互页面保持原样；通过静态校验后，由隔离绘制器生成明暗预览。满意的图形可保存复用，选择已有图无需再次调用模型。附带空托盘和已保存图库不依赖生成服务；新图生成需配置模型服务，不能用静态站点代替模型接口。接入、保存与验收范围见[空状态插图规范](skills/milk-white-web-design/references/empty-state-illustrations.md)。
 
 ## 快速开始
 
@@ -80,6 +80,20 @@ pnpm dev --host 127.0.0.1
 | `/#/#theme` | 白色、黑色与乳白设计规范 |
 | `/#/guide` | 使用指南 |
 
+### 可选：Prompt 生成空状态插图
+
+默认页面与已有图库可以独立运行。需要生成新图时，在另一个终端为 Node 服务配置 OpenAI 兼容的模型端点、密钥和模型名，再启动：
+
+```bash
+export HAIRLINE_MODEL_BASE_URL='https://your-model-provider.example/v1'
+export HAIRLINE_MODEL_API_KEY='your-server-side-api-key'
+export HAIRLINE_MODEL='your-model-name'
+export HAIRLINE_ACCESS_TOKEN='your-private-service-access-token'
+pnpm hairline:serve
+```
+
+服务默认监听 `127.0.0.1:4341`，Vite 开发服务将 `/api/hairline/` 代理到该地址。打开空状态展区，填写服务访问令牌，再描述物件、缺席的内容及指针如何回应，生成、预览和保存。模型密钥只放服务端，页面中的访问令牌用于保护生成服务，与模型密钥不同；公开部署还需配置允许来源和 HTTPS。完整变量、接口与技能包运行方式见[Hairline 生成服务](skills/milk-white-web-design/references/hairline-generation-service.md)。
+
 ### 检查与构建
 
 ```bash
@@ -106,6 +120,7 @@ pnpm preview
 | 工程基础 | Vue 3、TypeScript、Vite 8、Tailwind CSS 4、Vue Router |
 | UI 与可访问交互 | 本地 shadcn-vue 源码、Reka UI、VueUse、Lucide |
 | 数据与图形 | ECharts、Unovis、TanStack Table、SVG、Canvas 2D、原生 WebGL |
+| 可选线稿生成 | 独立 Node.js API、OpenAI 兼容模型、Hairline 固定引擎与静态校验、隔离预览、服务缓存与本浏览器图库 |
 | 节点编辑 | Vue Flow 与独立的 ComfyUI 格式适配器 |
 | 状态与动效 | Vue 响应式状态、已注册的 Pinia 入口、主题控制器、共享按压、悬浮波纹、焦点循光及滚动渐入控制器，GSAP 按需编排 |
 | Agent 交付 | SKILL.md、参考规范、可复用资产、Node.js 安装器、ZIP / tar.gz 归档 |
@@ -129,6 +144,7 @@ milkstone/
 │       ├── component-lab/           领域组件沙盒
 │       └── shadcn-catalog/          独立基础组件目录
 ├── bin/                             本地 CLI
+├── server/                          可选 Hairline 模型服务与固定运行时
 ├── lib/                             安装与归档
 ├── scripts/                         源码同步、打包与校验
 ├── tests/                           安装器、工作流、主题和按压测试
@@ -225,7 +241,9 @@ pnpm dev
 
 ## 当前范围
 
-页面中的表单、收藏、星体配置与工作流用于本地交互演示，未连接业务后端。主题选择保存在浏览器本地。
+页面中的表单、收藏、星体配置与工作流用于本地交互演示，未连接业务后端。主题选择与用户保存的线稿图库保存在当前浏览器；图库可通过 JSON 导出与导入迁移，不等同于账号云同步。
+
+Prompt 生成线稿是真实模型接口能力，需要自行配置可选 Node 服务及模型提供方；静态 GitHub Pages 和静态 1Panel 站点本身不运行模型。未配置、请求失败或图形校验失败时显示实际错误，不用预设模板假装生成成功。生成结果标记为 `validation: "static"`，不代表已经通过 Hairline 原技能的八画面视觉验收。
 
 工作流不包含 ComfyUI 服务、模型权重或真实图像生成；不支持 API prompt 格式及未声明的工作流版本。神经图呈现关系示例，园区场景使用原创演示建筑。Pinia 已注册，具体业务 store 可按需增加；Three.js / TresJS 是可选扩展路线。
 

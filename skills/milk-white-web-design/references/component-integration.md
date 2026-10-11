@@ -3,6 +3,8 @@
 
 shadcn-vue 目录以根工程 `src/` 为开发来源，打包同步至独立 `assets/shadcn-catalog/`。完整基础组件库的复制、依赖与主题说明见 [shadcn-vue 组件目录](shadcn-catalog.md)。
 
+Empty 的 Prompt 生成、预览与本浏览器图库属于独立可选能力：复制对应目录时保留相邻 Hairline 资源和隔离绘制器，静态页面可直接使用已保存图。需要生成新图时另外运行 `assets/hairline-service/` 中的 Node API，模型密钥只保留在服务端；前端与服务不共享环境密钥文件。复用路径、接口和保存边界见 [空状态插图](empty-state-illustrations.md) 与 [生成服务](hairline-generation-service.md)。
+
 全部组件默认 light 采用浅灰柔和拟物表面，milk-white-web-design 和 milk-tokens.css 保留兼容标识。普通外框与已有结构边界复用 --milk-border-width、--milk-border-color 和 --milk-border-gradient，使用 1px 半透明白边；图片区专用 3px 白色 rim。圆角闭合外框可用 padding-box/border-box，无圆角单边结构线可用同源 border-image，不为文字布局额外套框。Card 圆角浮起，按钮紧凑胶囊，输入及读数窗内凹，Tabbar 为凹槽并让选中拨片浮起。左上白色高光与右下灰色柔影、协调的灰白表面共同表达实体层级；按角色复用八类真实阴影，数值以 milk-tokens.css 为准。milk-relief 及 control/card/tabbar 类保留兼容，depth 为 0，不再创建 ::before/::after 硬底座或 isolation 结构。焦点遵循 [输入框焦点边界](design-system.md)：仅真实输入框在已有边框内显示柔和渐变流光，复合输入只在编辑器聚焦时装饰一处可见边界，内部按钮聚焦不亮起，所有主题和 Portal 同样适用。输入框成功装饰时取消额外外圈，未接管时仅输入框保留静态键盘边界回退；按钮、链接、Tabs、Select、开关、滑杆和容器等其他元素不新增焦点 outline、ring、边框变色或流光，正常材质及选中状态保持。极轻纸纹不影响读数；SVG、图表和 Canvas/WebGL 内容保持可读，园区柔焦、扫描灯层、星体光晕和电流光尾继续保留。设计令牌见 [设计系统](design-system.md)。
 
 主题集成同时保留 theme-controller.ts、theme-colors.css 和三选项主题选择器。保留 light 默认值与 light／dark／milk 的选择记忆，milk 的浏览器 color-scheme 为 light。dark 使用对应深色背景、主题和文本，milk 使用牛奶柔白、暖白高光与浅暖灰凹槽；边框、表面及八类阴影按材料角色校准颜色与透明度，保持左上受光、右下投影、凸面较亮和凹槽较暗。边框宽度、圆角、投影方向及交互几何保持；light 与 dark 的阴影几何相同，milk 通过更短偏移、更小模糊和紧密接触影加强实体感，具体参数复用同一令牌。Portal、SVG 和图表连接同一控制器与语义令牌；Canvas/WebGL 保持星体与建筑的自然照明，监听 milk-theme-change 更新需要适配的背景、文字、坐标和轨道，卸载时清理订阅，不用整页反相 filter。接口见 [三种主题](theme-modes.md)。

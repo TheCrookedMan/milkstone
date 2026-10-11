@@ -19,6 +19,6 @@ function downloads(server: { middlewares: Connect.Server }) {
 export default defineConfig({
   resolve: { alias: { '@': new URL('./src', import.meta.url).pathname } },
   plugins: [vue(), tailwindcss(), { name: 'skill-downloads', configureServer: downloads, configurePreviewServer: downloads }],
-  server: { host: '0.0.0.0', port: 4340, strictPort: true },
-  preview: { host: '0.0.0.0', port: 4340, strictPort: true }
+  server: { host: '0.0.0.0', port: 4340, strictPort: true, proxy: { '/api/hairline': 'http://127.0.0.1:4341' } },
+  preview: { host: '0.0.0.0', port: 4340, strictPort: true, proxy: { '/api/hairline': 'http://127.0.0.1:4341' } }
 })
