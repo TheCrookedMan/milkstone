@@ -9,7 +9,10 @@ import { router } from './router'
 import './styles/main.css'
 import { initTheme } from './theme-controller'
 import { initPressFeedback } from '../skills/milk-white-web-design/assets/press-controller'
+import { initRevealMotion } from '../skills/milk-white-web-design/assets/reveal-controller'
 initTheme()
 const disposePressFeedback = initPressFeedback()
 import.meta.hot?.dispose(disposePressFeedback)
 createApp(App).use(createPinia()).use(router).mount('#app')
+const disposeRevealMotion = initRevealMotion(document.getElementById('app')!)
+import.meta.hot?.dispose(disposeRevealMotion)

@@ -15,7 +15,7 @@
 | 组件 | shadcn-vue 本地源码、Reka UI 2.11.0（当前 Drawer 所需） |
 | 工具 | @vueuse/core 14.4.0、class-variance-authority 0.7.1、clsx 2.1.1、tailwind-merge 3.3.1 |
 | 图标 | lucide-vue-next 1.0.0，统一 Icon 和显式映射 |
-| 动画 | GSAP 3.15.0、Vue Transition |
+| 动画 | 原生 IntersectionObserver + CSS 入场、委托按压控制器；GSAP 3.15.0、Vue Transition 按需使用 |
 | 字体 | @fontsource-variable/noto-sans-sc 5.3.0、@fontsource/ibm-plex-sans 5.3.0 |
 | 可选 3D | @tresjs/core 5.9.0、three 0.186.0 |
 | 可选脚本 | tsx 4.23.13，Node node:test 或现有测试框架 |
@@ -67,7 +67,9 @@ ECharts/Unovis 等非 CSS 取色通过同一控制器按文本、网格和数据
 
 图标显式映射且未知名称回退，不按用户输入执行模块路径。GSAP 只操作局部 DOM、context 清理，列表／toast／dialog 可用 Vue Transition；连续 Canvas 不触发每帧状态树更新。
 
-按钮触感复用 assets/press-controller.ts 的委托控制器，在 initTheme() 后、mount 前调用 initPressFeedback()，返回清理函数接入卸载与 HMR dispose。统一令牌规定 90ms 按下、至少 88ms 反馈和 320ms 平稳回位；不延迟业务 click，不让按压覆盖浮层定位、节点拖拽或滑杆行为。两模式共用运动几何，减少动态效果只保留即时材质反馈，详见 [交互规范](motion-and-network.md)。
+页面入场复用 assets/reveal-controller.ts 与 assets/milk-motion.css，在 mount 后调用 initRevealMotion()，以 data-milk-reveal 标记单元素、data-milk-reveal-group 标记直接子项分组。原生 IntersectionObserver 触发一次 700ms 渐显／18px 上移，组内延迟按 80ms 递增并封顶 240ms；MutationObserver 登记异步组件、筛选和路由新增内容，无新增动画依赖。旋转媒体、可拖节点和连续动画保留自身 transform，入场仅施加到包装层。返回清理函数接入卸载与 HMR dispose；键盘聚焦时立即显示，减少动态效果、缺少观察器或清理后内容完整可见，详见 [交互规范](motion-and-network.md)。
+
+按钮触感复用 assets/press-controller.ts 的委托控制器，在 initTheme() 后、mount 前调用 initPressFeedback()，返回清理函数接入卸载与 HMR dispose。统一令牌规定 100ms 按下、至少 112ms 反馈和 420ms 平稳回位，默认位移 2px、缩放 0.975；不延迟业务 click，不让按压覆盖浮层定位、节点拖拽或滑杆行为。两模式共用运动几何，减少动态效果只保留即时材质反馈，详见 [交互规范](motion-and-network.md)。
 
 ## 状态、接口与一致性
 

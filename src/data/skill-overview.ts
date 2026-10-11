@@ -27,7 +27,7 @@ export const skillOverview = {
         { name: 'shadcn-vue', version: '本地源码', role: '70 项组件演示，共用纸面材质与明暗主题。' },
         { name: 'Reka UI', version: dependencies['reka-ui'], role: '处理标签切换、键盘导航与浮层焦点，让操作自然衔接。' },
         { name: 'VueUse', version: dependencies['@vueuse/core'], role: '连接响应式属性与系统偏好，让组件随环境调整。' },
-        { name: 'GSAP', version: dependencies.gsap, role: '轻轻展开首屏内容，并遵循减少动态效果的系统偏好。' },
+        { name: 'GSAP', version: dependencies.gsap, role: '按需编排复杂转场，与内置渐入过渡和减少动态效果规范配合。' },
         { name: 'Milk 设计令牌', version: 'CSS', role: '统一纸面、凸面与凹槽的色调和光影，让明暗主题保持同一触感。', kind: '技能内置 · milk-tokens.css' },
       ],
     },

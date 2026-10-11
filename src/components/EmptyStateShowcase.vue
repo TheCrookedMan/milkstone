@@ -29,7 +29,7 @@ function toggleQuery() {
 
 <template>
   <div class="empty-state-showcase">
-    <div class="empty-state-grid">
+    <div class="empty-state-grid" data-milk-reveal-group>
       <article class="empty-state-example panel" :aria-labelledby="`${id}-data-title`">
         <span class="empty-state-label">DATA / 01</span>
         <div class="empty-state-body">
@@ -83,7 +83,7 @@ function toggleQuery() {
       </article>
     </div>
 
-    <div class="empty-state-footnote">
+    <div class="empty-state-footnote" data-milk-reveal>
       <p>同一只空托盘，承接不同的留白。静态线稿用于页面占位，完整交互图可单独打开。</p>
       <a :href="interactiveUrl" target="_blank" rel="noopener noreferrer">打开交互插图 ↗</a>
     </div>

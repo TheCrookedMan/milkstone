@@ -1,5 +1,6 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
+import { readFileSync } from 'node:fs'
 import { initPressFeedback, PRESS_FEEDBACK_TIMING } from '../skills/milk-white-web-design/assets/press-controller.ts'
 
 // A small DOM/event fixture lets the real delegated controller run against a
@@ -110,18 +111,18 @@ function fixture(run, { reducedMotion = false } = {}) {
 const state = element => element.getAttribute('data-milk-press')
 const writes = element => element.history.filter(([name]) => name === 'data-milk-press').map(([, value]) => value)
 
-test('quick pointer click retains compression for 88 ms, then returns for 320 ms without consuming the click', () => fixture(({ doc, clock, pointer, element }) => {
-  assert.deepEqual(PRESS_FEEDBACK_TIMING, { minimumHold: 88, release: 320 })
+test('quick pointer click retains compression for 112 ms, then returns for 420 ms without consuming the click', () => fixture(({ doc, clock, pointer, element }) => {
+  assert.deepEqual(PRESS_FEEDBACK_TIMING, { minimumHold: 112, release: 420 })
   const button = element('button')
   assert.equal(pointer('pointerdown', button).defaultPrevented, false)
   clock.tick(10)
   pointer('pointerup', button)
   assert.equal(doc.emit('click', { target: button, detail: 1 }).defaultPrevented, false)
-  clock.tick(77)
+  clock.tick(PRESS_FEEDBACK_TIMING.minimumHold - 11)
   assert.equal(state(button), 'down')
   clock.tick(1)
   assert.equal(state(button), 'release')
-  clock.tick(319)
+  clock.tick(PRESS_FEEDBACK_TIMING.release - 1)
   assert.equal(state(button), 'release')
   clock.tick(1)
   assert.equal(state(button), null)
@@ -138,8 +139,21 @@ test('held controls release on pointerup, cancellation or lost capture anywhere 
     assert.equal(state(button), 'down', ending)
     pointer(ending, outside, 7)
     assert.equal(state(button), 'release', ending)
-    clock.tick(320)
+    clock.tick(PRESS_FEEDBACK_TIMING.release)
     assert.equal(state(button), null, ending)
+  }
+}))
+
+test('a cancelled quick touch or lost capture starts returning without completing a click hold', () => fixture(({ clock, pointer, element }) => {
+  for (const ending of ['pointercancel', 'lostpointercapture']) {
+    const button = element('button')
+    pointer('pointerdown', button, 7)
+    clock.tick(5)
+    pointer(ending, element('div'), 7)
+    assert.equal(state(button), 'release', ending)
+    clock.tick(PRESS_FEEDBACK_TIMING.release)
+    assert.equal(state(button), null, ending)
+    assert.equal(clock.pending, 0)
   }
 }))
 
@@ -152,17 +166,17 @@ test('rapid presses interrupt both pending release and return cleanup without an
   pointer('pointerdown', button, 2)
   clock.tick(10)
   pointer('pointerup', button, 2)
-  clock.tick(38) // The first press would have released here.
+  clock.tick(PRESS_FEEDBACK_TIMING.minimumHold - 50) // The first press would have released here.
   assert.equal(state(button), 'down')
   clock.tick(40)
   assert.equal(state(button), 'release')
   clock.tick(32)
   pointer('pointerdown', button, 3)
-  clock.tick(288) // The second return's previous cleanup deadline.
+  clock.tick(PRESS_FEEDBACK_TIMING.release - 32) // The second return's previous cleanup deadline.
   assert.equal(state(button), 'down')
   pointer('pointerup', element('div'), 3)
   assert.equal(state(button), 'release')
-  clock.tick(320)
+  clock.tick(PRESS_FEEDBACK_TIMING.release)
   assert.equal(state(button), null)
   assert.equal(clock.pending, 0)
 }))
@@ -174,12 +188,12 @@ test('Space and Enter repeat events and their native synthetic click do not dupl
     key('keydown', button, value, true)
     key('keydown', button, value) // Duplicate down without repeat still has the same source.
     doc.emit('click', { target: button, detail: 0 })
-    clock.tick(100)
+    clock.tick(PRESS_FEEDBACK_TIMING.minimumHold)
     assert.equal(state(button), 'down')
     assert.deepEqual(writes(button), ['down'])
     key('keyup', element('div'), value)
     assert.equal(state(button), 'release')
-    clock.tick(320)
+    clock.tick(PRESS_FEEDBACK_TIMING.release)
     assert.equal(state(button), null)
     assert.deepEqual(writes(button), ['down', 'release'])
   }
@@ -192,6 +206,7 @@ test('delegation excludes disabled, inert, draggable, editable and slider surfac
   const ignored = [
     element('button', { disabled: '' }),
     element('button', { 'aria-disabled': 'true' }),
+    element('button', { 'data-disabled': '' }),
     element('button', {}, element('div', { inert: '' })),
     element('button', {}, element('div', { 'data-milk-press-ignore': '' })),
     element('button', {}, element('div', { draggable: 'true' })),
@@ -228,9 +243,9 @@ test('assistive activation, pill links, summaries and explicit checkbox labels r
     const origin = control.tagName === 'label' ? element('input', { type: 'checkbox' }, control) : control
     doc.emit('click', { target: origin, detail: 0 })
     assert.equal(state(control), 'down')
-    clock.tick(88)
+    clock.tick(PRESS_FEEDBACK_TIMING.minimumHold)
     assert.equal(state(control), 'release')
-    clock.tick(320)
+    clock.tick(PRESS_FEEDBACK_TIMING.release)
     assert.equal(state(control), null)
   }
   const button = element('button')
@@ -254,7 +269,7 @@ test('blur, hidden documents and motion changes clear active controls and outsta
   assert.equal(clock.pending, 0)
   doc.hidden = false
   pointer('pointerdown', button)
-  clock.tick(100)
+  clock.tick(PRESS_FEEDBACK_TIMING.minimumHold)
   pointer('pointerup', button)
   assert.equal(state(button), 'release')
   motion.matches = true
@@ -302,3 +317,10 @@ test('reduced motion clears on release immediately without hold or return timers
   assert.equal(state(button), null)
   assert.equal(clock.pending, 0)
 }, { reducedMotion: true }))
+
+test('the shared CSS return duration matches controller cleanup and compression completes before a quick tap releases', () => {
+  const css = readFileSync(new URL('../skills/milk-white-web-design/assets/milk-tokens.css', import.meta.url), 'utf8')
+  const duration = name => Number(css.match(new RegExp(`--milk-${name}-duration:([\\d.]+)ms`))?.[1])
+  assert.equal(duration('release'), PRESS_FEEDBACK_TIMING.release)
+  assert.ok(duration('press') > 0 && duration('press') <= PRESS_FEEDBACK_TIMING.minimumHold)
+})

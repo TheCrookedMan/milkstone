@@ -28,6 +28,8 @@ for (const [from, to] of [
   ['skills/milk-white-web-design/assets/theme-colors.css', 'src/styles/theme-colors.css'],
   ['skills/milk-white-web-design/assets/theme-controller.ts', 'src/theme-controller.ts'],
   ['skills/milk-white-web-design/assets/press-controller.ts', 'src/press-controller.ts'],
+  ['skills/milk-white-web-design/assets/reveal-controller.ts', 'src/reveal-controller.ts'],
+  ['skills/milk-white-web-design/assets/milk-motion.css', 'src/styles/milk-motion.css'],
   ['skills/milk-white-web-design/assets/components/ThemeModeSwitch.vue', 'src/components/ThemeModeSwitch.vue'],
   ['public/licenses/shadcn-vue-MIT.txt', 'LICENSE.shadcn-vue.txt'],
   ['docs/shadcn-registry-source.json', 'registry-source.json'],
@@ -63,16 +65,20 @@ import '@fontsource/ibm-plex-sans/latin-600.css'
 import App from './App.vue'
 import { initTheme } from './theme-controller'
 import { initPressFeedback } from './press-controller'
+import { initRevealMotion } from './reveal-controller'
 import './style.css'
 initTheme()
 const disposePressFeedback = initPressFeedback()
 import.meta.hot?.dispose(disposePressFeedback)
-createApp(App).mount('#app')\n`)
+createApp(App).mount('#app')
+const disposeRevealMotion = initRevealMotion(document.getElementById('app')!)
+import.meta.hot?.dispose(disposeRevealMotion)\n`)
 await writeFile(join(target, 'src/style.css'), `@import "tailwindcss" source(none);
 @source "./";
 @import "tw-animate-css";
 @import "./styles/theme-colors.css";
 @import "./styles/milk-tokens.css";
+@import "./styles/milk-motion.css";
 @import "./styles/shadcn-theme.css";
 @import "./styles/shadcn-metrics.css";
 .catalog-shell{max-width:1240px;margin:auto;padding:50px 40px 80px}
@@ -83,5 +89,5 @@ await writeFile(join(target, 'src/App.vue'), `<script setup lang="ts">
 import ShadcnGallery from './components/ShadcnGallery.vue'
 import ThemeModeSwitch from './components/ThemeModeSwitch.vue'
 </script>
-<template><main class="catalog-shell"><header class="catalog-intro"><ThemeModeSwitch/><span class="eyebrow">MILK / PAPER COMPONENT LIBRARY</span><h1>七十种组件，一种触感。</h1><p>按键、表单、导航与浮层。70 项 shadcn-vue 交互示例，在同一张纸面上展开。</p></header><ShadcnGallery/></main></template>\n`)
+<template><main class="catalog-shell"><header class="catalog-intro" data-milk-reveal-group><ThemeModeSwitch/><span class="eyebrow">MILK / PAPER COMPONENT LIBRARY</span><h1>七十种组件，一种触感。</h1><p>按键、表单、导航与浮层。70 项 shadcn-vue 交互示例，在同一张纸面上展开。</p></header><ShadcnGallery/></main></template>\n`)
 console.log('Synced shadcn-vue standalone catalog from the landing page source.')

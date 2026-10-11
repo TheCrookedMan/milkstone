@@ -2,7 +2,7 @@
 const baseUrl = import.meta.env.BASE_URL
 </script>
 <template>
-  <main id="main-content" tabindex="-1" class="guide">
+  <main id="main-content" tabindex="-1" class="guide" data-milk-reveal-group>
     <div class="eyebrow">MILKSTONE / GET STARTED</div>
     <h1>从一页开始，把触感带入项目。</h1>
     <p>下载并解压技能包，将 milk-white-web-design 文件夹放入目标 Agent 的 skills 目录。也可以在本工程中使用 CLI 安装到当前项目：</p>

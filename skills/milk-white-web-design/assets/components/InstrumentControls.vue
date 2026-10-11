@@ -45,8 +45,8 @@ const angle = computed(()=>Number(intensity.value)*2.4-120)
 
 /* The label delegates press state; only the physical track moves. */
 .switch-label[data-milk-press]{translate:none!important;scale:1!important}
-.physical-switch{transition:scale var(--milk-release-duration,320ms) var(--milk-release-ease,cubic-bezier(.16,1,.3,1)),box-shadow var(--milk-release-duration,320ms) var(--milk-release-ease,cubic-bezier(.16,1,.3,1));scale:1}
-.switch-label[data-milk-press="down"] .physical-switch{scale:var(--milk-press-scale,.985);box-shadow:var(--milk-pressed);transition-duration:var(--milk-press-duration,90ms);transition-timing-function:var(--milk-press-ease,cubic-bezier(.2,.8,.2,1))}
-.physical-switch i{transition:transform var(--milk-release-duration,320ms) var(--milk-release-ease,cubic-bezier(.16,1,.3,1)),box-shadow var(--milk-release-duration,320ms) var(--milk-release-ease,cubic-bezier(.16,1,.3,1))}
+.physical-switch{transition:scale var(--milk-release-duration,420ms) var(--milk-release-ease,cubic-bezier(.18,.78,.26,1)),box-shadow var(--milk-release-duration,420ms) var(--milk-release-ease,cubic-bezier(.18,.78,.26,1));scale:1}
+.switch-label[data-milk-press="down"] .physical-switch{scale:var(--milk-press-scale,.98);box-shadow:var(--milk-pressed);transition-duration:var(--milk-press-duration,100ms);transition-timing-function:var(--milk-press-ease,cubic-bezier(.2,.7,.15,1))}
+.physical-switch i{transition:transform var(--milk-release-duration,420ms) var(--milk-release-ease,cubic-bezier(.18,.78,.26,1)),box-shadow var(--milk-release-duration,420ms) var(--milk-release-ease,cubic-bezier(.18,.78,.26,1))}
 @media(prefers-reduced-motion:reduce){.physical-switch{scale:1!important;transition:none!important}.physical-switch i{transition:none!important}}
 </style>

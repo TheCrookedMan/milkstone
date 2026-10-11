@@ -3,6 +3,7 @@
 @import "tw-animate-css";
 @import "./styles/theme-colors.css";
 @import "./styles/milk-tokens.css";
+@import "./styles/milk-motion.css";
 @import "./styles/shadcn-theme.css";
 @import "./styles/shadcn-metrics.css";
 .catalog-shell{max-width:1240px;margin:auto;padding:50px 40px 80px}

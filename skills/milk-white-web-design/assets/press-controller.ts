@@ -1,5 +1,7 @@
 /** Visual feedback only: native click, focus, selection and drag behavior stay in charge. */
-export const PRESS_FEEDBACK_TIMING = { minimumHold: 88, release: 320 } as const
+// Complete the short compression even on a very quick tap, then let the softer
+// return settle. Keep these values aligned with milk-tokens.css.
+export const PRESS_FEEDBACK_TIMING = { minimumHold: 112, release: 420 } as const
 const TARGET = 'button,a.pill,summary,[data-milk-press-target]'
 const IGNORE = '[data-milk-press-ignore],[draggable="true"],.vue-flow__node,.workflow-node,[role="slider"],input[type="range"]'
 const installations = new WeakMap<Document, () => void>()
@@ -27,7 +29,7 @@ export function initPressFeedback(): () => void {
     if (!(origin instanceof Element) || origin.closest(IGNORE)) return null
     const control = origin.closest<HTMLElement>(TARGET)
     if (!control || control.namespaceURI !== 'http://www.w3.org/1999/xhtml') return null
-    if (control.matches(':disabled,[disabled],[aria-disabled="true"]') || control.closest('[inert]')) return null
+    if (control.matches(':disabled,[disabled],[aria-disabled="true"],[data-disabled]') || control.closest('[inert]')) return null
     // Editable text never gets a mechanical press; hidden checkbox/radio labels may opt in.
     if (origin.closest('textarea,[contenteditable="true"],input:not([type="checkbox"]):not([type="radio"])')) return null
     return control
@@ -53,7 +55,7 @@ export function initPressFeedback(): () => void {
     presses.set(control, press)
     control.setAttribute('data-milk-press', 'down')
   }
-  function end(control: HTMLElement, source: string) {
+  function end(control: HTMLElement, source: string, cancelled = false) {
     const press = presses.get(control)
     if (!press || !press.sources.delete(source) || press.sources.size) return
     const release = () => {
@@ -62,12 +64,14 @@ export function initPressFeedback(): () => void {
       control.setAttribute('data-milk-press', 'release')
       press.cleanTimer = setTimeout(() => clear(control), PRESS_FEEDBACK_TIMING.release)
     }
-    const remaining = motion.matches ? 0 : Math.max(0, PRESS_FEEDBACK_TIMING.minimumHold - (performance.now() - press.started))
+    // Touch scrolling or a drag cancellation should start returning immediately;
+    // the minimum hold is only for an intentional native activation.
+    const remaining = motion.matches || cancelled ? 0 : Math.max(0, PRESS_FEEDBACK_TIMING.minimumHold - (performance.now() - press.started))
     if (remaining) press.releaseTimer = setTimeout(release, remaining)
     else release()
   }
-  function endSource(source: string) {
-    for (const control of presses.keys()) end(control, source)
+  function endSource(source: string, cancelled = false) {
+    for (const control of presses.keys()) end(control, source, cancelled)
   }
   function clearAll() {
     for (const control of presses.keys()) clear(control)
@@ -83,7 +87,7 @@ export function initPressFeedback(): () => void {
     if (control) begin(control, `pointer:${event.pointerId}`)
   })
   for (const type of ['pointerup', 'pointercancel', 'lostpointercapture']) {
-    listen<PointerEvent>(win, type, event => endSource(`pointer:${event.pointerId}`))
+    listen<PointerEvent>(win, type, event => endSource(`pointer:${event.pointerId}`, type !== 'pointerup'))
   }
   listen<KeyboardEvent>(doc, 'keydown', event => {
     if (event.repeat || (event.key !== ' ' && event.key !== 'Enter')) return

@@ -1,5 +1,7 @@
 # Milkstone 展示页
 
+页面采用逐步展开的入场效果：首屏标题、说明与主操作，以及进入视区的面板、Card 和媒体包装层，以 700ms 渐显并从下方 18px 归位；分组子项每隔 80ms 错峰，延迟最多 240ms，每个元素只播放一次。异步内容与筛选后的新元素由共享观察器登记，媒体旋转与画布动画保留。按钮按下使用 100ms 下沉、至少 112ms 材质反馈和 420ms 平稳回位；默认位移 2px、缩放 0.975，Tab 为 1px，小开关原位缩放 0.98，业务操作立即执行。light／dark 复用同一节奏，键盘聚焦时立即显示内容，系统减少动态效果时保留完整静态内容与即时按压材质。接入与验收规则见技能 [交互规范](../skills/milk-white-web-design/references/motion-and-network.md)。
+
 `/#/#empty-states` 展示暂无数据、暂无用户与筛选无结果：共用 Hairline 空托盘静态插图，复用明暗原生线稿配色。添加、筛选与重置作用于当前页面的本地数据；完整指针抬起反馈通过「打开交互插图」单独查看。`/#/#shadcn` 的 Empty 示例使用相同插图。生成与接入规则见 [空状态插图](../skills/milk-white-web-design/references/empty-state-illustrations.md)。
 
 根工程只使用 pnpm。运行 pnpm install、pnpm typecheck、pnpm test、pnpm build。使用 pnpm dev 预览，开发和生产预览默认监听 0.0.0.0:4340，同一局域网的其他电脑可通过 http://<本机局域网IP>:4340/ 访问；本机仍可使用 http://127.0.0.1:4340/。默认 light 覆盖页面壳、70 项 shadcn-vue 与五个领域工作台：#e9eaee 浅灰画布保留极轻随机纸纹，灰白表面使用左上白高光和右下灰柔影。Card 圆角浮起，胶囊按钮紧凑，输入与 Tabbar 为凹槽，选中拨片浮起；普通边框 1px 半透明白，图片专用 3px 白 rim 与较清晰柔软投影。八类阴影按容器、Card、按钮、内凹控件和浮层角色复用，数值以 CSS 为准。milk-relief 类保留兼容、depth 为 0，不绘制伪元素硬底座或 isolation 实体结构。输入、下拉与复合输入容器取消外圈焦点 outline、ring 和焦点边框变色，正常边框与柔影保持，以内部材质及状态提示聚焦；普通按钮、Tab 与链接保留键盘 outline，dark 与 Portal 同样遵循。图形内容线保留信息含义；园区柔焦、扫描灯、星体光晕与电流光尾继续保留。三个独立示例使用相同规范。dark 与 light 共用设计、材料角色和状态行为，背景、主题与文本使用对应深色配色；材质颜色与透明度按相近感知深度校准，左上继续受光、右下继续投影，凸面比基底亮、凹槽比基底暗，选中 Tab 仍浮起。渐变位置、阴影几何、字体、尺寸与布局保持。Portal 与图表按同一语义令牌适配，图片、星体和建筑保留自然照明，不使用整页 filter。选择以 milk-design-theme 记住，接口见技能 [双模式主题](../skills/milk-white-web-design/references/theme-modes.md)。公开验证范围与未执行项见 [验证记录](verification.md)。

@@ -6,8 +6,11 @@ import '@fontsource/ibm-plex-sans/latin-600.css'
 import App from './App.vue'
 import { initTheme } from './theme-controller'
 import { initPressFeedback } from './press-controller'
+import { initRevealMotion } from './reveal-controller'
 import './style.css'
 initTheme()
 const disposePressFeedback = initPressFeedback()
 import.meta.hot?.dispose(disposePressFeedback)
 createApp(App).mount('#app')
+const disposeRevealMotion = initRevealMotion(document.getElementById('app')!)
+import.meta.hot?.dispose(disposeRevealMotion)

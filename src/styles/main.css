@@ -2,6 +2,7 @@
 @source "../";
 @source "../../skills/milk-white-web-design/assets/components";
 @import "../../skills/milk-white-web-design/assets/milk-tokens.css";
+@import "../../skills/milk-white-web-design/assets/milk-motion.css";
 @import "tw-animate-css";
 @import "./shadcn-theme.css";
 @import "./shadcn-metrics.css";

@@ -22,7 +22,7 @@ const visibleCount = computed(() => visibleGroups.value.reduce((sum, group) => s
 
 <template>
   <div class="stack-showcase">
-    <div class="specification milk-relief milk-relief-card">
+    <div class="specification milk-relief milk-relief-card" data-milk-reveal>
       <div class="specification-identity">
         <span class="technical-label">MILK / DESIGN KIT</span>
         <div class="skill-name">MILK / Paper <span class="version">v{{ version }}</span></div>
@@ -36,7 +36,7 @@ const visibleCount = computed(() => visibleGroups.value.reduce((sum, group) => s
       </dl>
     </div>
 
-    <div class="catalog-toolbar">
+    <div class="catalog-toolbar" data-milk-reveal>
       <div class="category-filter" role="group" aria-label="筛选技术栈分类">
         <button type="button" :aria-pressed="selectedGroup === 'all'" @click="selectedGroup = 'all'">全部</button>
         <button v-for="group in groups" :key="group.id" type="button"
@@ -45,7 +45,7 @@ const visibleCount = computed(() => visibleGroups.value.reduce((sum, group) => s
       <p class="catalog-count" aria-live="polite">{{ visibleCount }} 项技术<span> / 构成这份触感</span></p>
     </div>
 
-    <div class="technology-groups" :class="{ 'is-filtered': selectedGroup !== 'all' }">
+    <div class="technology-groups" data-milk-reveal-group :class="{ 'is-filtered': selectedGroup !== 'all' }">
       <article v-for="group in visibleGroups" :key="group.id" class="technology-card milk-relief milk-relief-card">
         <header class="group-heading">
           <span class="group-number" aria-hidden="true">{{ group.index }}</span>
@@ -62,17 +62,17 @@ const visibleCount = computed(() => visibleGroups.value.reduce((sum, group) => s
       </article>
     </div>
 
-    <section v-if="choices.length" class="integration-choices milk-relief milk-relief-card" aria-labelledby="integration-title">
+    <section v-if="choices.length" class="integration-choices milk-relief milk-relief-card" data-milk-reveal aria-labelledby="integration-title">
       <div class="section-caption"><span class="technical-label">ROOM TO GROW</span><h3 id="integration-title">按需扩展</h3></div>
       <ul><li v-for="choice in choices" :key="choice.name"><h4>{{ choice.name }}</h4><p>{{ choice.note }}</p></li></ul>
     </section>
 
     <section class="capability-section" aria-labelledby="capability-title">
-      <div class="subsection-heading">
+      <div class="subsection-heading" data-milk-reveal>
         <div><span class="technical-label">EXPLORE THE COLLECTION</span><h3 id="capability-title">沿着组件，继续探索。</h3></div>
         <span class="subsection-note">选择一项，进入对应展区 <span aria-hidden="true">↗</span></span>
       </div>
-      <div class="capability-grid">
+      <div class="capability-grid" data-milk-reveal-group>
         <RouterLink v-for="capability in capabilities" :key="capability.index"
           :to="{ path: '/', hash: capability.href }" class="capability-link milk-relief milk-relief-card">
           <div class="capability-top"><span>{{ capability.index }}</span><span class="capability-arrow" aria-hidden="true">↗</span></div>
@@ -81,7 +81,7 @@ const visibleCount = computed(() => visibleGroups.value.reduce((sum, group) => s
       </div>
     </section>
 
-    <details v-if="commands.length" id="skill-guide" class="quickstart milk-relief milk-relief-card">
+    <details v-if="commands.length" id="skill-guide" class="quickstart milk-relief milk-relief-card" data-milk-reveal>
       <summary><span class="quickstart-heading"><span class="technical-label">QUICK START</span><strong>启动项目与使用技能</strong></span><span class="details-indicator" aria-hidden="true">+</span></summary>
       <div class="command-list"><p class="command-note">在对应目录执行命令，即可开始预览与接入。</p><div v-for="command in commands" :key="command.label" class="command-row"><h4>{{ command.label }}</h4><pre><code>{{ command.command }}</code></pre></div></div>
     </details>
