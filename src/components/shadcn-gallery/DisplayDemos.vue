@@ -287,9 +287,12 @@ function submitQuestionnaire(event: Event) {
     <p class="demo-caption">拖动分隔条，或聚焦后使用方向键。</p>
   </div>
 
-  <ScrollArea v-else-if="name === 'scroll-area'" class="scroll-list">
-    <div class="scroll-content"><strong class="text-sm">组件索引</strong><div v-for="(item, index) in ['触感按钮', '刻度旋钮', '数据图表', '神经网络', '章鱼图', '轨道星空', '园区雷达', '工作流画布', '消息面板', '图层检查器']" :key="item" class="scroll-row"><span class="demo-caption">{{ String(index + 1).padStart(2, '0') }}</span>{{ item }}<Separator /></div></div>
-  </ScrollArea>
+  <div v-else-if="name === 'scroll-area'" class="demo-stack w-full">
+    <ScrollArea class="scroll-list" aria-label="组件索引">
+      <div class="scroll-content"><strong class="text-sm">组件索引</strong><div v-for="(item, index) in ['触感按钮', '刻度旋钮', '数据图表', '神经网络', '章鱼图', '轨道星空', '园区雷达', '工作流画布', '消息面板', '图层检查器']" :key="item" class="scroll-row"><span class="demo-caption">{{ String(index + 1).padStart(2, '0') }}</span>{{ item }}<Separator /></div></div>
+    </ScrollArea>
+    <p class="demo-caption">滚动查看其余组件；聚焦列表后也可使用方向键。</p>
+  </div>
 
   <div v-else-if="name === 'separator'" class="demo-stack w-full">
     <div><strong class="text-sm">MILK Design</strong><p class="demo-caption mt-1">纸上成形，触感有度。</p></div>

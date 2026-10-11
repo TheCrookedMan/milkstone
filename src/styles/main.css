@@ -37,7 +37,7 @@ dialog{position:fixed;inset:0;margin:auto;height:fit-content;color:var(--milk-in
 @media(max-width:900px){.shell{padding:0 22px}.header{height:80px}.brand small,.nav a:not(.pill){display:none}.nav{gap:8px}.nav .pill{padding:9px 14px;font-size:12px}.hero{grid-template-columns:1fr;gap:20px;padding:45px 0}.hero h1{font-size:46px}.hero-stage{height:330px}.object{width:240px;height:240px}.float-label{right:0;bottom:5px;font-size:12px}.sample-grid,.lab,.material{grid-template-columns:1fr}.section{padding:40px 0}.section-heading{display:block}.material{padding:26px;gap:20px}.section h2{font-size:27px}.swatches{gap:8px}.swatch{padding:6px;font-size:10px;height:100px}footer{gap:15px;flex-wrap:wrap}}
 @media(min-width:901px) and (max-width:1120px){.brand small{display:none}.nav{gap:18px}}
 
-.theme-spec-control{display:flex;align-items:center;gap:16px;margin-top:20px;font-size:13px}.theme-spec-note{font-size:11px;margin-top:18px}
+.theme-spec-control{display:flex;align-items:center;gap:16px;margin-top:20px;font-size:13px}.theme-spec-note{font-size:11px;margin-top:18px}.theme-scroll-note{max-width:680px;margin:24px 0 0;font-size:14px;line-height:1.7}
 @media(max-width:600px){.header .nav .pill{display:none}.brand{font-size:23px}.theme-spec-control{flex-wrap:wrap;gap:12px}}
 
 /* Quiet structural dividers use the same soft highlight as the component rims. */

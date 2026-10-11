@@ -44,6 +44,10 @@ milk-relief 及其 control/card/tabbar 角色类保留兼容，不再创建 ::be
 
 Calendar 的日期网格、Sidebar 的导航层级、Table 的列对齐及输入框内嵌图标或动作保留各自密度；不把普通按钮的高度、外边距批量施加给嵌套控件。紧凑结构仍使用共享字阶、清晰层级和足够命中区域。公共样式按组件语义作用，保留 props、插槽与用户传入 `class` 的扩展能力，不用全局 `!important` 覆盖布局尺寸。
 
+overflow 为 scroll／auto 的区域统一隐藏横纵滚动条，保留原有滚动和尺寸约束。原生滚动条由 milk-tokens.css 的 scrollbar-width:none 与 ::-webkit-scrollbar 隐藏规则覆盖，light、dark 及 Portal 一致；Textarea、Sidebar、Table、Message 等区域遵循同一规则。ScrollArea 自绘的 DOM 滚动条在 shadcn-theme.css 中视觉隐藏，保留 Reka 的布局测量、视口与滚动语义，不用 overflow:hidden／clip 代替可滚动视口。
+
+隐藏滚动条后仍需通过表面边界、区域标签与内容层级辨识滚动范围；保留鼠标滚轮、触控板、触屏和键盘操作。独立且需要键盘滚动的非交互容器可设置 tabindex="0" 与可访问名称；已有输入和 Reka 控件保留自身焦点管理，不重复增加焦点入口。窄屏横向表格及浮层中的长内容必须可以滚动到末端，不以裁切内容消除溢出。
+
 面板圆角 24px、媒体 28px、输入框 12px、按钮胶囊 999px。按钮视觉紧凑，触控目标保持至少 44px。普通按钮、Tab 与链接的键盘焦点使用独立可见 outline。输入、下拉和复合输入容器（Input、Textarea、Select、Combobox、InputGroup、Tags、PIN/OTP）在 focus、focus-visible 或 focus-within 时不绘制最外层 outline、Tailwind ring，也不改变外边框颜色；以内部 inset 材质变化、光标、选中和状态提示表达焦点，保留正常 1px 半透明边框及柔影。dark 与 Portal 内控件使用相同规则，键盘操作、ARIA 和焦点恢复保持。正文与读数保持可读对比，不用模糊文字投影代替字形。默认、悬浮、按压、焦点、禁用与加载状态可辨。
 
 图片使用 3px 白色 rim、圆角和较清晰的柔软投影，保留图像内容辨识与替代文本。真实图像用 img 和明确尺寸，需要统一图形内容时可灰阶处理；不把产品图片全部换成装饰图形。

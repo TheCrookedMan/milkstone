@@ -58,6 +58,9 @@
 
 @layer base { * { @apply border-border; } }
 
+/* Keep Reka scrollbars mounted for viewport measurement, without visible tracks. */
+[data-slot=scroll-area-scrollbar], [data-slot=scroll-area-corner] { opacity:0; pointer-events:none }
+
 /* Soft raised surfaces share upper-left highlights and lower-right shading.
    Inputs and tab wells use inset roles; keyboard focus retains its own outline. */
 button[data-slot] { cursor:pointer; text-shadow:none }

@@ -25,6 +25,8 @@ GitHub Actions 使用 Node.js 24.10.0 和 pnpm 10.18.3，运行类型检查、�
 
 2026-10-11 动效增补：在真实浏览器核对随滚动触发的渐入、分组错峰、筛选后的卡片挂载、明暗模式、原生弹窗及 Esc 返回和指南路由。按键计算样式确认使用 420ms 阻尼回位；390px 窄屏配置下首页及单列卡片无横向溢出。减少动态效果、焦点即时可见、动态移除和卸载清理由自动测试覆盖，未修改操作系统偏好进行实测。
 
+2026-10-11 滚动规范增补：在真实浏览器核对页面、ScrollArea 和 Message Scroller 的滚动条隐藏样式。ScrollArea 在明暗模式下保留 overflow:scroll、键盘 End 到达末尾及滚轮返回，自绘条仍有布局尺寸且不可见、不拦截指针。Message Scroller 保留 overflow:auto，Home 翻到顶部与回到最新消息正常。390px 配置下 Data Table 可横向滚到末端，页面无横向溢出；未做实体触屏或 Safari／Firefox 实测。
+
 ## 已知限制
 
 - ECharts / ChartStudio 与组件目录的生产分包仍有 Vite 默认 500kB 提示，构建通过。
