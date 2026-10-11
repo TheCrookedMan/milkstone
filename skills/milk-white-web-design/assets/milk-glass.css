@@ -1,0 +1,158 @@
+/* Glass is a material layer, independent of the light / dark / milk palette.
+   Blur only the backdrop; foreground type, charts and images stay untouched. */
+:root, [data-theme="light"] {
+  --milk-glass-face:246 248 252;
+  --milk-glass-base:231 235 242;
+  --milk-glass-well:216 222 232;
+  --milk-glass-rim:255 255 255;
+  --milk-glass-shade:84 99 123;
+  --milk-glass-shine:255 255 255;
+  --milk-glass-card-softness:12px;
+  --milk-glass-card-hover-softness:14px;
+  --milk-glass-button-hover-softness:5px;
+  --milk-glass-floating-softness:18px;
+  --milk-glass-rim-alpha:.72;
+  --milk-glass-shine-alpha:.64;
+  --milk-glass-contact-alpha:.16;
+}
+[data-theme="dark"] {
+  --milk-glass-face:48 55 66;
+  --milk-glass-base:32 38 47;
+  --milk-glass-well:19 24 32;
+  --milk-glass-rim:184 199 220;
+  --milk-glass-shade:0 0 0;
+  --milk-glass-shine:159 179 207;
+  --milk-glass-rim-alpha:.24;
+  --milk-glass-shine-alpha:.16;
+  --milk-glass-contact-alpha:.42;
+}
+[data-theme="milk"] {
+  --milk-glass-face:255 253 247;
+  --milk-glass-base:244 240 230;
+  --milk-glass-well:229 222 207;
+  --milk-glass-rim:255 255 251;
+  --milk-glass-shade:119 106 83;
+  --milk-glass-shine:255 255 251;
+  --milk-glass-card-softness:7px;
+  --milk-glass-card-hover-softness:8px;
+  --milk-glass-button-hover-softness:4px;
+  --milk-glass-floating-softness:12px;
+  --milk-glass-rim-alpha:.8;
+  --milk-glass-shine-alpha:.8;
+  --milk-glass-contact-alpha:.2;
+}
+:is(:root[data-material="glass"], .milk-glass) {
+  --milk-glass-opacity:.64;
+  --milk-glass-control-opacity:.74;
+  --milk-glass-overlay-opacity:.88;
+  --milk-glass-blur:16px;
+  --milk-glass-control-blur:10px;
+  --milk-glass-overlay-blur:20px;
+  --milk-surface-raised:linear-gradient(145deg,rgb(var(--milk-glass-face) / var(--milk-glass-control-opacity)),rgb(var(--milk-glass-base) / var(--milk-glass-opacity)));
+  --milk-surface-panel:linear-gradient(145deg,rgb(var(--milk-glass-face) / var(--milk-glass-opacity)),rgb(var(--milk-glass-base) / var(--milk-glass-opacity)));
+  --milk-surface-recessed:linear-gradient(145deg,rgb(var(--milk-glass-well) / var(--milk-glass-control-opacity)),rgb(var(--milk-glass-base) / var(--milk-glass-opacity)));
+  --milk-surface-side:var(--milk-surface-panel);
+  --milk-border-color:rgb(var(--milk-glass-rim) / var(--milk-glass-rim-alpha));
+  --milk-glass-divider:linear-gradient(145deg,rgb(var(--milk-glass-rim) / var(--milk-glass-rim-alpha)),rgb(var(--milk-glass-rim) / .08));
+  /* A border-box fill would also paint under the translucent face. Use an
+     actual thin rim instead, so the backdrop can pass through the center. */
+  --milk-border-gradient:linear-gradient(transparent,transparent);
+  --milk-shadow:2px 3px 6px rgb(var(--milk-glass-shade) / var(--milk-glass-contact-alpha)),inset 1px 1px 0 rgb(var(--milk-glass-shine) / var(--milk-glass-shine-alpha));
+  --milk-card-shadow:3px 4px var(--milk-glass-card-softness) rgb(var(--milk-glass-shade) / var(--milk-glass-contact-alpha)),inset 1px 1px 0 rgb(var(--milk-glass-shine) / var(--milk-glass-shine-alpha)),inset -1px -1px 0 rgb(var(--milk-glass-shade) / .06);
+  --milk-card-hover-shadow:4px 5px var(--milk-glass-card-hover-softness) rgb(var(--milk-glass-shade) / var(--milk-glass-contact-alpha)),inset 1px 1px 0 rgb(var(--milk-glass-shine) / var(--milk-glass-shine-alpha));
+  --milk-button-shadow:1px 2px 3px rgb(var(--milk-glass-shade) / var(--milk-glass-contact-alpha)),inset 1px 1px 0 rgb(var(--milk-glass-shine) / var(--milk-glass-shine-alpha));
+  --milk-hover-shadow:2px 3px var(--milk-glass-button-hover-softness) rgb(var(--milk-glass-shade) / var(--milk-glass-contact-alpha)),inset 1px 1px 0 rgb(var(--milk-glass-shine) / var(--milk-glass-shine-alpha));
+  --milk-control-shadow:inset 1px 2px 3px rgb(var(--milk-glass-shade) / var(--milk-glass-contact-alpha)),inset -1px -1px 0 rgb(var(--milk-glass-shine) / var(--milk-glass-shine-alpha));
+  --milk-pressed:inset 2px 2px 4px rgb(var(--milk-glass-shade) / var(--milk-glass-contact-alpha)),inset -1px -1px 0 rgb(var(--milk-glass-shine) / var(--milk-glass-shine-alpha));
+  --milk-floating-shadow:4px 7px var(--milk-glass-floating-softness) rgb(var(--milk-glass-shade) / var(--milk-glass-contact-alpha)),inset 1px 1px 0 rgb(var(--milk-glass-shine) / var(--milk-glass-shine-alpha));
+  --shadcn-raised-shadow:var(--milk-button-shadow);
+  --shadcn-inset-shadow:var(--milk-pressed);
+}
+html[data-material="glass"] body {
+  background-image:var(--milk-paper-texture),radial-gradient(ellipse at 10% 12%,color-mix(in srgb,var(--milk-accent) 50%,transparent),transparent 45%),linear-gradient(115deg,var(--milk-ambient-light),transparent 65%);
+}
+/* Large material surfaces and portal contents. Avoid applying a filter to
+   every nested item: the parent already softens the scene behind it. */
+html[data-material="glass"] :is(
+  .panel,.milk-bordered,.material,.mini-card,.float-label,.nav,.theme-mode-switch,
+  .milk-relief-card,.milk-relief-tabbar,.component-display,
+  .shadcn-gallery-summary,.shadcn-toolbar,.shadcn-example,.shadcn-empty,
+  [data-slot="card"],[data-slot="alert"],[data-slot="empty"],[data-slot="command"],
+  [data-slot="calendar"],[data-slot="range-calendar"],[data-slot="tabs-list"],[data-slot="menubar"],
+  [data-slot="dialog-content"],[data-slot="alert-dialog-content"],[data-slot="sheet-content"],[data-slot="drawer-content"],
+  [data-slot="popover-content"],[data-slot="hover-card-content"],[data-slot="dropdown-menu-content"],[data-slot="dropdown-menu-sub-content"],
+  [data-slot="context-menu-content"],[data-slot="context-menu-sub-content"],[data-slot="menubar-content"],[data-slot="menubar-sub-content"],
+  [data-slot="select-content"],[data-slot="combobox-content"],[data-slot="combobox-list"],[data-slot="navigation-menu-viewport"],[data-slot="tooltip-content"],
+  [data-slot="toast"],[data-sonner-toast],.toast,dialog,.paper-chart-tooltip
+), .milk-glass {
+  -webkit-backdrop-filter:blur(var(--milk-glass-blur)) saturate(115%);
+  backdrop-filter:blur(var(--milk-glass-blur)) saturate(115%);
+  border-color:var(--milk-border-color)!important;
+}
+html[data-material="glass"] :is(
+  button:not([data-slot]):not(.shadcn-gallery button),a.pill,[data-slot="button"]:not([data-variant="ghost"],[data-variant="link"]),[data-mono-button]:not([data-variant="ghost"],[data-variant="link"]),
+  input:not([type="hidden"],[type="checkbox"],[type="radio"],[type="range"],[type="file"]),textarea,select,
+  [data-slot="select-trigger"],[data-slot="input-group"],[data-slot="tags-input"],[data-slot="number-field-content"],
+  [data-slot="input-otp-slot"],[data-slot="pin-input-slot"]
+), .milk-glass:is(button,input,textarea,select,.milk-relief-control,.milk-relief-tabbar) {
+  -webkit-backdrop-filter:blur(var(--milk-glass-control-blur)) saturate(115%);
+  backdrop-filter:blur(var(--milk-glass-control-blur)) saturate(115%);
+  border-color:var(--milk-border-color)!important;
+}
+html[data-material="glass"] :is(
+  [data-slot="dialog-content"],[data-slot="alert-dialog-content"],[data-slot="sheet-content"],[data-slot="drawer-content"],
+  [data-slot="popover-content"],[data-slot="hover-card-content"],[data-slot="dropdown-menu-content"],[data-slot="dropdown-menu-sub-content"],
+  [data-slot="context-menu-content"],[data-slot="context-menu-sub-content"],[data-slot="menubar-content"],[data-slot="menubar-sub-content"],
+  [data-slot="select-content"],[data-slot="combobox-content"],[data-slot="combobox-list"],[data-slot="navigation-menu-viewport"],[data-slot="tooltip-content"],
+  [data-slot="toast"],[data-sonner-toast],.toast,dialog,.paper-chart-tooltip
+) {
+  --milk-border-surface:linear-gradient(145deg,rgb(var(--milk-glass-face) / var(--milk-glass-overlay-opacity)),rgb(var(--milk-glass-base) / var(--milk-glass-overlay-opacity)))!important;
+  -webkit-backdrop-filter:blur(var(--milk-glass-overlay-blur)) saturate(115%);
+  backdrop-filter:blur(var(--milk-glass-overlay-blur)) saturate(115%);
+}
+html[data-material="glass"] :is(.toast,dialog) { background:var(--milk-border-surface) padding-box }
+/* Structure remains visible without repainting the translucent faces. */
+html[data-material="glass"] :is(
+  .header,.section,[data-slot="accordion-item"],[data-slot="command-input-wrapper"],[data-slot="marker"][data-variant="border"],
+  [data-slot="card-header"].border-b,[data-slot="card-footer"].border-t,[data-slot="input-group-addon"],
+  [data-slot="sidebar-menu-sub"],.contained-sidebar-panel,.typography-recipe blockquote,
+  [data-slot="sidebar"][data-variant="sidebar"] > div:last-child
+) { border-image:var(--milk-glass-divider) 1 }
+html[data-material="glass"] [data-slot="table-row"] > :is(th,td) { background-image:var(--milk-glass-divider) }
+html[data-material="glass"] :is(
+  [data-slot="separator"],[data-slot="sidebar-separator"],[data-slot="dropdown-menu-separator"],
+  [data-slot="context-menu-separator"],[data-slot="menubar-separator"],[data-slot="command-separator"],
+  [data-slot="combobox-separator"],[data-slot="select-separator"],[data-slot="item-separator"],[data-slot="button-group-separator"]
+) { background:var(--milk-glass-divider) }
+html[data-material="glass"] :is(input[data-slot="input"],textarea[data-slot="textarea"],input[data-slot="combobox-input"],input[data-slot="number-field-input"],input[data-slot="pin-input-slot"],[data-slot="questionnaire-input"]):focus,
+html[data-material="glass"] :is([data-slot="input-group"],[data-slot="number-field-content"],[data-slot="tags-input"],[data-slot="command-input-wrapper"]):has(:is(input,textarea):focus),
+html[data-material="glass"] :is([data-slot="input-otp-slot"][data-active="true"],[data-slot="tags-input-item"][data-state="active"]) {
+  --milk-border-surface:var(--milk-surface-recessed);
+}
+/* An explicit local sample works even when the rest of the page is solid. */
+.milk-glass {
+  background:var(--milk-border-surface,var(--milk-surface-panel)) padding-box;
+}
+.milk-glass:is(button,.milk-relief-control) { --milk-border-surface:var(--milk-surface-raised) }
+.milk-glass:is(input,textarea,select,.milk-relief-tabbar) { --milk-border-surface:var(--milk-surface-recessed) }
+.milk-glass:is(button):is(:active,[data-milk-press="down"],[aria-pressed="true"]) { --milk-border-surface:var(--milk-surface-recessed) }
+.milk-glass[role="tab"][aria-selected="false"] { --milk-border-surface:linear-gradient(rgb(var(--milk-glass-base) / .12),rgb(var(--milk-glass-base) / .12));box-shadow:none }
+/* Unsupported blur and reduced transparency keep opaque, readable surfaces.
+   Opacity changes the material tokens rather than fading the whole element. */
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))) {
+  :is(:root[data-material="glass"],.milk-glass) { --milk-glass-opacity:1;--milk-glass-control-opacity:1;--milk-glass-overlay-opacity:1 }
+  .milk-glass[role="tab"][aria-selected="false"] { --milk-border-surface:var(--milk-surface-panel) }
+}
+@media(prefers-reduced-transparency:reduce) {
+  :is(:root[data-material="glass"],.milk-glass) { --milk-glass-opacity:1;--milk-glass-control-opacity:1;--milk-glass-overlay-opacity:1;--milk-glass-blur:0px;--milk-glass-control-blur:0px;--milk-glass-overlay-blur:0px }
+  .milk-glass[role="tab"][aria-selected="false"] { --milk-border-surface:var(--milk-surface-panel) }
+}
+@media(forced-colors:active) {
+  :is(:root[data-material="glass"],.milk-glass) {
+    --milk-surface-raised:linear-gradient(Canvas,Canvas);--milk-surface-panel:linear-gradient(Canvas,Canvas);--milk-surface-recessed:linear-gradient(Canvas,Canvas);
+    --milk-glass-blur:0px;--milk-glass-control-blur:0px;--milk-glass-overlay-blur:0px;--milk-glass-overlay-opacity:1;
+    --milk-border-color:CanvasText;
+  }
+  .milk-glass[role="tab"][aria-selected="false"] { --milk-border-surface:var(--milk-surface-panel) }
+  html[data-material="glass"] [data-slot$="content"],html[data-material="glass"] :is(.toast,dialog,[data-sonner-toast]) { --milk-border-surface:linear-gradient(Canvas,Canvas)!important }
+}

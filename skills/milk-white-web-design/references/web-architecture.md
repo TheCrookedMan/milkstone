@@ -63,6 +63,8 @@ Tailwind 4 使用 Vite 插件，入口先 `@import "tailwindcss"` 再引入令�
 
 颜色令牌与 `html[data-theme]` 由源码主题控制器管理，启动调用 `initTheme`，三选项切换调用 `setTheme` 设置 `light`、`dark` 或 `milk`；`milk-design-theme` 记住选择，变化派发 `milk-theme-change`。令牌默认定义于 :root；嵌入已有系统时可限定主题容器。Teleport 的 Dialog／Popover 根同样需要主题类或主题化 portal 容器，不能丢失 CSS 变量。保留 Reka 焦点和键盘语义。
 
+材质另由 assets/material-controller.ts 管理 html[data-material] 的 solid／glass，默认 solid，initTheme() 后调用 initMaterial()，以 milk-design-material 独立保存并通过 useMaterial 连接 Vue 状态。assets/milk-glass.css 最后引入，覆盖语义表面的透明度及背景虚化，不覆盖业务状态、布局或动画控制器；Portal 继承相同根属性与令牌。局部预览用 milk-glass 类，只有背景被虚化，文字和绘制器不使用 filter／opacity。API、启动顺序及原生回退见 [毛玻璃材质](glass-material.md)。
+
 ECharts/Unovis 等非 CSS 取色通过同一控制器按文本、网格和数据系列角色适配，避免对已解析 CSS 令牌重复取反。Canvas/WebGL 保持星体、建筑与发光的自然照明，只更新需要主题对比的背景、坐标、轨道和标签；主题变化后重绘已有数据，几何和动画相位保持，不通过整页 filter 替代源码取色。
 
 图标显式映射且未知名称回退，不按用户输入执行模块路径。GSAP 只操作局部 DOM、context 清理，列表／toast／dialog 可用 Vue Transition；连续 Canvas 不触发每帧状态树更新。

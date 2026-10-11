@@ -35,6 +35,10 @@ pnpm dev
 
 Card、按钮、TabsList、Input、Textarea、Select、面板与 Portal 普通外框采用 1px 半透明白边，图片区专用 3px 白色 rim；页面、列表和表格现有结构边界复用普通边框。复用 --milk-border-width、--milk-border-color 和 --milk-border-gradient，圆角外框可用 padding-box/border-box，无圆角单边结构线可用同源 border-image，不为文字布局新增外框。Card 使用外浮柔影，Button 与选中的 TabsTrigger 使用小尺度外浮柔影；TabsList 为 recessed 凹槽，未选中 Tab 融入槽面，Input、Textarea 与读数窗使用内凹表面及阴影。八类阴影按角色复用 milk-tokens.css，左上白色高光和右下灰色投影形成柔和层次。milk-relief 及角色类保留兼容，depth 为 0，不再绘制伪元素硬底座或 isolation 结构。按压保留表面变化与小幅位移，文字按主题切换并保持清楚。只有 Input、Textarea、contenteditable、数字／日期等真实输入及 Command/Combobox 的输入框聚焦时，在已有边框内显示柔和渐变流光，不改变原边框几何和柔影。InputGroup、Tags 等复合输入只在内部编辑器聚焦时装饰一个可见边界，内部按钮聚焦不亮起；PIN/OTP 跟随活动格。Button、TabsTrigger、链接、Select 触发器及选项、菜单项、Checkbox/Radio/Switch、Slider/Range 和滚动／页面容器均不新增焦点 outline、ring、边框变色或流光，保留正常材质与选中状态。输入框成功装饰时取消额外 outline 与 Tailwind ring，未接管时仅输入框保留静态键盘边界回退；减少动态效果保留输入框静态亮边，强制颜色模式仅为输入框使用 Highlight，详见 [焦点规范](design-system.md)。此规则同样覆盖所有主题与 Portal，保留 Reka 键盘、ARIA 和焦点管理。Dialog、Popover、Dropdown、Tooltip、Sheet 和通知的 Portal 根继承相同规范，随 html[data-theme] 同步；Unovis 非 CSS 取色按文本、网格与数据系列角色读取当前主题，不对已解析 CSS 令牌重复取反。
 
+## 毛玻璃与三主题组合
+
+独立沙盒保留与根落地页相同的 MaterialModeSwitch.vue、material-controller.ts 和 milk-glass.css。毛玻璃独立于 light／dark／milk，默认实面，切换和刷新恢复不改变主题选择或组件状态。Card、Button、TabsList／TabsTrigger、Input／Textarea 和 Portal 延用原有浮起、凹槽及选中关系，仅将角色表面改为半透明、背景虚化与细亮边；Switch、错误与业务状态色保持。字阶、间距、焦点范围、键盘行为和阻尼参数不另写一套。完整接入与不透明回退见 [毛玻璃材质](glass-material.md)。
+
 ## 字阶、密度与组合
 
 所有基础组件及其组合使用同一套字阶与间距，而非只给展示卡片套上材质。统一实现位于根工程 `src/styles/shadcn-metrics.css`，打包时同步到 `assets/shadcn-catalog/src/styles/`。该文件只定义排版、内边距、尺寸和布局节奏，材质与阴影继续交给 `shadcn-theme.css`、`milk-tokens.css`，焦点、按压及悬浮波纹复用 `milk-focus.css`、`milk-hover.css` 及共享控制器，避免状态样式互相覆盖。

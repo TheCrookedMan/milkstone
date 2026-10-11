@@ -1,11 +1,11 @@
 ---
 name: milk-white-web-design
-description: 创建、改造或评审浅灰纸底与细微纹理、左上白高光和右下灰柔影、浮起圆角 Card、紧凑胶囊按钮、内凹输入与 Tabbar 构成的柔和拟物 Web 界面，并支持保持相同凸起与凹槽光照关系的黑色与牛奶乳白风格，包含 shadcn-vue 组件目录、刻度控件、ECharts、动态关系与星空、柔焦园区雷达、Hairline 空状态插图、Vue Flow / ComfyUI 格式工作流及 Vue 初始化参考。适用于用户选择浅灰柔和实体设计语言的项目；保留已有框架和品牌约束。
+description: 创建、改造或评审浅灰纸底与细微纹理、左上白高光和右下灰柔影、浮起圆角 Card、紧凑胶囊按钮、内凹输入与 Tabbar 构成的柔和拟物 Web 界面，并支持保持相同凸起与凹槽光照关系的黑色与牛奶乳白风格，以及可独立叠加于三种主题的毛玻璃材质，包含 shadcn-vue 组件目录、刻度控件、ECharts、动态关系与星空、柔焦园区雷达、Hairline 空状态插图、Vue Flow / ComfyUI 格式工作流及 Vue 初始化参考。适用于用户选择浅灰柔和实体设计语言的项目；保留已有框架和品牌约束。
 ---
 
 # 浅灰柔和拟物 Web 设计
 
-以浅灰画布与极轻随机纸纹作为最大面积，用协调的灰白表面、左上白色柔和高光与右下灰色柔影呈现柔和拟物（soft neumorphic）。Card 圆角浮起，按钮是紧凑胶囊，输入框与 Tabbar 为凹槽，选中 Tab 浮起，图片使用 3px 白 rim 和较清晰的柔软投影。按用户业务组织页面，不固定模块数，不要求神经图。milk-white-web-design 与 milk-tokens.css 保留兼容标识；默认 light，dark 使用对应深色配色，milk 使用柔白基底、暖白高光与浅暖灰凹槽，以更短、更凝实的投影加强实体感；三者保持相同凸起与凹槽的光照关系。
+以浅灰画布与极轻随机纸纹作为最大面积，用协调的灰白表面、左上白色柔和高光与右下灰色柔影呈现柔和拟物（soft neumorphic）。Card 圆角浮起，按钮是紧凑胶囊，输入框与 Tabbar 为凹槽，选中 Tab 浮起，图片使用 3px 白 rim 和较清晰的柔软投影。按用户业务组织页面，不固定模块数，不要求神经图。milk-white-web-design 与 milk-tokens.css 保留兼容标识；默认 light，dark 使用对应深色配色，milk 使用柔白基底、暖白高光与浅暖灰凹槽，以更短、更凝实的投影加强实体感；三者保持相同凸起与凹槽的光照关系。毛玻璃作为独立的可选材质，与三种底色组合，默认保留实面。
 
 ## 工作方式
 
@@ -13,6 +13,7 @@ description: 创建、改造或评审浅灰纸底与细微纹理、左上白高�
 
 - 设计页面、令牌和控件时读取 [设计系统](references/design-system.md)，复制 [CSS 令牌](assets/milk-tokens.css)，参考 [组件示例](assets/vue-panel/src/App.vue) 与 [实体相框图片](assets/FramedImage.vue)。
 - 实现白色／黑色／乳白风格切换时读取 [三种主题](references/theme-modes.md)，保留源码主题控制、选择记忆与绘制器同源取色。
+- 实现毛玻璃效果时读取 [毛玻璃材质](references/glass-material.md)，保留 [材质控制器](assets/material-controller.ts)、[材质样式](assets/milk-glass.css)、[材质开关](assets/components/MaterialModeSwitch.vue) 与 [材质展示](assets/components/GlassMaterialShowcase.vue)；材质与配色独立，不新增第四种颜色主题。
 - 使用 shadcn-vue 或展示完整基础组件库时读取 [shadcn-vue 组件目录](references/shadcn-catalog.md)，复用本地源码、交互语义和浅灰柔和拟物主题。
 - 需要暂无数据、暂无用户或无搜索结果的简洁等距线稿时读取 [空状态插图](references/empty-state-illustrations.md)；根据用户 Prompt 动态生成时另读 [Hairline 模型服务](references/hairline-generation-service.md)，复用可选服务资产与隔离绘制器，已有图保存复用。人工新建交互图形可调用可用的 `hairline-create`，文字和操作仍由页面组件承接。
 - 需要实体 Tabbar、旋钮、开关和刻印读数时读取 [实体控件](references/instrument-components.md)，使用 [控件示例](assets/components/InstrumentControls.vue)。
@@ -31,6 +32,8 @@ description: 创建、改造或评审浅灰纸底与细微纹理、左上白高�
 light 基准：画布 #e9eaee、面板 #ebedf1、凸面 #eef0f4、浅亮面 #f4f5f8、凹槽 #e4e6eb、深面 #dfe2e8；正文 #2e3540、次字 #5b6573、图形内容线 #cdd2db、焦点回退 #6b7c93。极轻静态纸纹不能干扰读数。普通外框与结构边界采用 1px 半透明白边，图片区专用 3px 白 rim，圆角外框复用 milk-border-width、milk-border-color 与 milk-border-gradient；文字布局不额外套框。八类阴影恢复真实角色：milk-shadow、milk-card-shadow、milk-card-hover-shadow、milk-floating-shadow 为容器或 Card 外浮；milk-button-shadow、milk-hover-shadow 为小尺度外浮；milk-pressed、milk-control-shadow 为内凹，数值以 assets/milk-tokens.css 为准。表面复用 raised/recessed/panel 令牌，输入与 Tabbar 凹槽内凹、选中拨片浮起，按压有浅凹反馈。milk-relief 及角色类仅保留兼容，depth 为 0，不绘制硬底座、::before/::after 实体层或独立隔离层叠结构。保持清楚文字与可辨焦点反馈，默认、悬浮、按压、禁用和加载状态可辨。
 
 三种风格共用设计、材料角色与状态行为。dark 将背景、主题及文本切为对应深色配色，但高光与投影维持白版的光照关系：左上较亮、右下较暗，凸面亮于基底、凹槽暗于基底，选中拨片浮起。milk 以 #f4f1ea 牛奶柔白为画布、#f7f4ee 为面板、#fbf9f4 为凸面、#e9e4da 为凹槽，搭配 #fffefa 暖白高光、浅暖灰投影和 #48473f 深灰褐正文，不改变纸纹密度或叠加全页滤色。按相同角色校准各主题的表面、边框、高光、阴影及其透明度，使默认、悬浮、按压、焦点、选中、禁用、加载和错误状态的深度关系一致；三者保持阴影方向、边框宽度、圆角、尺寸、字体、间距与交互几何；light 与 dark 保持相同阴影几何，milk 使用更短偏移、更小模糊、紧密接触影与内侧薄高光，让凸面更清晰。选择记住并在刷新后恢复，DOM 与 Portal 复用语义令牌，图表按文本、网格和数据系列角色适配；图片、星体与建筑自然照明保持。由源码控制器及颜色令牌实现，不使用整页 filter。接口见 [三种主题](references/theme-modes.md)。
+
+毛玻璃以半透明角色表面、背景虚化和细亮边呈现，Card 保持浮起、输入与 Tabbar 保持内凹、选中拨片保持凸起。卡片背景虚化 16px、小控件 10px、浮层 20px，完整参数以 assets/milk-glass.css 为准；只处理背景，文字、图片、SVG 和 Canvas/WebGL 内容保持清晰，不用元素 opacity 或整页 filter 制造透明效果。三种配色分别保留冷灰、石墨和奶白色温及原有光照、字阶、间距、阻尼与状态色；不额外添加焦点框。材质以 data-material="solid"／"glass" 控制，通过 milk-design-material 记住选择；局部样本用 milk-glass 类，未支持背景虚化、减少透明或强制颜色时使用不透明表面回退，详见毛玻璃材质参考。
 
 控件、图表、关系图、星空、园区扫描与工作流统一使用浅灰柔和拟物材质。页面元素进入视区时以 700ms 渐显并从下方 18px 归位，分组子项每隔 80ms 错峰、延迟上限 240ms，每个元素只播放一次。入场作用于内容包装层，不改变星体、媒体或拖拽节点自身的旋转与定位。按钮使用轻微机械阻尼：100ms 按下、至少保留 112ms 反馈、420ms 单调回位，位移 2px、缩放 0.975；Tab 位移 1px，小开关原位缩放 0.98，阴影同步压实。三种风格时序相同，按键操作不等待动画；复用统一控制器，避免覆盖拖拽、滑杆和浮层定位。具体曲线、状态及减少动态效果规则见交互规范。图形内容可保持灰阶，以亮度、线型、形状、图标和文字区分状态。园区柔焦、粒子、扫描灯与余辉、星体光晕、太阳肌理及电流光尾保留自身内容光学与动态关系；它们和 UI 投影分别按各自含义呈现。
 

@@ -8,6 +8,7 @@
 @import "./shadcn-metrics.css";
 @import "../../skills/milk-white-web-design/assets/milk-focus.css";
 @import "../../skills/milk-white-web-design/assets/milk-hover.css";
+@import "../../skills/milk-white-web-design/assets/milk-glass.css";
 
 .shell{max-width:1240px;margin:auto;padding:0 40px}
 .header{height:100px;display:flex;align-items:center;justify-content:space-between;border-bottom:var(--milk-border-width) solid var(--milk-edge)}

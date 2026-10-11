@@ -1,6 +1,8 @@
 # Milkstone 展示页
 
-页面采用逐步展开的入场效果：首屏标题、说明与主操作，以及进入视区的面板、Card 和媒体包装层，以 700ms 渐显并从下方 18px 归位；分组子项每隔 80ms 错峰，延迟最多 240ms，每个元素只播放一次。异步内容与筛选后的新元素由共享观察器登记，媒体旋转与画布动画保留。按钮按下使用 100ms 下沉、至少 112ms 材质反馈和 420ms 平稳回位；默认位移 2px、缩放 0.975，Tab 为 1px，小开关原位缩放 0.98，业务操作立即执行。light／dark 复用同一节奏，键盘聚焦时立即显示内容，系统减少动态效果时保留完整静态内容与即时按压材质。接入与验收规则见技能 [交互规范](../skills/milk-white-web-design/references/motion-and-network.md)。
+页面采用逐步展开的入场效果：首屏标题、说明与主操作，以及进入视区的面板、Card 和媒体包装层，以 700ms 渐显并从下方 18px 归位；分组子项每隔 80ms 错峰，延迟最多 240ms，每个元素只播放一次。异步内容与筛选后的新元素由共享观察器登记，媒体旋转与画布动画保留。按钮按下使用 100ms 下沉、至少 112ms 材质反馈和 420ms 平稳回位；默认位移 2px、缩放 0.975，Tab 为 1px，小开关原位缩放 0.98，业务操作立即执行。light／dark／milk 复用同一节奏，键盘聚焦时立即显示内容，系统减少动态效果时保留完整静态内容与即时按压材质。接入与验收规则见技能 [交互规范](../skills/milk-white-web-design/references/motion-and-network.md)。
+
+`/#/#theme` 提供白色、黑色、乳白三主题与独立毛玻璃开关，页头也可直接切换材质。毛玻璃默认关闭，开启后以半透明表面、背景虚化和细亮边覆盖 Card、按钮、Tabbar、输入及浮层，保持原有凸起、凹槽、字阶、间距和阻尼；文字与绘制器内容清晰。随三种主题切换的局部样本展示玻璃后的几何背景，示例内的 Tab、输入和操作只改变当前样本。主题和材质分别记住，刷新恢复；无背景虚化支持、减少透明偏好或强制颜色时回退不透明表面。资产与规则见 [毛玻璃材质](../skills/milk-white-web-design/references/glass-material.md)。
 
 `/#/#empty-states` 展示暂无数据、暂无用户与筛选无结果，并提供 Prompt 生成与个人图库。新图通过配置好的生成 API 调用真实大模型，按 Hairline Create 的 figure 接口组装与静态校验，再在隔离环境中绘制明暗预览；服务未配置或生成失败时明确提示。用户可保存生成图形、选择已有图、导入／导出图库 JSON 及下载交互 HTML，已有图无需重复调用模型。初始空托盘与添加、筛选、重置仍可离线演示；业务数据操作只作用于当前页面。`/#/#shadcn` 的 Empty 示例沿用同一插图语言。生成与接入规则见 [空状态插图](../skills/milk-white-web-design/references/empty-state-illustrations.md)，服务启动与缓存边界见 [Hairline 模型服务](../skills/milk-white-web-design/references/hairline-generation-service.md)。
 

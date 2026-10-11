@@ -24,11 +24,11 @@ export const skillOverview = {
       id: 'interface', label: '界面交互', index: '02', summary: '让触碰与切换，都有回应。',
       items: [
         { name: 'Vue Router', version: dependencies['vue-router'], role: '连接组件展区、设计规范与使用指南。' },
-        { name: 'shadcn-vue', version: '本地源码', role: '70 项组件演示，共用白色、黑色与乳白三种材质主题。' },
+        { name: 'shadcn-vue', version: '本地源码', role: '70 项组件演示，共用白色、黑色与乳白底色，并支持实体和毛玻璃材质。' },
         { name: 'Reka UI', version: dependencies['reka-ui'], role: '处理标签切换、键盘导航与浮层焦点，让操作自然衔接。' },
         { name: 'VueUse', version: dependencies['@vueuse/core'], role: '连接响应式属性与系统偏好，让组件随环境调整。' },
         { name: 'GSAP', version: dependencies.gsap, role: '按需编排复杂转场，与内置渐入过渡和减少动态效果规范配合。' },
-        { name: 'Milk 设计令牌', version: 'CSS', role: '统一纸面、凸面与凹槽的色调和光影，让明暗主题保持同一触感。', kind: '技能内置 · milk-tokens.css' },
+        { name: 'Milk 设计令牌', version: 'CSS', role: '统一三种底色的纸面、凸面、凹槽与毛玻璃透光层，保持同向光影和清晰内容。', kind: '技能内置 · milk-tokens.css' },
       ],
     },
     {
@@ -63,12 +63,13 @@ export const skillOverview = {
     { index: '04', title: '园区雷达', description: '柔焦楼群与 XYZ 坐标，五秒一圈的逐层光扫。', href: '#campus' },
     { index: '05', title: '节点工作流', description: '连接节点、调整参数，预演一条流程。', href: '#workflow' },
     { index: '06', title: '空状态插图', description: '按提示词生成线稿，保存为图库，在不同空状态中复用。', href: '#empty-states' },
-    { index: '07', title: '运行与使用', description: '从本地启动到组件接入，找到下一步。', href: '#skill-guide' },
+    { index: '07', title: '透光材质', description: '在纸白、石墨与乳白中切换毛玻璃，保持实体与凹槽的触感。', href: '#theme' },
+    { index: '08', title: '运行与使用', description: '从本地启动到组件接入，找到下一步。', href: '#skill-guide' },
   ],
   commands: [
     { label: '本地预览 · 在项目根目录执行', command: 'pnpm install --frozen-lockfile\npnpm dev' },
     { label: '检查与交付 · 同步构建技能包', command: 'pnpm typecheck\npnpm build' },
     { label: '独立工作台 · 先复制技能的完整 assets 目录', command: 'cd component-lab\npnpm install --frozen-lockfile\npnpm dev' },
-    { label: '使用技能 · 安装后发送给 Agent', command: '$milk-white-web-design 为我的产品实现纸感界面，支持白色、黑色与乳白主题和实体交互。' },
+    { label: '使用技能 · 安装后发送给 Agent', command: '$milk-white-web-design 为我的产品实现纸感界面，支持白色、黑色与乳白主题、毛玻璃材质和实体交互。' },
   ],
 }
