@@ -32,7 +32,17 @@ export function initFocusBorder(): () => void {
   maskPath.setAttribute('class', 'milk-focus-mask')
   maskPath.setAttribute('fill', 'none')
   rimMask.append(maskPath)
-  defs.append(clip, rimMask)
+  const spectrum = doc.createElementNS(SVG_NS, 'linearGradient')
+  const spectrumId = `${clipId}-spectrum`
+  spectrum.setAttribute('id', spectrumId)
+  spectrum.setAttribute('gradientUnits', 'userSpaceOnUse')
+  for (const [tone, offset] of [['blue', '0%'], ['jade', '50%'], ['lilac', '100%']]) {
+    const stop = doc.createElementNS(SVG_NS, 'stop')
+    stop.setAttribute('class', `milk-focus-stop-${tone}`)
+    stop.setAttribute('offset', offset)
+    spectrum.append(stop)
+  }
+  defs.append(clip, rimMask, spectrum)
   const group = doc.createElementNS(SVG_NS, 'g')
   group.setAttribute('clip-path', `url(#${clipId})`)
   const lightLayer = doc.createElementNS(SVG_NS, 'g')
@@ -42,7 +52,10 @@ export function initFocusBorder(): () => void {
     path.setAttribute('class', `milk-focus-${name}`)
     path.setAttribute('pathLength', '100')
     path.setAttribute('fill', 'none')
-    if (name === 'light') lightLayer.append(path)
+    if (name === 'light') {
+      path.setAttribute('stroke', `url(#${spectrumId})`)
+      lightLayer.append(path)
+    }
     else group.append(path)
     return path
   })
@@ -164,6 +177,9 @@ export function initFocusBorder(): () => void {
     const key = `${path}|${left}|${top}|${right}|${bottom}|${origin.left}|${origin.top}|${sx}|${sy}`
     if (geometry !== key) {
       paths.forEach(node => node.setAttribute('d', path))
+      // Anchor color to the visible control, including transformed dialogs and
+      // composite input owners, rather than to the full viewport overlay.
+      for (const [name, value] of Object.entries({ x1: x, y1: y, x2: x + rect.width / sx, y2: y + rect.height / sy })) spectrum.setAttribute(name, String(value))
       const clipX = (left - origin.left) / sx, clipY = (top - origin.top) / sy
       const clipWidth = (right - left) / sx, clipHeight = (bottom - top) / sy
       setRect(clipRect, clipX, clipY, clipWidth, clipHeight)

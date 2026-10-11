@@ -52,9 +52,17 @@ overflow 为 scroll／auto 的区域采用细而低调的纸感滚动条，保�
 
 面板圆角 24px、媒体 28px、输入框 12px、按钮胶囊 999px。按钮视觉紧凑，触控目标保持至少 44px。正文与读数保持可读对比，不用模糊文字投影代替字形。默认、悬浮、按压、焦点、禁用与加载状态可辨。
 
-焦点统一沿实际聚焦元素的已有边框内侧表现：稳定可辨的轨道上叠加柔和渐变光带，银灰同色系随透明度平滑过渡、首尾渐隐，约 5.2s 绕圆角流动一周。光带融入材质，不以硬白亮头或突变蓝尾切开边框；颜色与周期以 milk-focus.css 的主题令牌为准。装饰 SVG 绘制约 2px 宽的内侧亮边，不新增外圈，不改变 border 宽度、尺寸、圆角、布局或凸凹材质；装饰不接收指针且对辅助技术隐藏。覆盖按钮、链接、输入框、下拉触发器、Tab、菜单项及可聚焦滚动区，dark 与 Portal 共用同一规则。InputGroup、Tags 等复合输入只装饰一处可见边界，PIN/OTP 随当前活动格移动，不让外层与内部输入重复发光；需要显式指定可见边界时使用 data-milk-focus-surface。
+焦点统一沿实际聚焦元素的已有边框内侧表现：稳定可辨的银灰基线上叠加一束低饱和彩色光带，雾蓝、青玉与淡紫在控件局部渐变中连续过渡，首尾透明渐隐，约 5.2s 绕圆角流动一周。光带约占周长 22%，柔化后通过 2px 内侧 mask 裁剪，融入纸感材质，不出现硬白亮头、突变色块或外围光晕。彩色仅用于焦点光带，表面、稳定基线、悬浮波纹和按压材质沿用原规则。装饰不新增外圈，不改变 border 宽度、尺寸、圆角、布局或凸凹材质，不接收指针且对辅助技术隐藏。覆盖按钮、链接、输入框、下拉触发器、Tab、菜单项及可聚焦滚动区，dark 与 Portal 共用同一规则。InputGroup、Tags 等复合输入只装饰一处可见边界，PIN/OTP 随当前活动格移动，不让外层与内部输入重复发光；需要显式指定可见边界时使用 data-milk-focus-surface。
 
-共享 assets/focus-controller.ts 的 initFocusBorder() 与 assets/milk-focus.css 接管焦点装饰；仅对成功装饰的目标关闭额外 outline 与 Tailwind ring，控制器未初始化、不可装饰或已清理时仍保留可见键盘 outline 回退。prefers-reduced-motion 停止流动并保留静态亮边，forced-colors 使用系统 Highlight，焦点不依赖动画才可辨。原有光标、选中、错误提示、ARIA、键盘导航和焦点恢复保持，集成和清理见 [交互规范](motion-and-network.md)。
+焦点光色集中于 milk-focus.css 的三个主题令牌，可按项目品牌覆盖并保持低饱和、连续渐变；第一个名称沿用既有 --milk-focus-flow 以保持兼容，周期仍由 --milk-focus-lap 管理。
+
+| 令牌／色标 | light | dark |
+| --- | --- | --- |
+| --milk-focus-flow／0% 雾蓝 | #82a8d4 | #97b6df |
+| --milk-focus-flow-jade／50% 青玉 | #83b9b2 | #91c7bf |
+| --milk-focus-flow-lilac／100% 淡紫 | #b29dca | #c0addd |
+
+共享 assets/focus-controller.ts 的 initFocusBorder() 与 assets/milk-focus.css 接管焦点装饰；仅对成功装饰的目标关闭额外 outline 与 Tailwind ring，控制器未初始化、不可装饰或已清理时仍保留可见键盘 outline 回退。prefers-reduced-motion 隐藏彩色流光并保留静态银灰边界，forced-colors 使用系统 Highlight，焦点不依赖动画或色相才可辨。原有光标、选中、错误提示、ARIA、键盘导航和焦点恢复保持，集成和清理见 [交互规范](motion-and-network.md)。
 
 支持悬浮的按钮表面增加一次轻柔波纹，由指针进入处向外扩散并淡出。波纹限制在已有圆角表面内，使用低透明度主题柔光，保留文字、实体材质、按压阻尼和焦点边界，不新增外围光圈或改变尺寸。light／dark 共用扩散节奏，按表面明度校准光色；禁用项与触摸不触发，减少动态效果时不播放。共享入口与清理见 [交互规范](motion-and-network.md)。
 

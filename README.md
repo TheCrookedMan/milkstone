@@ -141,7 +141,7 @@ milkstone/
 - **渐入**：标题、卡片和工作台随视区逐层显现，700ms 淡入并轻移 18px；同组错峰 80ms，延迟上限 240ms。
 - **按压**：100ms 按下、至少 112ms 反馈、420ms 平稳回位；普通按钮下沉 2px、缩放至 0.975。
 - **明暗一致**：共用几何、层级与状态规则，按材料角色切换配色，保留相同的凸起和凹槽感。
-- **轻触与焦点**：按钮悬浮时表面微波轻轻荡开，按下后阻尼回位；焦点以首尾渐隐的银灰微光沿已有边缘流动。保留 Reka 的键盘、ARIA 和焦点管理，支持减少动态效果及静态焦点回退。
+- **轻触与焦点**：按钮悬浮时表面微波轻轻荡开，按下后阻尼回位；焦点以低饱和雾蓝、青玉与淡紫流光沿已有边缘游走，首尾自然渐隐。保留 Reka 的键盘、ARIA 和焦点管理，支持减少动态效果及静态焦点回退。
 
 详细说明：[设计规范](skills/milk-white-web-design/references/design-system.md) · [双模式主题](skills/milk-white-web-design/references/theme-modes.md) · [交互与动画](skills/milk-white-web-design/references/motion-and-network.md) · [组件目录规范](skills/milk-white-web-design/references/shadcn-catalog.md)。
 

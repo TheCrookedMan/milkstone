@@ -1,12 +1,16 @@
-/* A soft silver light blends into the existing rim, never a second box. */
+/* Muted blue, jade and lilac light blend into the existing silver rim. */
 :root {
   --milk-focus-rim:#737f91;
-  --milk-focus-flow:#c6ccd5;
+  --milk-focus-flow:#82a8d4;
+  --milk-focus-flow-jade:#83b9b2;
+  --milk-focus-flow-lilac:#b29dca;
   --milk-focus-lap:5.2s;
 }
 :root[data-theme="dark"] {
   --milk-focus-rim:#84909f;
-  --milk-focus-flow:#c2cbd7;
+  --milk-focus-flow:#97b6df;
+  --milk-focus-flow-jade:#91c7bf;
+  --milk-focus-flow-lilac:#c0addd;
 }
 /* Keep a native keyboard fallback until the controller has drawn its light. */
 :focus-visible { outline:2px solid var(--milk-focus)!important; outline-offset:2px!important }
@@ -38,10 +42,12 @@
 .milk-focus-overlay path { stroke-width:2px; stroke-linecap:round; stroke-linejoin:round; vector-effect:non-scaling-stroke }
 .milk-focus-mask { stroke:#fff }
 .milk-focus-track { stroke:var(--milk-focus-rim); opacity:1 }
+.milk-focus-stop-blue { stop-color:var(--milk-focus-flow) }
+.milk-focus-stop-jade { stop-color:var(--milk-focus-flow-jade) }
+.milk-focus-stop-lilac { stop-color:var(--milk-focus-flow-lilac) }
 /* Blur supplies continuous fades at both ends of one light sweep. The mask
    then confines every soft pixel to the same inner 2px rim as the steady base. */
 .milk-focus-light {
-  stroke:var(--milk-focus-flow);
   stroke-width:14px!important;
   stroke-linecap:butt!important;
   stroke-dasharray:22 78;

@@ -3,7 +3,7 @@
 
 Card 使用圆角灰白表面与外浮柔影，按钮采用紧凑胶囊；普通边框为 1px 半透明白，图片区保留 3px 白色 rim。左上白色高光与右下灰色投影表现柔和浮起。Card 悬浮使用 --milk-card-hover-shadow，小按钮悬浮使用 --milk-hover-shadow，按压切换 --milk-pressed 并保留小幅位移；输入、读数窗和功能槽使用内凹表面。Tabbar 整体为凹槽，选中拨片浮起，未选中项融入槽面。阴影参数复用统一令牌，不再使用伪元素硬底座；milk-relief 仅保留兼容，depth 为 0。焦点使用已有边框内的稳定内侧轨道与柔和渐变光带，成功装饰时不再叠加外围 outline 或 ring；控件原有表面、边框几何与阴影保持，未接管时保留可见键盘 outline 回退，见 [焦点规范](design-system.md)。纸纹静态且极轻，disabled 降低不透明度且不可触发，loading 保留可读文字、阻止重复操作并向读屏报告状态。园区柔焦、扫描灯、星体光晕和电流光尾继续保留。
 
-焦点复用 assets/focus-controller.ts 与 assets/milk-focus.css，在应用入口调用一次 initFocusBorder()，将返回清理函数接入卸载与 HMR dispose。控制器跟随真实焦点，在选定边界内显示单个不可交互、对辅助技术隐藏的 SVG；稳定轨道保持可辨，柔和渐变光带约 5.2s 循环，光色连续过渡且首尾渐隐，失焦后隐藏，不依靠 box-shadow 额外套框。复合输入只保留一个可见装饰，PIN/OTP 跟随活动格；异步内容与 Portal 不需要逐组件建立焦点监听。尺寸和主题变化时保持边框贴合，清理时移除装饰并释放监听与绘制循环。prefers-reduced-motion 显示静态亮边，forced-colors 使用系统 Highlight；只有成功绘制时取消原外圈，初始化失败、不可装饰或清理后保留可见键盘焦点回退。
+焦点复用 assets/focus-controller.ts 与 assets/milk-focus.css，在应用入口调用一次 initFocusBorder()，将返回清理函数接入卸载与 HMR dispose。控制器跟随真实焦点，在选定边界内显示单个不可交互、对辅助技术隐藏的 SVG；稳定银灰基线保持可辨，雾蓝、青玉与淡紫连续过渡的单束柔光约 5.2s 循环，首尾自然渐隐并裁在 2px 内侧边界。三色通过 --milk-focus-flow、--milk-focus-flow-jade、--milk-focus-flow-lilac 自定义，数值见 [焦点规范](design-system.md)；彩色只用于光带，原有表面、悬浮波纹和按压反馈保持。失焦后隐藏，不依靠 box-shadow 额外套框。复合输入只保留一个可见装饰，PIN/OTP 跟随活动格；异步内容与 Portal 不需要逐组件建立焦点监听。尺寸和主题变化时保持边框贴合，清理时移除装饰并释放监听与绘制循环。prefers-reduced-motion 隐藏彩色流光并保留静态银灰边界，forced-colors 使用系统 Highlight；只有成功绘制时取消原外圈，初始化失败、不可装饰或清理后保留可见键盘焦点回退。
 
 普通微交互过渡默认 180ms。内容进入视区时以 700ms、cubic-bezier(.16,1,.3,1) 从透明与下方 18px 过渡到完整显示；分组直接子项以 80ms 错峰，延迟最多 240ms。首屏标题、说明与主操作按同一节奏展开，后续区块随滚动逐步出现，每个元素只播放一次，不因滚动返回、主题切换或普通 DOM 更新重复播放。入场不锁定点击、键盘或滚动，键盘聚焦内容时立即完整显示。
 

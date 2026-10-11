@@ -145,6 +145,10 @@ test('pointer/native focus follows press geometry without mutating layout and st
   assert.equal(light.getAttribute('d'), path(context))
   assert.equal(mask.querySelector('path').getAttribute('d'), path(context))
   assert.equal(light.parentElement.getAttribute('mask'), `url(#${mask.getAttribute('id')})`)
+  const spectrum = context.overlay.querySelector('linearGradient')
+  assert.equal(light.getAttribute('stroke'), `url(#${spectrum.getAttribute('id')})`)
+  assert.equal(spectrum.getAttribute('gradientUnits'), 'userSpaceOnUse')
+  for (const [attribute, value] of Object.entries({ x1: 101.5, y1: 102, x2: 218.5, y2: 141 })) assert.equal(Number(spectrum.getAttribute(attribute)), value)
   assert.deepEqual(control.style, initialStyle)
   doc.activeElement = doc.body
   doc.emit('focusout')
