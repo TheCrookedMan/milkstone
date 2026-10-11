@@ -11,7 +11,7 @@
 [![Vue 3](https://img.shields.io/badge/Vue-3-555b66.svg)](https://vuejs.org/)
 [![shadcn-vue](https://img.shields.io/badge/shadcn--vue-70_components-555b66.svg)](docs/shadcn-registry-source.json)
 
-[在线体验](https://thecrookedman.github.io/milkstone/) · [快速开始](#快速开始) · [组件与工作台](#组件与工作台) · [设计规范](#设计规范) · [Agent Skill](#agent-skill) · [下载技能包](https://github.com/TheCrookedMan/milkstone/releases/latest)
+[在线体验](https://thecrookedman.github.io/milkstone/) · [GitHub 仓库](https://github.com/TheCrookedMan/milkstone) · [Gitee 国内镜像](https://gitee.com/theCrookedMan/milkstone) · [快速开始](#快速开始) · [组件与工作台](#组件与工作台) · [设计规范](#设计规范) · [Agent Skill](#agent-skill) · [下载技能包](https://github.com/TheCrookedMan/milkstone/releases/latest)
 
 ## 为什么叫 Milkstone
 
@@ -57,6 +57,8 @@ pnpm install --frozen-lockfile
 pnpm dev
 ```
 
+国内用户也可从 Gitee 克隆相同源码：`git clone https://gitee.com/theCrookedMan/milkstone.git`。
+
 打开 [http://127.0.0.1:4340/](http://127.0.0.1:4340/)。开发和预览服务默认监听 `0.0.0.0:4340`，同一局域网中的电脑可使用启动终端显示的 Network 地址访问。
 
 仅需本机访问时：
@@ -92,6 +94,8 @@ pnpm preview
 ### 在线发布
 
 公共演示使用 [GitHub Pages](https://thecrookedman.github.io/milkstone/)，由 GitHub Actions 在 `main` 更新后构建发布，无需部署密钥。构建命令为 `pnpm run build --base=/milkstone/`，技能包与页面一起生成。仓库同时保留可选的 Vercel 配置，操作与验收步骤见 [部署说明](docs/deployment.md)。
+
+源码同时发布到 [Gitee 个人仓库](https://gitee.com/theCrookedMan/milkstone)。Gitee Pages 已下线，Gitee 镜像提供源码托管；国内站点可另接 EdgeOne Makers 等静态托管平台，域名与构建要求见 [部署说明](docs/deployment.md#gitee-国内镜像与国内站点)。
 
 ## 技术架构
 

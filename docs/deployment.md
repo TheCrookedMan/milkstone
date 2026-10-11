@@ -33,6 +33,36 @@ Pages 将本项目放在 `/milkstone/` 子路径。构建的 `base` 会调整图
 
 `vercel.json` 中的附件响应头和 `no-store` 仅适用于 Vercel，不会应用到 GitHub Pages。
 
+## Gitee 国内镜像与国内站点
+
+源码镜像：[gitee.com/theCrookedMan/milkstone](https://gitee.com/theCrookedMan/milkstone)。仓库从 GitHub 导入，保留 `main`、标签与提交历史；GitHub 是当前上游，CI 和已发布的在线演示继续由 GitHub Actions 管理。
+
+本地为两个平台分别保留远程地址，日常同步 `main` 和标签即可：
+
+```bash
+git remote add gitee https://gitee.com/theCrookedMan/milkstone.git
+git push origin main
+git push gitee main
+git push gitee --tags
+```
+
+已有 `gitee` 远程地址时无需重复添加。推送需使用本机已配置的 Gitee Git 认证，不要把账号令牌写入代码或远程 URL。若镜像出现独立提交，先检查差异再同步，避免强推覆盖。
+
+截至 2026-10-11，Gitee 官方帮助中心将 [Gitee Pages、Pages Pro 和单页面应用托管](https://gitee.com/help.com/) 均标为“功能已下线”。因此此 Gitee 仓库不提供 Pages 在线地址，不能通过推送 `dist/` 或更改分支恢复服务。
+
+国内在线站点可选腾讯 **EdgeOne Makers（原 Pages）**。在该平台连接本仓库后，使用仓库根目录、生产分支 `main`、Node.js 24.x，并配置：
+
+```bash
+# 安装命令
+npx --yes pnpm@10.18.3 install --frozen-lockfile
+# 构建命令
+npx --yes pnpm@10.18.3 run build
+```
+
+输出目录为 `dist`。域名根路径发布使用默认 `base=/`，不要沿用 GitHub Pages 的 `--base=/milkstone/`；Hash 路由、独立 HTML 与技能下载均随完整构建产出。平台账号、域名绑定和部署需另行完成；此处配置说明不代表国内站点已上线。
+
+正式国内访问须使用自定义域名：Makers 的默认项目和部署域名在中国大陆只能通过有效期三小时的预览链接访问。选择中国大陆或全球含大陆节点时，自定义域名须已备案；全球不含大陆节点无需备案。参见腾讯官方的 [域名与加速区域要求](https://cloud.tencent.com/document/product/1552/127403)、[价格与套餐](https://cloud.tencent.com/document/product/1552/132790)。
+
 ## 可选：Vercel
 
 在 Vercel 中导入 `TheCrookedMan/milkstone`，根目录保留仓库根目录，Node.js 选用 24.x。仓库的 `vercel.json` 声明了 Vite 框架、固定 pnpm 10.18.3 的安装与构建命令，以及 `dist` 输出目录，无需另外填写环境变量。
