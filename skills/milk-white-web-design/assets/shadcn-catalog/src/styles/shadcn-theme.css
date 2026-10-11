@@ -151,8 +151,8 @@ button[data-slot] { cursor:pointer; text-shadow:none }
 [data-slot=checkbox], [data-slot=radio-group-item] { border-color:transparent; color:var(--foreground) }
 [data-slot=radio-group-indicator] svg { fill:var(--foreground) }
 [data-slot=checkbox][data-state=checked], [data-slot=radio-group-item][data-state=checked] { --milk-border-surface:var(--milk-surface-recessed); border-color:transparent }
-[data-slot=switch][data-state=unchecked] { --milk-border-surface:var(--milk-surface-recessed); border-color:transparent }
-[data-slot=switch][data-state=checked] { --milk-border-surface:linear-gradient(145deg,var(--milk-depth),var(--milk-inset)); border-color:transparent }
+[data-slot=switch][data-state=unchecked] { --milk-press-surface:var(--milk-switch-off-surface); --milk-border-surface:var(--milk-switch-off-surface); color:var(--milk-switch-off-ink); border-color:transparent }
+[data-slot=switch][data-state=checked] { --milk-press-surface:var(--milk-switch-on-surface); --milk-border-surface:var(--milk-switch-on-surface); color:var(--milk-switch-on-ink); border-color:transparent }
 [data-slot=slider-thumb], [data-slot=switch-thumb] { --milk-border-surface:var(--milk-surface-raised); border-color:transparent; box-shadow:var(--milk-button-shadow) }
 [data-slot=slider-range], [data-slot=progress-indicator] { background:var(--milk-color-888888) }
 [data-slot=slider-track], [data-slot=progress] { --milk-border-surface:var(--milk-surface-recessed)}
@@ -326,8 +326,12 @@ button[data-slot] { cursor:pointer; text-shadow:none }
 
 /* Small controls keep usable marks and targets inside the soft highlight edge. */
 [data-slot=checkbox], [data-slot=radio-group-item], [data-slot=slider-thumb] { width:20px; height:20px }
-[data-slot=switch] { width:40px; height:26px }
-[data-slot=switch-thumb] { width:18px; height:18px }
+[data-slot=switch] { width:60px; height:32px; padding:0 }
+[data-slot=switch-state] { position:absolute; inset:0; display:flex; align-items:center; justify-content:space-between; padding-inline:10px; pointer-events:none; font-size:12px; font-weight:600; line-height:1 }
+[data-slot=switch-state] > span { transition:opacity var(--milk-duration) }
+[data-slot=switch][data-state=unchecked] [data-switch-on], [data-slot=switch][data-state=checked] [data-switch-off] { opacity:0 }
+[data-slot=switch-thumb] { width:24px; height:24px; inset-block-start:3px; inset-inline-start:3px; transition:inset-inline-start var(--milk-release-duration) var(--milk-release-ease),box-shadow var(--milk-release-duration) var(--milk-release-ease) }
+[data-slot=switch-thumb][data-state=checked] { inset-inline-start:calc(100% - 27px) }
 [data-slot=slider-track][data-orientation=horizontal] { min-height:10px }
 [data-slot=slider-track][data-orientation=vertical] { min-width:10px }
 [data-slot=progress] { min-height:12px }
@@ -490,7 +494,8 @@ button[data-slot] { cursor:pointer; text-shadow:none }
   :is([data-slot=dialog-content],[data-slot=alert-dialog-content],[data-slot=sheet-content],[data-slot=drawer-content]) > button,
   .shadcn-demo .layer-option, .shadcn-demo .reaction-button
 )[data-milk-press=down]:not(:disabled):not([aria-disabled=true]):not([data-disabled]) {
-  --milk-border-surface:var(--milk-surface-recessed)!important;
+  /* A stateful switch keeps its state color while the material compresses. */
+  --milk-border-surface:var(--milk-press-surface,var(--milk-surface-recessed))!important;
   box-shadow:var(--milk-pressed)!important;
   transition-duration:var(--milk-press-duration);
   transition-timing-function:var(--milk-press-ease);

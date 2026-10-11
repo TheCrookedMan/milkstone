@@ -77,7 +77,7 @@ export const shadcnCatalog: ShadcnCatalogItem[] = [
   { id: 'sonner', name: 'Sonner', label: '消息通知', category: '导航与浮层', description: '操作完成后，递上一条简短反馈与后续入口。', owner: 'overlay' },
   { id: 'spinner', name: 'Spinner', label: '加载指示', category: '基础与展示', description: '用轻量旋转，提示操作仍在进行。', owner: 'display' },
   { id: 'stepper', name: 'Stepper', label: '步骤导航', category: '导航与浮层', description: '从选材到成形，让每一步都有可返回的位置。', owner: 'overlay' },
-  { id: 'switch', name: 'Switch', label: '拨动开关', category: '表单与输入', description: '拨片沿槽位移动，在开启与关闭之间切换。', owner: 'input' },
+  { id: 'switch', name: 'Switch', label: '拨动开关', category: '表单与输入', description: '青绿为开，灰色为关；状态文字与拨片一起切换。', owner: 'input' },
   { id: 'table', name: 'Table', label: '表格', category: '基础与展示', description: '让名称、状态与版本各自对齐，便于逐行比较。', owner: 'display' },
   { id: 'tabs', name: 'Tabs', label: '标签页', category: '导航与浮层', description: '标签浮在槽位之上，轻按切换当前内容。', owner: 'overlay' },
   { id: 'tags-input', name: 'Tags Input', label: '标签输入', category: '表单与输入', description: '把关键词收成小标签，随时补充或移除。', owner: 'input' },
