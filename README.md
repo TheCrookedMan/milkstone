@@ -11,7 +11,7 @@
 [![Vue 3](https://img.shields.io/badge/Vue-3-555b66.svg)](https://vuejs.org/)
 [![shadcn-vue](https://img.shields.io/badge/shadcn--vue-70_components-555b66.svg)](docs/shadcn-registry-source.json)
 
-[快速开始](#快速开始) · [组件与工作台](#组件与工作台) · [设计规范](#设计规范) · [Agent Skill](#agent-skill) · [下载技能包](https://github.com/TheCrookedMan/milkstone/releases/latest)
+[在线体验](https://thecrookedman.github.io/milkstone/) · [快速开始](#快速开始) · [组件与工作台](#组件与工作台) · [设计规范](#设计规范) · [Agent Skill](#agent-skill) · [下载技能包](https://github.com/TheCrookedMan/milkstone/releases/latest)
 
 ## 为什么叫 Milkstone
 
@@ -87,11 +87,11 @@ pnpm build
 pnpm preview
 ```
 
-`pnpm dev` 和 `pnpm build` 会先自动同步独立组件目录并生成技能包。生产静态文件输出到 `dist/`；使用 Hash 路由，可放到支持静态文件的站点根路径。
+`pnpm dev` 和 `pnpm build` 会先自动同步独立组件目录并生成技能包。生产静态文件输出到 `dist/`；使用 Hash 路由。发布到仓库子路径时，构建需指定相应的 `base`。
 
 ### 在线发布
 
-项目已包含 Vercel 静态部署配置，固定 pnpm 版本并保留技能包的附件下载行为。可从 GitHub 导入本仓库，或通过 Vercel CLI 发布，操作和验收步骤见 [Vercel 部署说明](docs/deployment.md)。
+公共演示使用 [GitHub Pages](https://thecrookedman.github.io/milkstone/)，由 GitHub Actions 在 `main` 更新后构建发布，无需部署密钥。构建命令为 `pnpm run build --base=/milkstone/`，技能包与页面一起生成。仓库同时保留可选的 Vercel 配置，操作与验收步骤见 [部署说明](docs/deployment.md)。
 
 ## 技术架构
 
@@ -220,7 +220,7 @@ pnpm dev
 
 工作流不包含 ComfyUI 服务、模型权重或真实图像生成；不支持 API prompt 格式及未声明的工作流版本。神经图呈现关系示例，园区场景使用原创演示建筑。Pinia 已注册，具体业务 store 可按需增加；Three.js / TresJS 是可选扩展路线。
 
-本仓库提供源码和技能分发，公共演示站点尚未部署。验证范围与已知限制见 [验证记录](docs/verification.md)。
+本仓库提供源码、技能分发与 [在线演示](https://thecrookedman.github.io/milkstone/)。验证范围与已知限制见 [验证记录](docs/verification.md)。
 
 ## 参与贡献
 
