@@ -1,3 +1,6 @@
+<script setup lang="ts">
+const baseUrl = import.meta.env.BASE_URL
+</script>
 <template>
   <main id="main-content" tabindex="-1" class="guide">
     <div class="eyebrow">MILKSTONE / GET STARTED</div>
@@ -11,9 +14,9 @@
     <p>体验独立组件沙盒时，请复制完整 assets 目录，在 assets/component-lab 中运行 pnpm install --frozen-lockfile，再运行 pnpm dev。各示例的启动方式见对应 README。</p>
     <p>工作流支持 ComfyUI 0.4 子集的导入导出与本地模拟，未连接图像生成后端。落地页中的表单、收藏和示例数据用于交互演示。下载包由 skills/milk-white-web-design 源码构建。</p>
     <div class="row">
-      <a class="pill primary" href="/milk-white-web-design.skill" download>下载技能包 ↓</a>
+      <a class="pill primary" :href="baseUrl + 'milk-white-web-design.skill'" download>下载技能包 ↓</a>
       <RouterLink class="pill" :to="{path:'/',hash:'#stack'}">查看技术栈与组件</RouterLink>
     </div>
-    <p><a href="/design-sources.md">来源与许可证说明 ↗</a></p>
+    <p><a :href="baseUrl + 'design-sources.md'">来源与许可证说明 ↗</a></p>
   </main>
 </template>

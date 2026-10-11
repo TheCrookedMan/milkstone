@@ -3,7 +3,7 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import LandingPage from '../pages/LandingPage.vue'
 import GuidePage from '../pages/GuidePage.vue'
 export const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHashHistory(import.meta.env.BASE_URL),
   routes: [{ path: '/', component: LandingPage }, { path: '/guide', component: GuidePage }, { path: '/:pathMatch(.*)*', redirect: '/' }],
   async scrollBehavior(to, from, saved) {
     if (saved) return saved
