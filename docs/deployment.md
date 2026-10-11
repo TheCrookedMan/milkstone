@@ -93,15 +93,17 @@ pnpm build --base=/
 NODE_ENV=production
 HAIRLINE_HOST=127.0.0.1
 HAIRLINE_PORT=4341
-HAIRLINE_MODEL_BASE_URL=https://your-model-provider.example/v1
-HAIRLINE_MODEL_API_KEY=your-server-side-api-key
-HAIRLINE_MODEL=your-model-name
+HAIRLINE_MODEL_BASE_URL=https://api.deepseek.com
+HAIRLINE_MODEL_API_KEY=your-deepseek-api-key
+HAIRLINE_MODEL=deepseek-flash
 HAIRLINE_ACCESS_TOKEN=your-private-service-access-token
 HAIRLINE_ALLOWED_ORIGINS=https://milkstone.dipp.cc,https://thecrookedman.github.io
 HAIRLINE_DATA_DIR=/path/outside/public-web-root/hairline-data
 ```
 
-启动入口为 `node --env-file=/path/to/private-hairline.env server/hairline-server.mjs`；保持固定运行时文件相对位置，确保进程有权限写入缓存目录。不要将模型密钥放入 `VITE_*`，不要把环境文件或服务缓存上传到 `dist/`。页面填写的访问令牌只用于生成 API 的 Bearer 认证，与提供方模型密钥不同。
+默认端点和模型采用 [DeepSeek 官方接入文档](https://api-docs.deepseek.com/zh-cn/) 的 `https://api.deepseek.com` 与 `deepseek-flash`，允许用户自行更换 OpenAI 兼容服务及模型；真实密钥与服务访问令牌需自行配置，项目不提供公共密钥。
+
+从 `server/.env.example` 复制为根目录 `.env.hairline` 后，`pnpm hairline:serve` 会自动加载该文件；生产进程也可用 `node --env-file=/path/to/private-hairline.env server/hairline-server.mjs` 指定私有环境文件。保持固定运行时文件相对位置，确保进程有权限写入缓存目录。不要将模型密钥放入 `VITE_*`，不要把环境文件或服务缓存上传到 `dist/`。页面填写的访问令牌只用于生成 API 的 Bearer 认证，与提供方模型密钥不同。
 
 在 1Panel 的目标网站中添加 `/api/hairline/` 路径反向代理，后端地址为 `http://127.0.0.1:4341`，将请求路径完整传给服务。对应 OpenResty 配置形态为：
 
@@ -117,7 +119,7 @@ location /api/hairline/ {
 
 `proxy_pass` 后不附加 URI，避免把 `/api/hairline/` 前缀删掉。使用面板已有的反向代理功能或配置编辑器时，先检查实际生成的配置，测试成功后再重载；静态资源和原有网站入口保持现有规则。模型端点耗时较长时，按提供方与服务超时调整代理读超时。
 
-同域站点使用默认 API 地址；GitHub Pages 在页面中填写独立 API 的 HTTPS 基址，并将 `https://thecrookedman.github.io` 加入允许来源，Origin 不带 `/milkstone/`。跨域请求需要服务正确返回 CORS 响应，API 必须支持 HTTPS。
+同域站点使用以 `/api/hairline` 结尾的完整服务 URL，例如 `https://milkstone.dipp.cc/api/hairline`；GitHub Pages 在页面中填写独立 API 的完整 HTTPS 基址，并将 `https://thecrookedman.github.io` 加入允许来源，Origin 不带 `/milkstone/`。跨域请求需要服务正确返回 CORS 响应，API 必须支持 HTTPS。DeepSeek 模型端点配置在服务器环境中，页面只填写自建生成服务的 URL 和访问令牌。
 
 发布后先访问 `/api/hairline/capabilities` 确认服务可用，再验证未授权生成被拒绝、真实 Prompt 能生成并预览、相同 Prompt 命中缓存、图形保存和导入导出正常。模型未配置或调用失败应如实显示，不能用已有图形冒充新生成。具体变量、静态校验与视觉验收边界见 [Hairline 生成服务](../skills/milk-white-web-design/references/hairline-generation-service.md)。此配置说明不表示公开演示站已配置模型提供方。
 

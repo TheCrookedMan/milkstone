@@ -1,16 +1,27 @@
 # Hairline Prompt 生成服务
 
-本服务是 Empty 组件的可选扩展。静态站点、附带空托盘和用户已保存的图库无需模型服务；根据新 Prompt 生成图形需要一个真实大模型端点。服务采用 OpenAI 兼容的 `chat/completions` 协议，模型只编写 Hairline figure 源码，固定引擎和页面由本项目组装。
+本服务是 Empty 组件的可选扩展。静态站点、附带空托盘和用户已保存的图库无需模型服务；根据新 Prompt 生成图形需要一个真实大模型端点。服务采用 OpenAI 兼容的 `chat/completions` 协议，模型只编写 Hairline figure 源码，固定引擎和页面由本项目组装。默认采用 DeepSeek，用户可自定义端点和模型。
 
 ## 本地运行
 
-在 Milkstone 仓库根目录设置环境后运行：
+在 Milkstone 仓库根目录复制配置示例：
 
 ```bash
-export HAIRLINE_MODEL_BASE_URL='https://your-model-provider.example/v1'
-export HAIRLINE_MODEL_API_KEY='your-server-side-api-key'
-export HAIRLINE_MODEL='your-model-name'
-export HAIRLINE_ACCESS_TOKEN='your-private-service-access-token'
+cp server/.env.example .env.hairline
+```
+
+编辑根目录 `.env.hairline`，填入自己的模型密钥与单独设置的服务访问令牌：
+
+```dotenv
+HAIRLINE_MODEL_BASE_URL=https://api.deepseek.com
+HAIRLINE_MODEL_API_KEY=your-deepseek-api-key
+HAIRLINE_MODEL=deepseek-flash
+HAIRLINE_ACCESS_TOKEN=your-private-service-access-token
+```
+
+默认端点和模型依据 [DeepSeek 官方接入文档](https://api-docs.deepseek.com/zh-cn/)；其他 OpenAI 兼容服务按实际端点和模型名修改。项目不附带公共模型密钥，缺少模型密钥或服务访问令牌时保持未配置状态。配置完成后运行下列命令，自动加载根目录 `.env.hairline`：
+
+```bash
 pnpm hairline:serve
 ```
 
@@ -26,14 +37,16 @@ node --env-file=/path/to/private-hairline.env server/hairline-server.mjs
 
 | 变量 | 用途 |
 | --- | --- |
-| `HAIRLINE_MODEL_BASE_URL` | OpenAI 兼容 API 基地址，通常以 `/v1` 结尾；服务在此基础上请求 `chat/completions` |
+| `HAIRLINE_MODEL_BASE_URL` | OpenAI 兼容 API 基地址，默认 `https://api.deepseek.com`；服务在此基础上请求 `chat/completions`，其他提供方按实际 API 前缀配置 |
 | `HAIRLINE_MODEL_API_KEY` | 模型提供方密钥，仅服务端读取 |
-| `HAIRLINE_MODEL` | 提供方实际支持的模型名 |
+| `HAIRLINE_MODEL` | 提供方实际支持的模型名，默认 `deepseek-flash` |
 | `HAIRLINE_ACCESS_TOKEN` | 保护生成 API 的必需访问令牌，本地与生产环境均需设置，与模型密钥分开 |
 | `HAIRLINE_ALLOWED_ORIGINS` | 逗号分隔的允许网页来源，按实际协议、域名及端口配置；保留 Host 的同域反向代理无需额外跨域来源 |
 | `HAIRLINE_DATA_DIR` | 生成缓存目录；仓库默认 `work/hairline-data`，部署时设置可写且持久的目录 |
 | `HAIRLINE_HOST` / `HAIRLINE_PORT` | 服务监听地址和端口，默认 `127.0.0.1` / `4341` |
 | `HAIRLINE_JSON_MODE` | 默认请求 JSON 对象输出；提供方不支持 `response_format` 时设为 `false`，返回内容仍须为有效 JSON |
+
+DeepSeek 使用 `response_format: { "type": "json_object" }` 的 [JSON Output](https://api-docs.deepseek.com/zh-cn/guides/json_mode/)；服务提示包含输出结构要求。有效 JSON 仍需继续通过图形静态校验，模型返回空内容或不合格图形时如实反馈失败。此处接入配置不代表已经使用真实 DeepSeek 密钥完成生成测试。
 
 不要将真实密钥或令牌提交到仓库，也不要放入 `VITE_*` 变量、静态构建产物或可公开下载的技能包。访问令牌用于授权使用生成服务；拥有它的人可以消耗对应模型服务额度，应按自己的使用范围分发。
 
@@ -42,7 +55,7 @@ node --env-file=/path/to/private-hairline.env server/hairline-server.mjs
 - `GET /api/hairline/capabilities`：查询服务配置与生成能力。前端据此显示是否可生成；未配置模型时明确提示缺少配置。
 - `POST /api/hairline/generate`：JSON 请求体为 `{ "prompt": "物件、空状态与指针回应" }`，成功响应为 `{ "artwork": ..., "reused": false }`；命中已有服务缓存时 `reused` 为 `true`。
 
-生成请求通过 `Authorization: Bearer <服务访问令牌>` 认证，本地开发也需填写。页面的服务 URL 指向部署此 API 的服务，访问令牌只保存在页面当前会话内存中；刷新后需重新填写，不自动保存到浏览器图库或导出文件。
+生成请求通过 `Authorization: Bearer <服务访问令牌>` 认证，本地开发也需填写。页面的服务 URL 是以 `/api/hairline` 结尾的完整 API 基址，例如开发时 `http://127.0.0.1:4340/api/hairline` 或公开部署的 `https://your-api.example/api/hairline`。模型提供方端点通过服务端 `HAIRLINE_MODEL_BASE_URL` 配置。页面访问令牌只保存在当前会话内存中；刷新后需重新填写，不自动保存到浏览器图库或导出文件。
 
 服务将用户 Prompt 与固定 Hairline 规则发送给配置的模型。模型返回值只作为 figure 文本处理，服务端不通过 `eval`、动态导入或子进程运行它。固定组装器生成自包含 HTML，再由固定静态校验器检查；失败最多请求模型修复一次，仍未通过则返回错误。只有通过校验的结果才能返回给前端并进入服务缓存。
 
@@ -58,7 +71,7 @@ node --env-file=/path/to/private-hairline.env server/hairline-server.mjs
 
 ## 生产接入
 
-静态 GitHub Pages 不运行此 Node 服务。可以把生成 API 部署在独立 HTTPS 服务，并在页面中填写服务 URL；配置 `HAIRLINE_ALLOWED_ORIGINS` 为允许的页面来源，例如 `https://thecrookedman.github.io`。来源是 Origin，不包含 `/milkstone/` 路径或 Hash 路由。HTTPS 页面不能调用仅有 HTTP 的外部 API。
+静态 GitHub Pages 不运行此 Node 服务。可以把生成 API 部署在独立 HTTPS 服务，并在页面中填写包含 `/api/hairline` 的完整服务 URL；配置 `HAIRLINE_ALLOWED_ORIGINS` 为允许的页面来源，例如 `https://thecrookedman.github.io`。来源是 Origin，不包含 `/milkstone/` 路径或 Hash 路由。HTTPS 页面不能调用仅有 HTTP 的外部 API。
 
 1Panel / OpenResty 自有服务器可保留现有静态站点，另行运行 Node 服务并将 `/api/hairline/` 反向代理到 `http://127.0.0.1:4341`，保持完整 API 路径。生产模式配置模型、访问令牌、允许来源、持久缓存及进程重启策略；不要将服务环境文件放进公开网站目录。代理保留网站的 Host，按模型耗时设置读取超时；例如 `location /api/hairline/` 内使用不附加 URI 的 `proxy_pass http://127.0.0.1:4341;`，避免意外删掉 API 路径前缀。
 

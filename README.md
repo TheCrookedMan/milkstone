@@ -82,17 +82,28 @@ pnpm dev --host 127.0.0.1
 
 ### 可选：Prompt 生成空状态插图
 
-默认页面与已有图库可以独立运行。需要生成新图时，在另一个终端为 Node 服务配置 OpenAI 兼容的模型端点、密钥和模型名，再启动：
+默认页面与已有图库可以独立运行。需要生成新图时，先复制服务配置：
 
 ```bash
-export HAIRLINE_MODEL_BASE_URL='https://your-model-provider.example/v1'
-export HAIRLINE_MODEL_API_KEY='your-server-side-api-key'
-export HAIRLINE_MODEL='your-model-name'
-export HAIRLINE_ACCESS_TOKEN='your-private-service-access-token'
+cp server/.env.example .env.hairline
+```
+
+在根目录 `.env.hairline` 填入自己的 DeepSeek API 密钥和单独设置的服务访问令牌：
+
+```dotenv
+HAIRLINE_MODEL_BASE_URL=https://api.deepseek.com
+HAIRLINE_MODEL_API_KEY=your-deepseek-api-key
+HAIRLINE_MODEL=deepseek-flash
+HAIRLINE_ACCESS_TOKEN=your-private-service-access-token
+```
+
+默认端点与模型依据 [DeepSeek 官方接入文档](https://api-docs.deepseek.com/zh-cn/)；也可自定义其他 OpenAI 兼容服务和模型。项目不提供公共密钥。填好后在另一个终端启动生成服务，命令会自动加载根目录 `.env.hairline`：
+
+```bash
 pnpm hairline:serve
 ```
 
-服务默认监听 `127.0.0.1:4341`，Vite 开发服务将 `/api/hairline/` 代理到该地址。打开空状态展区，填写服务访问令牌，再描述物件、缺席的内容及指针如何回应，生成、预览和保存。模型密钥只放服务端，页面中的访问令牌用于保护生成服务，与模型密钥不同；公开部署还需配置允许来源和 HTTPS。完整变量、接口与技能包运行方式见[Hairline 生成服务](skills/milk-white-web-design/references/hairline-generation-service.md)。
+服务默认监听 `127.0.0.1:4341`，Vite 开发服务将 `/api/hairline/` 代理到该地址。打开空状态展区，服务 URL 使用完整 API 基址，例如 `http://127.0.0.1:4340/api/hairline`，填写服务访问令牌，再描述物件、缺席的内容及指针如何回应，生成、预览和保存。模型密钥只放服务端，页面中的访问令牌用于保护生成服务，与模型密钥不同；公开部署还需配置允许来源和 HTTPS。完整变量、接口与技能包运行方式见[Hairline 生成服务](skills/milk-white-web-design/references/hairline-generation-service.md)。
 
 ### 检查与构建
 

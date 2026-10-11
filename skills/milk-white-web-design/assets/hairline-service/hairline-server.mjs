@@ -5,12 +5,13 @@ import { pathToFileURL } from 'node:url'
 import { createGenerator, GenerationError } from './hairline-service.mjs'
 
 export function readConfig(env = process.env) {
-  const baseUrl = env.HAIRLINE_MODEL_BASE_URL || ''
+  const baseUrl = env.HAIRLINE_MODEL_BASE_URL || 'https://api.deepseek.com'
   if (baseUrl) {
     const parsed = new URL(baseUrl)
     if (!['http:', 'https:'].includes(parsed.protocol) || parsed.username || parsed.password || parsed.search || parsed.hash) throw new Error('HAIRLINE_MODEL_BASE_URL must be an HTTP(S) base URL without credentials/query/fragment.')
   }
-  return { baseUrl, apiKey: env.HAIRLINE_MODEL_API_KEY || '', model: env.HAIRLINE_MODEL || '', accessToken: env.HAIRLINE_ACCESS_TOKEN || '', allowedOrigins: (env.HAIRLINE_ALLOWED_ORIGINS || '').split(',').map(s => s.trim()).filter(Boolean), dataDir: resolve(env.HAIRLINE_DATA_DIR || 'work/hairline-data'), timeoutMs: 60000, jsonMode: env.HAIRLINE_JSON_MODE !== 'false', host: env.HAIRLINE_HOST || '127.0.0.1', port: Number(env.HAIRLINE_PORT || 4341) }
+  const defaultModel = new URL(baseUrl).hostname === 'api.deepseek.com' ? 'deepseek-flash' : ''
+  return { baseUrl, apiKey: env.HAIRLINE_MODEL_API_KEY || '', model: env.HAIRLINE_MODEL || defaultModel, accessToken: env.HAIRLINE_ACCESS_TOKEN || '', allowedOrigins: (env.HAIRLINE_ALLOWED_ORIGINS || '').split(',').map(s => s.trim()).filter(Boolean), dataDir: resolve(env.HAIRLINE_DATA_DIR || 'work/hairline-data'), timeoutMs: 60000, jsonMode: env.HAIRLINE_JSON_MODE !== 'false', host: env.HAIRLINE_HOST || '127.0.0.1', port: Number(env.HAIRLINE_PORT || 4341) }
 }
 export function createHairlineServer(config, options = {}) {
   const generator = createGenerator(config, options)

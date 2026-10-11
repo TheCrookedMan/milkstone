@@ -5,7 +5,7 @@ import { mkdtemp, readFile, readdir, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { createGenerator } from '../server/hairline-service.mjs'
-import { createHairlineServer } from '../server/hairline-server.mjs'
+import { createHairlineServer, readConfig } from '../server/hairline-server.mjs'
 import { validate } from '../server/hairline-runtime/validate.mjs'
 
 const source = await readFile(new URL('../server/hairline-runtime/examples/riffle.js', import.meta.url), 'utf8')
@@ -81,6 +81,88 @@ test('vendored Hairline engine, bench and tools retain their original bytes', as
     const bytes = await readFile(new URL(`../server/hairline-runtime/${name}`, import.meta.url))
     assert.equal(createHash('sha256').update(bytes).digest('hex'), hash, `${name} must stay untouched`)
   }
+})
+
+test('DeepSeek defaults provide a model address without pretending that generation is configured', async () => {
+  const model = modelFixture()
+  const defaults = readConfig({})
+  assert.equal(defaults.baseUrl, 'https://api.deepseek.com')
+  assert.equal(defaults.model, 'deepseek-flash')
+  assert.equal(defaults.apiKey, '')
+  assert.equal(defaults.accessToken, '')
+  const generator = createGenerator(defaults, { fetchImpl: model.fetchImpl })
+  assert.equal(generator.capabilities().configured, false)
+  await assert.rejects(generator.generate(prompt))
+  for (const credentials of [
+    { HAIRLINE_MODEL_API_KEY: 'only-the-model-key' },
+    { HAIRLINE_ACCESS_TOKEN: 'only-the-service-token' },
+  ]) {
+    assert.equal(createGenerator(readConfig(credentials), { fetchImpl: model.fetchImpl }).capabilities().configured, false)
+  }
+  assert.equal(model.calls.length, 0)
+})
+
+test('environment overrides support another provider and require its model to be explicit', () => {
+  const env = {
+    HAIRLINE_MODEL_BASE_URL: 'https://other-provider.example.invalid/v1',
+    HAIRLINE_MODEL_API_KEY: 'other-provider-private-key',
+    HAIRLINE_ACCESS_TOKEN: 'other-service-private-token',
+    HAIRLINE_ALLOWED_ORIGINS: 'https://milkstone.dipp.cc, https://preview.example.invalid',
+    HAIRLINE_JSON_MODE: 'false',
+    HAIRLINE_HOST: '0.0.0.0',
+    HAIRLINE_PORT: '4444',
+  }
+  const withoutModel = readConfig(env)
+  assert.equal(withoutModel.baseUrl, env.HAIRLINE_MODEL_BASE_URL)
+  assert.equal(withoutModel.model, '')
+  assert.equal(createGenerator(withoutModel).capabilities().configured, false)
+  const explicit = readConfig({ ...env, HAIRLINE_MODEL: 'other-provider-model' })
+  assert.equal(explicit.model, 'other-provider-model')
+  assert.equal(explicit.apiKey, env.HAIRLINE_MODEL_API_KEY)
+  assert.equal(explicit.accessToken, env.HAIRLINE_ACCESS_TOKEN)
+  assert.deepEqual(explicit.allowedOrigins, ['https://milkstone.dipp.cc', 'https://preview.example.invalid'])
+  assert.equal(explicit.jsonMode, false)
+  assert.equal(explicit.host, '0.0.0.0')
+  assert.equal(explicit.port, 4444)
+  assert.equal(createGenerator(explicit).capabilities().configured, true)
+})
+
+test('DeepSeek sends non-thinking JSON generation options and exposes its key only to the provider', async t => {
+  const temporary = await configFor(t)
+  const config = readConfig({
+    HAIRLINE_MODEL_API_KEY: temporary.apiKey,
+    HAIRLINE_ACCESS_TOKEN: temporary.accessToken,
+    HAIRLINE_DATA_DIR: temporary.dataDir,
+  })
+  const model = modelFixture()
+  const { base, post } = await liveServer(t, config, model.fetchImpl)
+  const capabilities = await (await fetch(`${base}/api/hairline/capabilities`)).json()
+  assert.equal(capabilities.configured, true)
+  assert.equal(capabilities.model, 'deepseek-flash')
+  const response = await post({ prompt })
+  assert.equal(response.status, 200)
+  const generated = await response.json()
+  assert.equal(model.calls.length, 1)
+  assert.equal(model.calls[0].url, 'https://api.deepseek.com/chat/completions')
+  assert.equal(model.calls[0].headers.get('authorization'), `Bearer ${config.apiKey}`)
+  assert.equal(model.calls[0].body.model, 'deepseek-flash')
+  assert.deepEqual(model.calls[0].body.thinking, { type: 'disabled' })
+  assert.equal(model.calls[0].body.max_tokens, 8192)
+  assert.deepEqual(model.calls[0].body.response_format, { type: 'json_object' })
+  for (const publicPayload of [capabilities, generated]) {
+    assert.ok(!JSON.stringify(publicPayload).includes(config.apiKey))
+    assert.ok(!JSON.stringify(publicPayload).includes(config.accessToken))
+  }
+  assert.ok(!JSON.stringify(model.calls[0].body).includes(config.apiKey))
+  assert.ok(!JSON.stringify(model.calls[0].body).includes(config.accessToken))
+})
+
+test('DeepSeek-specific options are limited to the exact official hostname', async t => {
+  const config = await configFor(t, { baseUrl: 'https://api.deepseek.com.attacker.invalid/v1' })
+  const model = modelFixture()
+  await createGenerator(config, { fetchImpl: model.fetchImpl }).generate(prompt)
+  assert.equal(model.calls[0].body.thinking, undefined)
+  assert.equal(model.calls[0].body.max_tokens, undefined)
 })
 
 test('generation calls a real chat-completions contract and preserves the validated independent page', async t => {

@@ -143,7 +143,7 @@ onBeforeUnmount(() => { operation++; controller?.abort(); token.value = '' })
     <div v-if="configOpen" :id="`${id}-settings`" class="studio-settings">
       <label :for="`${id}-endpoint`">生成服务 URL<Input :id="`${id}-endpoint`" v-model="endpoint" type="url" placeholder="https://你的服务/api/hairline" autocomplete="off" :disabled="!!busy" @update:model-value="invalidateConnection" /></label>
       <label :for="`${id}-token`">服务访问令牌 <span>仅本次页面有效</span><Input :id="`${id}-token`" v-model="token" type="password" placeholder="由生成服务提供" autocomplete="off" :disabled="!!busy" @update:model-value="invalidateConnection" /></label>
-      <div class="studio-settings-footer"><p>模型凭据由服务端管理。静态网站可连接自己的生成服务。</p><Button type="button" variant="outline" size="sm" :disabled="!!busy" @click="connect">{{ busy === 'checking' ? '正在连接…' : '测试连接' }}</Button></div>
+      <div class="studio-settings-footer"><p>默认接入 DeepSeek。使用者在自己的生成服务中配置模型与密钥，也可改用其他兼容服务。<a href="https://github.com/TheCrookedMan/milkstone/blob/main/skills/milk-white-web-design/references/hairline-generation-service.md" target="_blank" rel="noopener noreferrer">查看配置说明 ↗</a></p><Button type="button" variant="outline" size="sm" :disabled="!!busy" @click="connect">{{ busy === 'checking' ? '正在连接…' : '测试连接' }}</Button></div>
     </div>
 
     <form class="studio-prompt" @submit.prevent="generate">
@@ -186,6 +186,7 @@ onBeforeUnmount(() => { operation++; controller?.abort(); token.value = '' })
 .studio-settings label span,.studio-settings-footer p,.studio-prompt-footer > span,.studio-status,.studio-error,.studio-library-heading p,.studio-result-copy small { margin: 0; font-size: 12px; line-height: 1.65; color: var(--milk-muted); }
 .studio-prompt-footer > span,.studio-status,.studio-error,.studio-result-copy small,.studio-artwork-copy h5,.studio-artwork-copy span { min-width: 0; overflow-wrap: anywhere; }
 .studio-settings label span { display: inline; }
+.studio-settings-footer a { margin-inline-start: 8px; text-decoration: underline; text-underline-offset: 3px; }
 .studio-prompt { margin-bottom: 16px; }
 .studio-prompt-footer { margin-top: 8px; }
 .studio-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
