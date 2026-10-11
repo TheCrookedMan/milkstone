@@ -75,6 +75,16 @@ class DomElement {
     if (this.tagName === 'svg') return this.parentElement?.overlayOrigin ?? box(0, 0, 1000, 800)
     return this.rect
   }
+  get type() {
+    const value = (this.getAttribute('type') ?? 'text').toLowerCase()
+    return ['button', 'checkbox', 'color', 'date', 'datetime-local', 'email', 'file', 'hidden', 'image', 'month', 'number', 'password', 'radio', 'range', 'reset', 'search', 'submit', 'tel', 'text', 'time', 'url', 'week'].includes(value) ? value : 'text'
+  }
+  get isContentEditable() {
+    const value = this.getAttribute('contenteditable')?.toLowerCase()
+    if (value === 'false') return false
+    if (value === '' || value === 'true' || value === 'plaintext-only') return true
+    return this.parentElement?.isContentEditable ?? false
+  }
   get offsetWidth() { return this.layoutWidth ?? this.rect.width }
   get offsetHeight() { return this.layoutHeight ?? this.rect.height }
   get clientWidth() { return this.innerWidth ?? this.offsetWidth }
@@ -124,9 +134,9 @@ function fixture(run) {
 const marked = (node, kind) => node.hasAttribute(`data-milk-focus-${kind}`)
 const path = context => context.overlay.querySelector('[class="milk-focus-track"]').getAttribute('d')
 
-test('pointer/native focus follows press geometry without mutating layout and stops after focus leaves', () => fixture(context => {
+test('input focus follows changing geometry without mutating layout and stops after focus leaves', () => fixture(context => {
   const { element, focus, flush, doc } = context
-  const control = element('button')
+  const control = element('input')
   const initialStyle = { ...control.style }
   focus(control)
   assert.ok(marked(control, 'source') && marked(control, 'owner'))
@@ -158,20 +168,31 @@ test('pointer/native focus follows press geometry without mutating layout and st
   assert.equal(marked(control, 'source'), false)
 }))
 
-test('composite editors decorate one visible owner, while embedded buttons and OTP slots retain precise focus', () => fixture(context => {
+test('composite editors decorate one visible owner and embedded buttons clear that decoration', () => fixture(context => {
   const { element, focus, flush } = context
-  for (const slot of ['input-group', 'number-field-content', 'tags-input', 'command-input-wrapper', 'questionnaire-choice']) {
+  for (const slot of ['input-group', 'number-field-content', 'tags-input', 'command-input-wrapper']) {
     const group = element('div', { 'data-slot': slot })
     const input = element('input', {}, group)
-    if (slot === 'questionnaire-choice') input.computed.opacity = '0'
     focus(input); flush()
     assert.equal(marked(group, 'owner'), true, slot)
     assert.equal(marked(input, 'owner'), false, slot)
     const button = element('button', {}, group)
     focus(button); flush()
-    assert.equal(marked(button, 'owner'), true, slot)
+    assert.equal(marked(button, 'owner'), false, slot)
+    assert.equal(marked(button, 'source'), false, slot)
     assert.equal(marked(group, 'owner'), false, slot)
+    assert.equal(marked(input, 'source'), false, slot)
+    assert.equal(context.overlay.style.visibility, 'hidden', slot)
+    assert.equal(context.pending, 0, slot)
   }
+}))
+
+test('PIN and OTP inputs keep the visible active editing boundary', () => fixture(context => {
+  const { element, focus, flush } = context
+  const pin = element('input', { 'data-slot': 'pin-input-slot', type: 'text' })
+  focus(pin)
+  assert.equal(marked(pin, 'source'), true)
+  assert.equal(marked(pin, 'owner'), true)
   const container = element('div', { 'data-input-otp-container': '' })
   const first = element('div', { 'data-slot': 'input-otp-slot', 'data-active': 'true' }, container)
   const second = element('div', { 'data-slot': 'input-otp-slot', 'data-active': 'false' }, container)
@@ -185,6 +206,114 @@ test('composite editors decorate one visible owner, while embedded buttons and O
   assert.equal(marked(first, 'owner'), false)
   assert.equal(marked(second, 'owner'), true)
   assert.equal(marked(editor, 'source'), true)
+  assert.equal(marked(pin, 'source'), false)
+  const button = element('button', {}, container)
+  focus(button); flush()
+  assert.equal(marked(second, 'owner'), false)
+  assert.equal(marked(editor, 'source'), false)
+  assert.equal(context.overlay.style.visibility, 'hidden')
+  assert.equal(context.pending, 0)
+}))
+
+test('text editors retain focus borders across native input types and contenteditable fields', () => fixture(context => {
+  const { element, focus, flush } = context
+  const editors = [
+    element('input'),
+    ...['text', 'search', 'email', 'url', 'tel', 'password', 'number', 'date', 'datetime-local', 'month', 'week', 'time'].map(type => element('input', { type })),
+    element('textarea'),
+    ...['', 'true', 'plaintext-only'].map(contenteditable => element('div', { contenteditable, tabindex: '0' })),
+  ]
+  for (const editor of editors) {
+    focus(editor); flush()
+    assert.equal(marked(editor, 'source'), true, `${editor.tagName} ${editor.getAttribute('type') ?? editor.getAttribute('contenteditable') ?? ''}`)
+    assert.equal(marked(editor, 'owner'), true)
+    assert.equal(context.overlay.style.visibility, 'visible')
+  }
+}))
+
+test('editable-region children keep editor focus while embedded actions and explicit non-editable regions stay unframed', () => fixture(context => {
+  const { element, focus, flush } = context
+  const region = element('div', { contenteditable: 'true' })
+  const inheritedEditor = element('span', { tabindex: '0' }, region)
+  focus(inheritedEditor)
+  assert.equal(marked(inheritedEditor, 'source'), true)
+  assert.equal(marked(inheritedEditor, 'owner'), true)
+  const actions = [
+    element('button', { contenteditable: 'true' }, region),
+    element('a', { href: '#', contenteditable: 'true' }, region),
+    element('select', {}, region),
+    ...['button', 'tab', 'checkbox', 'radio', 'switch', 'slider'].map(role => element('div', { role, tabindex: '0' }, region)),
+    element('div', { contenteditable: 'false', tabindex: '0' }, region),
+  ]
+  const nonEditableParent = element('div', { contenteditable: 'false' }, region)
+  actions.push(element('span', { tabindex: '0' }, nonEditableParent))
+  for (const action of actions) {
+    focus(inheritedEditor); flush()
+    focus(action); flush()
+    assert.equal(marked(inheritedEditor, 'source'), false)
+    assert.equal(marked(action, 'source'), false, `${action.tagName} ${action.getAttribute('role') ?? ''}`)
+    assert.equal(marked(action, 'owner'), false)
+    assert.equal(context.overlay.style.visibility, 'hidden')
+    assert.equal(context.pending, 0)
+  }
+}))
+
+test('non-input controls never receive a focus border and stop an existing input animation', () => fixture(context => {
+  const { element, focus, flush } = context
+  const input = element('input')
+  const controls = [
+    element('button'),
+    element('a', { href: '#' }),
+    element('button', { 'data-slot': 'tabs-trigger', role: 'tab' }),
+    element('select', { 'data-slot': 'native-select' }),
+    element('button', { 'data-slot': 'select-trigger', role: 'combobox' }),
+    element('button', { 'data-slot': 'combobox-trigger', role: 'combobox' }),
+    element('button', { 'data-slot': 'switch', role: 'switch' }),
+    element('span', { 'data-slot': 'slider-thumb', role: 'slider', tabindex: '0' }),
+    element('div', { 'data-slot': 'scroll-area-viewport', tabindex: '0' }),
+    element('div', { 'data-slot': 'dropdown-menu-item', role: 'menuitem', tabindex: '0' }),
+    element('div', { 'data-slot': 'card', tabindex: '0' }),
+    element('main', { tabindex: '-1' }),
+    element('div', { contenteditable: 'false', tabindex: '0' }),
+    element('path', { tabindex: '0' }),
+    ...['checkbox', 'radio', 'range', 'color', 'file', 'button', 'submit', 'reset', 'image', 'hidden'].map(type => element('input', { type })),
+  ]
+  controls.find(control => control.tagName === 'path').namespaceURI = 'http://www.w3.org/2000/svg'
+  for (const control of controls) {
+    focus(input); flush()
+    assert.equal(marked(input, 'source'), true)
+    focus(control); flush()
+    assert.equal(marked(input, 'source'), false)
+    assert.equal(marked(input, 'owner'), false)
+    assert.equal(marked(control, 'source'), false, `${control.tagName} ${control.getAttribute('type') ?? control.getAttribute('data-slot') ?? ''}`)
+    assert.equal(marked(control, 'owner'), false)
+    assert.equal(context.overlay.style.visibility, 'hidden')
+    assert.equal(context.pending, 0)
+  }
+}))
+
+test('explicit focus surfaces accept text editors but cannot turn a choice or button into an input', () => fixture(context => {
+  const { element, focus, flush } = context
+  const surface = element('div', { 'data-milk-focus-surface': '' })
+  const input = element('input', {}, surface)
+  focus(input)
+  assert.equal(marked(surface, 'owner'), true)
+  assert.equal(marked(input, 'source'), true)
+  const button = element('button', {}, surface)
+  focus(button); flush()
+  assert.equal(marked(surface, 'owner'), false)
+  assert.equal(marked(button, 'source'), false)
+  assert.equal(context.pending, 0)
+  for (const type of ['checkbox', 'radio']) {
+    const choice = element('label', { 'data-slot': 'questionnaire-choice', 'data-milk-focus-surface': '' })
+    const control = element('input', { type, 'data-slot': 'questionnaire-choice-input' }, choice)
+    control.computed.opacity = '0'
+    focus(control); flush()
+    assert.equal(marked(choice, 'owner'), false)
+    assert.equal(marked(control, 'source'), false)
+    assert.equal(context.overlay.style.visibility, 'hidden')
+    assert.equal(context.pending, 0)
+  }
 }))
 
 test('clipping, occlusion and transformed native dialog coordinates do not leak a focus border over other UI', () => fixture(context => {
@@ -192,7 +321,7 @@ test('clipping, occlusion and transformed native dialog coordinates do not leak 
   const scroller = element('div')
   scroller.rect = box(80, 90, 200, 25)
   scroller.computed.overflowY = 'auto'
-  const control = element('a', { href: '#' }, scroller)
+  const control = element('input', {}, scroller)
   focus(control)
   const clip = context.overlay.querySelector('rect')
   assert.equal(clip.getAttribute('x'), '0') // Only the Y axis clips.
@@ -214,22 +343,21 @@ test('clipping, occlusion and transformed native dialog coordinates do not leak 
   focus(input); flush()
   assert.equal(context.overlay.parentElement, dialog)
   assert.match(path(context), /^M112,101H288A11,11/)
-  const portalButton = element('button')
-  focus(portalButton); flush()
+  const portalInput = element('textarea')
+  focus(portalInput); flush()
   assert.equal(context.overlay.parentElement, doc.body)
 }))
 
-test('SVG focus works, disabled or disconnected controls never retain a marker, and zero-size owners stay unpainted', () => fixture(context => {
+test('disabled or disconnected editors never retain a marker and zero-size owners stay unpainted', () => fixture(context => {
   const { element, focus, flush } = context
-  const edge = element('path', { tabindex: '0' })
-  edge.namespaceURI = 'http://www.w3.org/2000/svg'
+  const edge = element('input')
   focus(edge)
   assert.equal(marked(edge, 'source'), true)
   edge.isConnected = false
   flush()
   assert.equal(marked(edge, 'source'), false)
   assert.equal(context.pending, 0)
-  const disabled = element('button', { disabled: '' })
+  const disabled = element('input', { disabled: '' })
   focus(disabled)
   assert.equal(marked(disabled, 'source'), false)
   const hidden = element('input')
@@ -241,7 +369,7 @@ test('SVG focus works, disabled or disconnected controls never retain a marker, 
 
 test('blur, page visibility and HMR disposal cancel frames, remove decoration and allow an idempotent reinstall', () => fixture(context => {
   const { element, focus, doc, win, dispose, flush } = context
-  const control = element('button')
+  const control = element('input')
   focus(control)
   assert.equal(initFocusBorder(), dispose)
   win.emit('blur')

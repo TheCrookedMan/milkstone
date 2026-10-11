@@ -68,7 +68,8 @@ body{margin:0;background-color:var(--milk-canvas);background-image:var(--milk-pa
 a{color:inherit;text-decoration:none}button,input,textarea,select{font:inherit}
 button,a,input{-webkit-tap-highlight-color:transparent}button{cursor:pointer}
 button:disabled{cursor:not-allowed;opacity:.45}
-:focus-visible{outline:2px solid var(--milk-focus);outline-offset:2px}
+:where(:focus,:focus-within){outline:none!important;outline-offset:0!important}
+:where(input:not([type=button],[type=submit],[type=reset],[type=image],[type=checkbox],[type=radio],[type=range],[type=color],[type=file],[type=hidden]),textarea,:is([contenteditable=""],[contenteditable="true" i],[contenteditable="plaintext-only" i]):not(button,a,select,[role="button"],[role="tab"],[role="checkbox"],[role="radio"],[role="switch"],[role="slider"])):focus-visible{outline:2px solid var(--milk-focus)!important;outline-offset:2px!important}
 :where(button:not([data-slot]):not(.shadcn-gallery button):not([data-slot] button)),.pill{border-radius:var(--milk-control);border:var(--milk-border-width) solid transparent;background:var(--milk-surface-raised) padding-box,var(--milk-border-gradient) border-box;padding:13px 23px;color:var(--milk-ink);box-shadow:var(--milk-button-shadow);text-shadow:none;font-weight:500}
 :where(button:not([data-slot]):not(.shadcn-gallery button):not([data-slot] button)):hover,.pill:hover{box-shadow:var(--milk-hover-shadow)}
 :where(button:not([data-slot]):not(.shadcn-gallery button):not([data-slot] button)):active,.pill:active{background:var(--milk-surface-recessed) padding-box,var(--milk-border-gradient) border-box;box-shadow:var(--milk-pressed)}
@@ -85,8 +86,7 @@ small,.muted{color:var(--milk-muted)}
 input:not([type=range]):not([type=checkbox]),textarea,select{box-shadow:var(--milk-control-shadow)}
 
 /* Focus decoration lives in milk-focus.css; inset surfaces keep their depth. */
-:is(input:not([data-slot]):not([type=checkbox]):not([type=radio]):not([type=range]),textarea:not([data-slot]),select:not([data-slot])):is(:focus,:focus-visible){box-shadow:var(--milk-pressed)}
-:is(input[type=range],input[type=checkbox],input[type=radio]):focus-visible{accent-color:var(--milk-focus)}
+:is(input:not([data-slot]):not([type=button],[type=submit],[type=reset],[type=image],[type=checkbox],[type=radio],[type=range],[type=color],[type=file],[type=hidden]),textarea:not([data-slot])):is(:focus,:focus-visible){box-shadow:var(--milk-pressed)}
 :where(input[type=range]):is(:focus,:focus-visible){box-shadow:none}
 
 

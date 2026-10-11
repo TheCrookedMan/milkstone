@@ -307,7 +307,7 @@ button[data-slot] { cursor:pointer; text-shadow:none }
 /* Fills for component surfaces whose original color comes from generated utility classes. */
 [data-slot=input-group] [data-slot=input-group-control],
 [data-slot=number-field-content] > [data-number-field-input] { border:0!important; background:transparent!important; box-shadow:none }
-[data-slot=number-field-content]:focus-within { box-shadow:var(--milk-pressed) }
+[data-slot=number-field-content]:has(input:focus) { box-shadow:var(--milk-pressed) }
 [data-slot=number-field-content] > [data-number-field-input]:is(:focus,:focus-visible) { box-shadow:none!important }
 [data-slot=tags-input-item], .shadcn-demo kbd, [data-slot=tooltip-content] kbd { --milk-border-surface:var(--milk-surface-raised) }
 [data-slot=tags-input-item][data-state=active] { --milk-border-surface:var(--milk-surface-recessed) }
@@ -407,19 +407,13 @@ button[data-slot] { cursor:pointer; text-shadow:none }
 .shadcn-demo .layer-option { box-shadow:var(--milk-button-shadow) }
 .shadcn-demo .layer-option.is-selected, .shadcn-demo .layer-option:active, .shadcn-demo .reaction-button[aria-pressed=true], .shadcn-demo .reaction-button:active { box-shadow:var(--milk-pressed) }
 
-/* Focus keeps the inset material; milk-focus.css owns the luminous border and
-   removes extra rings only while the shared controller paints a visible owner. */
+/* Only focused input editors deepen their inset and receive the shared light.
+   Buttons inside composite fields do not light or press the enclosing field. */
 :where(
-  [data-slot=input], [data-slot=textarea], [data-slot=native-select], [data-slot=select-trigger],
-  [data-slot=combobox-input], [data-slot=combobox-trigger], [data-slot=combobox-anchor],
-  [data-slot=number-field-input], [data-slot=number-field-content], [data-slot=pin-input-slot],
-  [data-slot=checkbox], [data-slot=radio-group-item], [data-slot=switch], [data-slot=slider-thumb],
-  [data-slot=questionnaire-input], [data-slot=dropdown-menu-trigger], [data-slot=context-menu-trigger],
-  [data-slot=menubar-trigger], [data-slot=menubar-sub-trigger], [data-slot=dropdown-menu-sub-trigger], [data-slot=context-menu-sub-trigger],
-  [data-slot=popover-trigger], [data-slot=navigation-menu-trigger], [role=combobox],
-  [aria-haspopup=listbox], [aria-haspopup=menu]
+  input[data-slot=input], textarea[data-slot=textarea], input[data-slot=combobox-input],
+  input[data-slot=number-field-input], input[data-slot=pin-input-slot], [data-slot=questionnaire-input]
 ):is(:focus,:focus-visible),
-:where([data-slot=input-group],[data-slot=tags-input],[data-slot=command-input-wrapper],[data-slot=questionnaire-choice]):focus-within,
+:where([data-slot=input-group],[data-slot=number-field-content],[data-slot=tags-input],[data-slot=command-input-wrapper]):has(:is(input,textarea):focus),
 [data-slot=input-otp-slot][data-active=true],
 [data-slot=tags-input-item][data-state=active] {
   --milk-border-surface:linear-gradient(145deg,var(--milk-depth),var(--milk-inset));
@@ -429,7 +423,7 @@ button[data-slot] { cursor:pointer; text-shadow:none }
 
 /* Search lanes and composite fields own the inset; their unframed children do not
    draw another box. The OTP input is an invisible editor behind the visible slots. */
-:where([data-slot=input-group-control],[data-slot=tags-input-input],[data-slot=command-input],[data-slot=questionnaire-choice-input],input[data-slot=input-otp]):is(:focus,:focus-visible) {
+:where([data-slot=input-group-control],[data-slot=tags-input-input],[data-slot=command-input],input[data-slot=input-otp]):is(:focus,:focus-visible) {
   box-shadow:none!important;
 }
 :where([data-slot=input-group],[data-slot=tags-input],[data-slot=command-input-wrapper]) :is(input,textarea):is(:focus,:focus-visible) { box-shadow:none!important }
@@ -445,7 +439,7 @@ button[data-slot] { cursor:pointer; text-shadow:none }
   box-shadow:var(--milk-floating-shadow)!important;
 }
 
-/* Menu choices retain selection backgrounds beneath the shared focus border. */
+/* Menu choices retain selection backgrounds without an additional focus border. */
 :where(
   [data-slot=select-item], [data-slot=combobox-item], [data-slot=command-item],
   [data-slot=dropdown-menu-item], [data-slot=dropdown-menu-checkbox-item], [data-slot=dropdown-menu-radio-item],

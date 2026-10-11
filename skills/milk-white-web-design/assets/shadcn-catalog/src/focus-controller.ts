@@ -1,7 +1,18 @@
-/** A decorative border follows native focus without changing control geometry. */
+/** Input editors alone receive a decorative border, without changing geometry. */
 const installations = new WeakMap<Document, () => void>()
 const SVG_NS = 'http://www.w3.org/2000/svg'
+const INPUT_TYPES = new Set(['text', 'search', 'email', 'url', 'tel', 'password', 'number', 'date', 'datetime-local', 'month', 'week', 'time'])
 let installationId = 0
+
+function isInputEditor(element: Element): boolean {
+  if (element.namespaceURI !== 'http://www.w3.org/1999/xhtml') return false
+  const tag = element.tagName.toLowerCase()
+  if (tag === 'input') return INPUT_TYPES.has((element as HTMLInputElement).type)
+  if (tag === 'textarea') return true
+  // Interactive children of an editable region are still actions, not editors.
+  if (element.matches('button,a,select,[role="button"],[role="tab"],[role="checkbox"],[role="radio"],[role="switch"],[role="slider"]')) return false
+  return (element as HTMLElement).isContentEditable === true
+}
 
 /** Install once at the app entry point; dispose on unmount or Vite HMR. */
 export function initFocusBorder(): () => void {
@@ -89,10 +100,8 @@ export function initFocusBorder(): () => void {
         ?? container?.querySelector('[data-slot="input-otp-slot"]') ?? focused
     }
     if (focused.matches('input,textarea,[contenteditable]:not([contenteditable="false"])')) {
-      return focused.closest('[data-slot="input-group"],[data-slot="number-field-content"],[data-slot="tags-input"],[data-slot="command-input-wrapper"],[data-slot="questionnaire-choice"]') ?? focused
+      return focused.closest('[data-slot="input-group"],[data-slot="number-field-content"],[data-slot="tags-input"],[data-slot="command-input-wrapper"]') ?? focused
     }
-    if (focused.matches('[data-slot="attachment-trigger"]')) return focused.closest('[data-slot="attachment"]') ?? focused
-    if (focused.matches('[data-slot="scroll-area-viewport"]')) return focused.closest('[data-slot="scroll-area"]') ?? focused
     return focused
   }
   function topLayerHost(target: Element): Element {
@@ -128,7 +137,7 @@ export function initFocusBorder(): () => void {
   function draw(): boolean {
     let focused = doc.activeElement
     while (focused?.shadowRoot?.activeElement) focused = focused.shadowRoot.activeElement
-    if (!focused || focused === doc.body || focused === doc.documentElement || focused.matches('main') || !focused.isConnected
+    if (!focused || !isInputEditor(focused) || !focused.isConnected
       || focused.matches(':disabled,[disabled],[aria-disabled="true"],[data-disabled]') || focused.closest('[inert]')) {
       hide()
       return false

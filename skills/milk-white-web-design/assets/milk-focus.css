@@ -18,15 +18,27 @@
   --milk-focus-flow-jade:#98b8a9;
   --milk-focus-flow-lilac:#b9a7bd;
 }
-/* Keep a native keyboard fallback until the controller has drawn its light. */
-:focus-visible { outline:2px solid var(--milk-focus)!important; outline-offset:2px!important }
-/* Main is a skip-navigation destination, not a control surface. Keep focus
-   semantics without outlining the page; descendant controls keep their light. */
-main:is(:focus,:focus-visible),
+/* Focus never adds a frame to actions, selection controls or containers.
+   Reset ring variables, not box-shadow: the resting material keeps its depth. */
+:where(:focus,:focus-within) {
+  outline:none!important;
+  outline-offset:0!important;
+  --ring:transparent!important;
+  --tw-ring-shadow:0 0 transparent!important;
+  --tw-ring-offset-shadow:0 0 transparent!important;
+  --tw-inset-ring-shadow:0 0 transparent!important;
+  --tw-ring-offset-width:0px!important;
+}
+/* Only input editors get a keyboard fallback until their inner light is drawn. */
+:where(input:not([type="button"],[type="submit"],[type="reset"],[type="image"],[type="checkbox"],[type="radio"],[type="range"],[type="color"],[type="file"],[type="hidden"]),textarea,:is([contenteditable=""],[contenteditable="true" i],[contenteditable="plaintext-only" i]):not(button,a,select,[role="button"],[role="tab"],[role="checkbox"],[role="radio"],[role="switch"],[role="slider"])):focus-visible {
+  outline:2px solid var(--milk-focus)!important;
+  outline-offset:2px!important;
+}
+/* Composite editors and OTP decorate one visible boundary, not their children. */
 [data-milk-focus-source]:is(:focus,:focus-visible),
 [data-milk-focus-owner],
 [data-milk-focus-owner]:focus-within,
-:is([data-slot="attachment"],[data-slot="input-group"],[data-slot="number-field-content"],[data-slot="tags-input"],[data-slot="command-input-wrapper"],[data-slot="questionnaire-choice"]):has([data-milk-focus-source]),
+:is([data-slot="input-group"],[data-slot="number-field-content"],[data-slot="tags-input"],[data-slot="command-input-wrapper"]):has([data-milk-focus-source]),
 [data-slot="tags-input"]:has([data-milk-focus-source]) [data-slot="tags-input-item"][data-state="active"] {
   outline:none!important;
   outline-offset:0!important;
@@ -71,7 +83,7 @@ main:is(:focus,:focus-visible),
   .milk-focus-light { display:none }
 }
 @media(forced-colors:active) {
-  :focus-visible { outline-color:Highlight!important }
+  :where(input,textarea,[contenteditable]):focus-visible { outline-color:Highlight!important }
   .milk-focus-overlay { forced-color-adjust:none }
   .milk-focus-track { stroke:Highlight; opacity:1 }
   .milk-focus-light { display:none; animation:none!important }

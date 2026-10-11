@@ -7,6 +7,6 @@
 
 同时保留 assets/press-controller.ts，在 initTheme() 之后、应用 mount 之前调用一次 initPressFeedback()；将返回的清理函数接入卸载与 HMR dispose。按钮、Tab、开关共享轻微机械阻尼与 milk-tokens.css 中的按下／回位令牌，避免各自注册计时器。时序、触发范围、键盘和减少动态效果规则见 [交互规范](motion-and-network.md)。
 
-与 milk-tokens.css、milk-motion.css 一同引入 assets/milk-focus.css，在应用入口调用一次 assets/focus-controller.ts 的 initFocusBorder()，并将返回清理函数接入卸载与 HMR dispose。共享控制器将已有焦点边框呈现为柔和渐变流光，不在组件内重复注册监听；仅成功装饰时移除额外外围焦点框，未接管时保留可见键盘 outline 回退。减少动态效果与强制颜色模式保留静态可辨边界，具体范围与复合输入规则见 [交互规范](motion-and-network.md)。
+与 milk-tokens.css、milk-motion.css 一同引入 assets/milk-focus.css，在应用入口调用一次 assets/focus-controller.ts 的 initFocusBorder()，并将返回清理函数接入卸载与 HMR dispose。共享控制器仅将输入框已有边界呈现为柔和渐变流光，不在组件内重复注册监听；复合输入只在内部编辑器聚焦时亮起，内部按钮聚焦不亮起。输入框成功装饰时移除额外外围焦点框，未接管时仅输入框保留静态键盘边界回退，其他元素始终不新增焦点 outline、ring、边框变色或流光。减少动态效果与强制颜色模式仅为输入框保留静态可辨边界，具体范围与复合输入规则见 [交互规范](motion-and-network.md)。
 
 按钮悬浮反馈同时引入 assets/milk-hover.css 与 assets/hover-controller.ts，在应用入口调用一次 initHoverRipple()，将返回清理函数接入卸载与 HMR dispose。使用共享委托入口承接异步按钮及 Portal，组件不各自注册监听；波纹只装饰表面，不改业务 click、按压反馈或焦点语义。触发范围、减少动态效果和清理规则见 [交互规范](motion-and-network.md)。
