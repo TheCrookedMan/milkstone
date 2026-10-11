@@ -32,6 +32,8 @@ for (const [from, to] of [
   ['skills/milk-white-web-design/assets/milk-motion.css', 'src/styles/milk-motion.css'],
   ['skills/milk-white-web-design/assets/focus-controller.ts', 'src/focus-controller.ts'],
   ['skills/milk-white-web-design/assets/milk-focus.css', 'src/styles/milk-focus.css'],
+  ['skills/milk-white-web-design/assets/hover-controller.ts', 'src/hover-controller.ts'],
+  ['skills/milk-white-web-design/assets/milk-hover.css', 'src/styles/milk-hover.css'],
   ['skills/milk-white-web-design/assets/components/ThemeModeSwitch.vue', 'src/components/ThemeModeSwitch.vue'],
   ['public/licenses/shadcn-vue-MIT.txt', 'LICENSE.shadcn-vue.txt'],
   ['docs/shadcn-registry-source.json', 'registry-source.json'],
@@ -69,10 +71,13 @@ import { initTheme } from './theme-controller'
 import { initPressFeedback } from './press-controller'
 import { initRevealMotion } from './reveal-controller'
 import { initFocusBorder } from './focus-controller'
+import { initHoverRipple } from './hover-controller'
 import './style.css'
 initTheme()
 const disposePressFeedback = initPressFeedback()
 import.meta.hot?.dispose(disposePressFeedback)
+const disposeHoverRipple = initHoverRipple()
+import.meta.hot?.dispose(disposeHoverRipple)
 const disposeFocusBorder = initFocusBorder()
 import.meta.hot?.dispose(disposeFocusBorder)
 createApp(App).mount('#app')
@@ -87,6 +92,7 @@ await writeFile(join(target, 'src/style.css'), `@import "tailwindcss" source(non
 @import "./styles/shadcn-theme.css";
 @import "./styles/shadcn-metrics.css";
 @import "./styles/milk-focus.css";
+@import "./styles/milk-hover.css";
 .catalog-shell{max-width:1240px;margin:auto;padding:50px 40px 80px}
 .catalog-intro{padding:20px 0 35px}.catalog-intro h1{font-size:38px;font-weight:500;margin:12px 0}
 .catalog-intro p{color:var(--milk-muted)}.eyebrow{font-size:11px;letter-spacing:2px;color:var(--milk-muted)}

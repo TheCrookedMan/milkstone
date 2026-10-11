@@ -101,7 +101,7 @@ pnpm preview
 | UI 与可访问交互 | 本地 shadcn-vue 源码、Reka UI、VueUse、Lucide |
 | 数据与图形 | ECharts、Unovis、TanStack Table、SVG、Canvas 2D、原生 WebGL |
 | 节点编辑 | Vue Flow 与独立的 ComfyUI 格式适配器 |
-| 状态与动效 | Vue 响应式状态、已注册的 Pinia 入口、主题控制器、共享按压控制器、滚动渐入控制器，GSAP 按需编排 |
+| 状态与动效 | Vue 响应式状态、已注册的 Pinia 入口、主题控制器、共享按压、悬浮波纹、焦点循光及滚动渐入控制器，GSAP 按需编排 |
 | Agent 交付 | SKILL.md、参考规范、可复用资产、Node.js 安装器、ZIP / tar.gz 归档 |
 
 ```text
@@ -141,7 +141,7 @@ milkstone/
 - **渐入**：标题、卡片和工作台随视区逐层显现，700ms 淡入并轻移 18px；同组错峰 80ms，延迟上限 240ms。
 - **按压**：100ms 按下、至少 112ms 反馈、420ms 平稳回位；普通按钮下沉 2px、缩放至 0.975。
 - **明暗一致**：共用几何、层级与状态规则，按材料角色切换配色，保留相同的凸起和凹槽感。
-- **键盘与动态偏好**：保留 Reka 的键盘、ARIA 和焦点管理；输入焦点通过内凹材质反馈，普通按钮与链接保留可见键盘焦点；支持减少动态效果。
+- **轻触与焦点**：按钮悬浮时表面微波轻轻荡开，按下后阻尼回位；焦点以首尾渐隐的银灰微光沿已有边缘流动。保留 Reka 的键盘、ARIA 和焦点管理，支持减少动态效果及静态焦点回退。
 
 详细说明：[设计规范](skills/milk-white-web-design/references/design-system.md) · [双模式主题](skills/milk-white-web-design/references/theme-modes.md) · [交互与动画](skills/milk-white-web-design/references/motion-and-network.md) · [组件目录规范](skills/milk-white-web-design/references/shadcn-catalog.md)。
 

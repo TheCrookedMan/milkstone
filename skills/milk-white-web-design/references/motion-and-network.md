@@ -1,9 +1,9 @@
 # 交互与动效
 下述颜色以默认 light 为基准。dark 使用对应深色主题并按角色校准材质颜色和透明度，保持相同凸起与凹槽感、边框宽度、阴影偏移与模糊和交互位移；高光继续受光、暗部继续遮光，切换不重置交互或动画相位，见 [双模式主题](theme-modes.md)。
 
-Card 使用圆角灰白表面与外浮柔影，按钮采用紧凑胶囊；普通边框为 1px 半透明白，图片区保留 3px 白色 rim。左上白色高光与右下灰色投影表现柔和浮起。Card 悬浮使用 --milk-card-hover-shadow，小按钮悬浮使用 --milk-hover-shadow，按压切换 --milk-pressed 并保留小幅位移；输入、读数窗和功能槽使用内凹表面。Tabbar 整体为凹槽，选中拨片浮起，未选中项融入槽面。阴影参数复用统一令牌，不再使用伪元素硬底座；milk-relief 仅保留兼容，depth 为 0。焦点使用已有边框内的冷白蓝荧光轨道与流动短光段，成功装饰时不再叠加外围 outline 或 ring；控件原有表面、边框几何与阴影保持，未接管时保留可见键盘 outline 回退，见 [焦点规范](design-system.md)。纸纹静态且极轻，disabled 降低不透明度且不可触发，loading 保留可读文字、阻止重复操作并向读屏报告状态。园区柔焦、扫描灯、星体光晕和电流光尾继续保留。
+Card 使用圆角灰白表面与外浮柔影，按钮采用紧凑胶囊；普通边框为 1px 半透明白，图片区保留 3px 白色 rim。左上白色高光与右下灰色投影表现柔和浮起。Card 悬浮使用 --milk-card-hover-shadow，小按钮悬浮使用 --milk-hover-shadow，按压切换 --milk-pressed 并保留小幅位移；输入、读数窗和功能槽使用内凹表面。Tabbar 整体为凹槽，选中拨片浮起，未选中项融入槽面。阴影参数复用统一令牌，不再使用伪元素硬底座；milk-relief 仅保留兼容，depth 为 0。焦点使用已有边框内的稳定内侧轨道与柔和渐变光带，成功装饰时不再叠加外围 outline 或 ring；控件原有表面、边框几何与阴影保持，未接管时保留可见键盘 outline 回退，见 [焦点规范](design-system.md)。纸纹静态且极轻，disabled 降低不透明度且不可触发，loading 保留可读文字、阻止重复操作并向读屏报告状态。园区柔焦、扫描灯、星体光晕和电流光尾继续保留。
 
-焦点复用 assets/focus-controller.ts 与 assets/milk-focus.css，在应用入口调用一次 initFocusBorder()，将返回清理函数接入卸载与 HMR dispose。控制器跟随真实焦点，在选定边界内显示单个不可交互、对辅助技术隐藏的 SVG；低亮轨道保持可辨，冷白蓝短光段约 3s 循环，失焦后隐藏，不依靠 box-shadow 额外套框。复合输入只保留一个可见装饰，PIN/OTP 跟随活动格；异步内容与 Portal 不需要逐组件建立焦点监听。尺寸和主题变化时保持边框贴合，清理时移除装饰并释放监听与绘制循环。prefers-reduced-motion 显示静态亮边，forced-colors 使用系统 Highlight；只有成功绘制时取消原外圈，初始化失败、不可装饰或清理后保留可见键盘焦点回退。
+焦点复用 assets/focus-controller.ts 与 assets/milk-focus.css，在应用入口调用一次 initFocusBorder()，将返回清理函数接入卸载与 HMR dispose。控制器跟随真实焦点，在选定边界内显示单个不可交互、对辅助技术隐藏的 SVG；稳定轨道保持可辨，柔和渐变光带约 5.2s 循环，光色连续过渡且首尾渐隐，失焦后隐藏，不依靠 box-shadow 额外套框。复合输入只保留一个可见装饰，PIN/OTP 跟随活动格；异步内容与 Portal 不需要逐组件建立焦点监听。尺寸和主题变化时保持边框贴合，清理时移除装饰并释放监听与绘制循环。prefers-reduced-motion 显示静态亮边，forced-colors 使用系统 Highlight；只有成功绘制时取消原外圈，初始化失败、不可装饰或清理后保留可见键盘焦点回退。
 
 普通微交互过渡默认 180ms。内容进入视区时以 700ms、cubic-bezier(.16,1,.3,1) 从透明与下方 18px 过渡到完整显示；分组直接子项以 80ms 错峰，延迟最多 240ms。首屏标题、说明与主操作按同一节奏展开，后续区块随滚动逐步出现，每个元素只播放一次，不因滚动返回、主题切换或普通 DOM 更新重复播放。入场不锁定点击、键盘或滚动，键盘聚焦内容时立即完整显示。
 
@@ -12,6 +12,8 @@ Card 使用圆角灰白表面与外浮柔影，按钮采用紧凑胶囊；普通
 实体按键单独使用轻微机械阻尼：按下 100ms、位移 2px、缩放 0.975，曲线 cubic-bezier(.2,.7,.15,1)；松开后以 420ms、cubic-bezier(.18,.78,.26,1) 平稳回位，不越过初始位置，不做弹簧抖动。按下阶段至少保持 112ms，快速轻点也能看见浅凹反馈；阴影与表面同步压实，返回默认、悬浮或已选中材质。Tab 的默认位移减至 1px、缩放 0.985，开关、Checkbox 和 Radio 原位缩放 0.98，不打断选中拨片或开关自身的位置变化。上述参数由 milk-tokens.css 的 --milk-press-* 与 --milk-release-* 令牌统一管理，light／dark 共用同一时序与运动几何。
 
 复用 assets/press-controller.ts 的委托控制器，在应用入口 initTheme() 后、mount 前调用一次 initPressFeedback()；返回的清理函数用于卸载与 HMR dispose，不在每个按钮内新增计时器。启用的原生 button、a.pill、summary 及显式 data-milk-press-target 接收统一反馈，控制器通过 data-milk-press="down"／"release" 表达短暂按压状态。鼠标、触摸与 Space／Enter 均可触发，业务 click 与键盘语义保持原样，不因动画延迟操作。快速重复按下从当前状态平滑衔接；pointercancel 或失去指针捕获时直接回位，不等待最短按压时长，失焦与卸载清理状态、监听和定时器，禁用控件不触发。data-milk-press-ignore 可明确退出反馈；draggable、Vue Flow／工作流节点、SVG 图形和 range 滑杆不套用按键位移，浮层的定位 transform 不被覆盖。使用独立 translate 做 Y 轴居中的自定义按键，需将 --milk-press-origin-y 设为原本的 Y 偏移；内置轮播箭头与数字步进按钮已适配，原位压缩可用 data-milk-press-kind="switch"。
+
+悬浮波纹复用 assets/hover-controller.ts 与 assets/milk-hover.css，在应用入口调用一次 initHoverRipple()，返回清理函数接入卸载与 HMR dispose。指针进入启用的 button、a.pill、summary、role="button" 或 data-milk-press-target 时，从进入点扩散三道低对比细波纹，总长 1500ms，错开 120ms，平滑渐入渐出；持续停留不循环，移出以 180ms 衰减，再进入可重播。装饰在原圆角表面内裁剪，保留文字、材质、按压反馈与焦点流光，不改背景、transform、布局或业务事件；异步按钮和 Portal 由同一委托入口承接。data-milk-hover-ignore 可退出，data-milk-press-ignore、禁用／inert、拖拽节点、滑杆及编辑区不触发；触摸、无悬浮能力、减少动态效果和 forced-colors 不播放。波纹结束即停止绘制循环，失焦、后台和取消时停止当前波纹，卸载时移除装饰并释放监听。光色使用 milk-hover.css 中的主题令牌，两模式保持相同扩散几何和时序。
 
 尊重 prefers-reduced-motion，按键立即改变材质，取消位移、缩放和过渡，连续动画停止，信息与操作仍完整。GSAP 使用 context 并在卸载 revert，事件监听与定时器清理。
 

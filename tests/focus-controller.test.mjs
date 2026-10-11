@@ -122,7 +122,7 @@ function fixture(run) {
   }
 }
 const marked = (node, kind) => node.hasAttribute(`data-milk-focus-${kind}`)
-const path = context => context.overlay.querySelector('path').getAttribute('d')
+const path = context => context.overlay.querySelector('[class="milk-focus-track"]').getAttribute('d')
 
 test('pointer/native focus follows press geometry without mutating layout and stops after focus leaves', () => fixture(context => {
   const { element, focus, flush, doc } = context
@@ -138,6 +138,13 @@ test('pointer/native focus follows press geometry without mutating layout and st
   flush()
   assert.notEqual(path(context), resting)
   assert.match(path(context), /A/)
+  // The soft light and its mask follow exactly the same geometry as the steady
+  // rim, so a moving/pressed control cannot leak blurred pixels outside its edge.
+  const light = context.overlay.querySelector('[class="milk-focus-light"]')
+  const mask = context.overlay.querySelector('mask')
+  assert.equal(light.getAttribute('d'), path(context))
+  assert.equal(mask.querySelector('path').getAttribute('d'), path(context))
+  assert.equal(light.parentElement.getAttribute('mask'), `url(#${mask.getAttribute('id')})`)
   assert.deepEqual(control.style, initialStyle)
   doc.activeElement = doc.body
   doc.emit('focusout')
@@ -187,6 +194,8 @@ test('clipping, occlusion and transformed native dialog coordinates do not leak 
   assert.equal(clip.getAttribute('x'), '0') // Only the Y axis clips.
   assert.equal(clip.getAttribute('y'), '90')
   assert.equal(clip.getAttribute('height'), '25')
+  const mask = context.overlay.querySelector('mask')
+  for (const attribute of ['x', 'y', 'width', 'height']) assert.equal(mask.getAttribute(attribute), clip.getAttribute(attribute))
   context.setHit(element('header'))
   flush()
   assert.equal(context.overlay.style.visibility, 'hidden')

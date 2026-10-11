@@ -37,7 +37,7 @@ Card、按钮、TabsList、Input、Textarea、Select、面板与 Portal 普通�
 
 ## 字阶、密度与组合
 
-所有基础组件及其组合使用同一套字阶与间距，而非只给展示卡片套上材质。统一实现位于根工程 `src/styles/shadcn-metrics.css`，打包时同步到 `assets/shadcn-catalog/src/styles/`。该文件只定义排版、内边距、尺寸和布局节奏，材质与阴影继续交给 `shadcn-theme.css`、`milk-tokens.css`，焦点与按压复用 `milk-focus.css` 及共享 focus／press controller，避免状态样式互相覆盖。
+所有基础组件及其组合使用同一套字阶与间距，而非只给展示卡片套上材质。统一实现位于根工程 `src/styles/shadcn-metrics.css`，打包时同步到 `assets/shadcn-catalog/src/styles/`。该文件只定义排版、内边距、尺寸和布局节奏，材质与阴影继续交给 `shadcn-theme.css`、`milk-tokens.css`，焦点、按压及悬浮波纹复用 `milk-focus.css`、`milk-hover.css` 及共享控制器，避免状态样式互相覆盖。
 
 | 角色 | 字号 / 行高 | 字重 |
 | --- | --- | --- |
@@ -70,6 +70,8 @@ Textarea、Sidebar、Table／Data Table、Message Scroller 与浮层的 scroll�
 优先复用本地基础组件，业务页面只组合结构和传入数据。保留 Reka 的焦点管理、方向键、Escape、ARIA 与键盘导航；Label 关联真实输入，图标按钮提供名称。表单演示明确反馈校验和提交结果，菜单动作展示真实状态变化，日期、分页、筛选与步骤控件连接各自的状态。减少动态效果时仍可阅读所有内容。
 
 按钮与触发按键复用共享 press-controller.ts 和阻尼令牌：100ms 轻微下沉、至少 112ms 按下反馈、420ms 平稳回位，默认位移 2px、缩放 0.975，阴影同步变化，业务动作立即执行。TabsTrigger 位移 1px，Switch、Checkbox 和 Radio 原位缩放 0.98，保持自身选中／拨动几何。鼠标、触摸与 Space／Enter 共用短暂 data-milk-press 状态，禁用项不反馈；不要在组件内重复注册计时器，或用按压 transform 覆盖 Popover、Tooltip 和 Slider 的定位。减少动态效果时只保留即时材质反馈，两模式共用同一运动参数。详见 [交互规范](motion-and-network.md)。
+
+按钮及触发按键的悬浮波纹复用 hover-controller.ts 与 milk-hover.css，从指针进入处轻柔扩散一次后淡出，保留原有表面、按压与柔和渐变焦点流光。共享委托同样覆盖 Portal，禁用、触摸及减少动态效果不播放；不要为波纹改写基础组件的事件、焦点管理或定位几何，详见 [交互规范](motion-and-network.md)。
 
 目录 Card 的入场使用共享 reveal-controller.ts 与 milk-motion.css，在分组容器添加 data-milk-reveal-group。Card 进入视区时以 700ms 渐显与 18px 上移展现，直接子项按 80ms 错峰、最多延迟 240ms；筛选与延迟加载的新内容由共享观察器登记。动效只施加到展示包装层，不覆盖 Calendar、Slider、拖拽区域或 Portal 的内部定位与已有交互；键盘聚焦时立即显示，减少动态效果时完整静态呈现。
 

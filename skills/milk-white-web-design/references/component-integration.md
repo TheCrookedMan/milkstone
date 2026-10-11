@@ -3,7 +3,7 @@
 
 shadcn-vue 目录以根工程 `src/` 为开发来源，打包同步至独立 `assets/shadcn-catalog/`。完整基础组件库的复制、依赖与主题说明见 [shadcn-vue 组件目录](shadcn-catalog.md)。
 
-全部组件默认 light 采用浅灰柔和拟物表面，milk-white-web-design 和 milk-tokens.css 保留兼容标识。普通外框与已有结构边界复用 --milk-border-width、--milk-border-color 和 --milk-border-gradient，使用 1px 半透明白边；图片区专用 3px 白色 rim。圆角闭合外框可用 padding-box/border-box，无圆角单边结构线可用同源 border-image，不为文字布局额外套框。Card 圆角浮起，按钮紧凑胶囊，输入及读数窗内凹，Tabbar 为凹槽并让选中拨片浮起。左上白色高光与右下灰色柔影、协调的灰白表面共同表达实体层级；按角色复用八类真实阴影，数值以 milk-tokens.css 为准。milk-relief 及 control/card/tabbar 类保留兼容，depth 为 0，不再创建 ::before/::after 硬底座或 isolation 结构。焦点遵循 [统一荧光边框](design-system.md)：实际聚焦控件在已有边框内显示流动冷白蓝光段，复合输入只装饰一处可见边界，dark 和 Portal 同样适用；成功装饰时取消额外外圈，未接管时保留可见键盘 outline 回退。极轻纸纹不影响读数；SVG、图表和 Canvas/WebGL 内容保持可读，园区柔焦、扫描灯层、星体光晕和电流光尾继续保留。设计令牌见 [设计系统](design-system.md)。
+全部组件默认 light 采用浅灰柔和拟物表面，milk-white-web-design 和 milk-tokens.css 保留兼容标识。普通外框与已有结构边界复用 --milk-border-width、--milk-border-color 和 --milk-border-gradient，使用 1px 半透明白边；图片区专用 3px 白色 rim。圆角闭合外框可用 padding-box/border-box，无圆角单边结构线可用同源 border-image，不为文字布局额外套框。Card 圆角浮起，按钮紧凑胶囊，输入及读数窗内凹，Tabbar 为凹槽并让选中拨片浮起。左上白色高光与右下灰色柔影、协调的灰白表面共同表达实体层级；按角色复用八类真实阴影，数值以 milk-tokens.css 为准。milk-relief 及 control/card/tabbar 类保留兼容，depth 为 0，不再创建 ::before/::after 硬底座或 isolation 结构。焦点遵循 [统一荧光边框](design-system.md)：实际聚焦控件在已有边框内显示柔和渐变流光，复合输入只装饰一处可见边界，dark 和 Portal 同样适用；成功装饰时取消额外外圈，未接管时保留可见键盘 outline 回退。极轻纸纹不影响读数；SVG、图表和 Canvas/WebGL 内容保持可读，园区柔焦、扫描灯层、星体光晕和电流光尾继续保留。设计令牌见 [设计系统](design-system.md)。
 
 主题集成同时保留 theme-controller.ts、theme-colors.css 和模式开关。dark 使用对应深色背景、主题和文本；边框、表面及八类阴影按材料角色校准颜色与透明度，保持左上受光、右下投影、凸面较亮和凹槽较暗。边框宽度、圆角、投影方向、偏移与模糊及交互几何保持。Portal、SVG 和图表连接同一控制器与语义令牌；Canvas/WebGL 保持星体与建筑的自然照明，监听 milk-theme-change 更新需要适配的背景、文字、坐标和轨道，卸载时清理订阅，不用整页反相 filter。接口见 [双模式主题](theme-modes.md)。
 

@@ -22,7 +22,7 @@ description: 创建、改造或评审浅灰纸底与细微纹理、左上白高�
 - 需要节点编辑或 ComfyUI 数据交换时读取 [工作流编辑](references/workflow-editor.md)，复用 [工作台](assets/components/WorkflowStudio.vue)。
 - 完整组件沙盒与按需依赖见 [组件集成](references/component-integration.md)；所有演示数据和本地模拟状态须明确标记。
 - 初始化工程时读取 [初始化](references/project-initialization.md) 与 [架构](references/web-architecture.md)。独立示例是最小可运行样本，不覆盖已有 package.json。
-- 实现状态和动画时读取 [交互规范](references/motion-and-network.md)，复用 [入场控制器](assets/reveal-controller.ts)、[入场样式](assets/milk-motion.css)、[按压控制器](assets/press-controller.ts)、[焦点控制器](assets/focus-controller.ts) 与 [焦点样式](assets/milk-focus.css)，保持统一阻尼和边框光效。
+- 实现状态和动画时读取 [交互规范](references/motion-and-network.md)，复用 [入场控制器](assets/reveal-controller.ts)、[入场样式](assets/milk-motion.css)、[按压控制器](assets/press-controller.ts)、[焦点控制器](assets/focus-controller.ts)、[焦点样式](assets/milk-focus.css)、[悬浮波纹控制器](assets/hover-controller.ts) 与 [悬浮样式](assets/milk-hover.css)，保持统一阻尼、柔光和表面反馈。
 - 交付前按 [验收](references/acceptance.md) 检查真实页面，注明未执行项。
 - 复用来源相关内容时读取 [来源与许可](references/source-and-license.md)。
 
@@ -34,7 +34,7 @@ light 基准：画布 #e9eaee、面板 #ebedf1、凸面 #eef0f4、浅亮面 #f4f
 
 控件、图表、关系图、星空、园区扫描与工作流统一使用浅灰柔和拟物材质。页面元素进入视区时以 700ms 渐显并从下方 18px 归位，分组子项每隔 80ms 错峰、延迟上限 240ms，每个元素只播放一次。入场作用于内容包装层，不改变星体、媒体或拖拽节点自身的旋转与定位。按钮使用轻微机械阻尼：100ms 按下、至少保留 112ms 反馈、420ms 单调回位，位移 2px、缩放 0.975；Tab 位移 1px，小开关原位缩放 0.98，阴影同步压实。两模式时序相同，按键操作不等待动画；复用统一控制器，避免覆盖拖拽、滑杆和浮层定位。具体曲线、状态及减少动态效果规则见交互规范。图形内容可保持灰阶，以亮度、线型、形状、图标和文字区分状态。园区柔焦、粒子、扫描灯与余辉、星体光晕、太阳肌理及电流光尾保留自身内容光学与动态关系；它们和 UI 投影分别按各自含义呈现。
 
-按钮用 button，导航用链接，弹窗使用可访问对话框。获取焦点的按钮、链接、输入、Tab 与菜单项统一在已有边框内显示冷白蓝荧光流动效果，不叠加最外层 outline 或 Tailwind ring，不改变尺寸、圆角和原有实体材质。复合输入仅选一处可见边界，PIN/OTP 跟随当前活动格；dark 与 Portal 同样遵循。仅在焦点装饰成功接管时移除原焦点外圈，控制器未初始化或无法装饰时保留可见键盘 outline；减少动态效果为静态亮边，强制颜色模式使用 Highlight，详见 [焦点规范](references/design-system.md)。保留键盘、ARIA 与焦点恢复行为。演示数据明确标注，真实接口失败不得回退为假成功。
+按钮用 button，导航用链接，弹窗使用可访问对话框。获取焦点的按钮、链接、输入、Tab 与菜单项统一在已有边框内显示柔和渐变流光，不叠加最外层 outline 或 Tailwind ring，不改变尺寸、圆角和原有实体材质。复合输入仅选一处可见边界，PIN/OTP 跟随当前活动格；dark 与 Portal 同样遵循。仅在焦点装饰成功接管时移除原焦点外圈，控制器未初始化或无法装饰时保留可见键盘 outline；减少动态效果为静态亮边，强制颜色模式使用 Highlight，详见 [焦点规范](references/design-system.md)。按钮悬浮时在原表面内轻柔扩散一次波纹，保留材质、按压和焦点边界；禁用、触摸及减少动态效果不播放，复用共享悬浮控制器。保留键盘、ARIA 与焦点恢复行为。演示数据明确标注，真实接口失败不得回退为假成功。
 
 overflow 为 scroll／auto 的区域使用细而低调的纸感滚动条：凹槽轨道、圆角浮起滑块、白色高光与微投影，悬浮加深、拖拽压实；明暗保持同向光照，横纵轴及 Portal 一致，覆盖 Textarea、Sidebar、Table、Message 与 ScrollArea。不改原有 overflow，保留拖拽、滚轮、触控与键盘访问，具体令牌与原生回退见 [设计系统](references/design-system.md)。
 

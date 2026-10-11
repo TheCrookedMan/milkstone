@@ -22,17 +22,32 @@ export function initFocusBorder(): () => void {
   clip.setAttribute('clipPathUnits', 'userSpaceOnUse')
   const clipRect = doc.createElementNS(SVG_NS, 'rect')
   clip.append(clipRect)
-  defs.append(clip)
+  const rimMask = doc.createElementNS(SVG_NS, 'mask')
+  const rimId = `${clipId}-rim`
+  rimMask.setAttribute('id', rimId)
+  rimMask.setAttribute('maskUnits', 'userSpaceOnUse')
+  rimMask.setAttribute('maskContentUnits', 'userSpaceOnUse')
+  rimMask.setAttribute('mask-type', 'alpha')
+  const maskPath = doc.createElementNS(SVG_NS, 'path')
+  maskPath.setAttribute('class', 'milk-focus-mask')
+  maskPath.setAttribute('fill', 'none')
+  rimMask.append(maskPath)
+  defs.append(clip, rimMask)
   const group = doc.createElementNS(SVG_NS, 'g')
   group.setAttribute('clip-path', `url(#${clipId})`)
-  const paths = ['track', 'glow', 'trail', 'head'].map(name => {
+  const lightLayer = doc.createElementNS(SVG_NS, 'g')
+  lightLayer.setAttribute('mask', `url(#${rimId})`)
+  const paths = ['track', 'light'].map(name => {
     const path = doc.createElementNS(SVG_NS, 'path')
     path.setAttribute('class', `milk-focus-${name}`)
     path.setAttribute('pathLength', '100')
     path.setAttribute('fill', 'none')
-    group.append(path)
+    if (name === 'light') lightLayer.append(path)
+    else group.append(path)
     return path
   })
+  paths.push(maskPath)
+  group.append(lightLayer)
   svg.append(defs, group)
   let source: Element | null = null
   let owner: Element | null = null
@@ -149,7 +164,10 @@ export function initFocusBorder(): () => void {
     const key = `${path}|${left}|${top}|${right}|${bottom}|${origin.left}|${origin.top}|${sx}|${sy}`
     if (geometry !== key) {
       paths.forEach(node => node.setAttribute('d', path))
-      setRect(clipRect, (left - origin.left) / sx, (top - origin.top) / sy, (right - left) / sx, (bottom - top) / sy)
+      const clipX = (left - origin.left) / sx, clipY = (top - origin.top) / sy
+      const clipWidth = (right - left) / sx, clipHeight = (bottom - top) / sy
+      setRect(clipRect, clipX, clipY, clipWidth, clipHeight)
+      setRect(rimMask, clipX, clipY, clipWidth, clipHeight)
       geometry = key
     }
     if (source !== focused || owner !== target) {
