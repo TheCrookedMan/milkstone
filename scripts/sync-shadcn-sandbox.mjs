@@ -32,8 +32,6 @@ for (const [from, to] of [
   ['skills/milk-white-web-design/assets/milk-tokens.css', 'src/styles/milk-tokens.css'],
   ['skills/milk-white-web-design/assets/theme-colors.css', 'src/styles/theme-colors.css'],
   ['skills/milk-white-web-design/assets/theme-controller.ts', 'src/theme-controller.ts'],
-  ['skills/milk-white-web-design/assets/material-controller.ts', 'src/material-controller.ts'],
-  ['skills/milk-white-web-design/assets/milk-glass.css', 'src/styles/milk-glass.css'],
   ['skills/milk-white-web-design/assets/press-controller.ts', 'src/press-controller.ts'],
   ['skills/milk-white-web-design/assets/reveal-controller.ts', 'src/reveal-controller.ts'],
   ['skills/milk-white-web-design/assets/milk-motion.css', 'src/styles/milk-motion.css'],
@@ -42,8 +40,6 @@ for (const [from, to] of [
   ['skills/milk-white-web-design/assets/hover-controller.ts', 'src/hover-controller.ts'],
   ['skills/milk-white-web-design/assets/milk-hover.css', 'src/styles/milk-hover.css'],
   ['skills/milk-white-web-design/assets/components/ThemeModeSwitch.vue', 'src/components/ThemeModeSwitch.vue'],
-  ['skills/milk-white-web-design/assets/components/MaterialModeSwitch.vue', 'src/components/MaterialModeSwitch.vue'],
-  ['skills/milk-white-web-design/assets/components/GlassMaterialShowcase.vue', 'src/components/GlassMaterialShowcase.vue'],
   ['public/licenses/shadcn-vue-MIT.txt', 'LICENSE.shadcn-vue.txt'],
   ['docs/shadcn-registry-source.json', 'registry-source.json'],
 ]) {
@@ -70,7 +66,7 @@ export default defineConfig({
   server:{host:'127.0.0.1',proxy:{'/api/hairline':'http://127.0.0.1:4341'}},
   preview:{host:'127.0.0.1',proxy:{'/api/hairline':'http://127.0.0.1:4341'}}
 })\n`)
-await writeFile(join(target, 'index.html'), `<!doctype html>\n<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light dark"><meta name="theme-color" content="#e9eaee"><title>MILK / 纸面组件集</title><script>try{const saved=localStorage.getItem('milk-design-theme');const mode=['light','dark','milk'].includes(saved)?saved:'light';document.documentElement.dataset.theme=mode;document.documentElement.style.colorScheme=mode==='dark'?'dark':'light';document.querySelector('meta[name=theme-color]')?.setAttribute('content',({light:'#e9eaee',dark:'#1c1f24',milk:'#f4f1ea'})[mode])}catch{}</script><script>document.documentElement.dataset.material='solid';try{if(localStorage.getItem('milk-design-material')==='glass')document.documentElement.dataset.material='glass'}catch{}</script></head><body><div id="app"></div><script type="module" src="/src/main.ts"></script></body></html>\n`)
+await writeFile(join(target, 'index.html'), `<!doctype html>\n<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light dark"><meta name="theme-color" content="#e9eaee"><title>MILK / 纸面组件集</title><script>try{const saved=localStorage.getItem('milk-design-theme');const mode=['light','dark','milk'].includes(saved)?saved:'light';document.documentElement.dataset.theme=mode;document.documentElement.style.colorScheme=mode==='dark'?'dark':'light';document.querySelector('meta[name=theme-color]')?.setAttribute('content',({light:'#e9eaee',dark:'#1c1f24',milk:'#f4f1ea'})[mode])}catch{}</script></head><body><div id="app"></div><script type="module" src="/src/main.ts"></script></body></html>\n`)
 await writeFile(join(target, 'src/main.ts'), `import { createApp } from 'vue'
 import '@fontsource-variable/noto-sans-sc'
 import '@fontsource/ibm-plex-sans/latin-400.css'
@@ -78,14 +74,12 @@ import '@fontsource/ibm-plex-sans/latin-500.css'
 import '@fontsource/ibm-plex-sans/latin-600.css'
 import App from './App.vue'
 import { initTheme } from './theme-controller'
-import { initMaterial } from './material-controller'
 import { initPressFeedback } from './press-controller'
 import { initRevealMotion } from './reveal-controller'
 import { initFocusBorder } from './focus-controller'
 import { initHoverRipple } from './hover-controller'
 import './style.css'
 initTheme()
-initMaterial()
 const disposePressFeedback = initPressFeedback()
 import.meta.hot?.dispose(disposePressFeedback)
 const disposeHoverRipple = initHoverRipple()
@@ -105,16 +99,13 @@ await writeFile(join(target, 'src/style.css'), `@import "tailwindcss" source(non
 @import "./styles/shadcn-metrics.css";
 @import "./styles/milk-focus.css";
 @import "./styles/milk-hover.css";
-@import "./styles/milk-glass.css";
 .catalog-shell{max-width:1240px;margin:auto;padding:50px 40px 80px}
 .catalog-intro{padding:20px 0 35px}.catalog-intro h1{font-size:38px;font-weight:500;margin:12px 0}
-.catalog-intro p{color:var(--milk-muted)}.catalog-material-controls{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:24px}.glass-material-showcase{margin-bottom:48px}.eyebrow{font-size:11px;letter-spacing:2px;color:var(--milk-muted)}
+.catalog-intro p{color:var(--milk-muted)}.eyebrow{font-size:11px;letter-spacing:2px;color:var(--milk-muted)}
 @media(max-width:680px){.catalog-shell{padding:25px 22px 50px}.catalog-intro h1{font-size:28px}}\n`)
 await writeFile(join(target, 'src/App.vue'), `<script setup lang="ts">
 import ShadcnGallery from './components/ShadcnGallery.vue'
 import ThemeModeSwitch from './components/ThemeModeSwitch.vue'
-import MaterialModeSwitch from './components/MaterialModeSwitch.vue'
-import GlassMaterialShowcase from './components/GlassMaterialShowcase.vue'
 </script>
-<template><main class="catalog-shell"><header class="catalog-intro" data-milk-reveal-group><div class="catalog-material-controls"><ThemeModeSwitch/><MaterialModeSwitch/></div><span class="eyebrow">MILK / PAPER COMPONENT LIBRARY</span><h1>七十种组件，一种触感。</h1><p>按键、表单、导航与浮层。70 项 shadcn-vue 交互示例，在同一张纸面上展开。</p></header><GlassMaterialShowcase/><ShadcnGallery/></main></template>\n`)
+<template><main class="catalog-shell"><header class="catalog-intro" data-milk-reveal-group><ThemeModeSwitch/><span class="eyebrow">MILK / PAPER COMPONENT LIBRARY</span><h1>七十种组件，一种触感。</h1><p>按键、表单、导航与浮层。70 项 shadcn-vue 交互示例，在同一张纸面上展开。</p></header><ShadcnGallery/></main></template>\n`)
 console.log('Synced shadcn-vue standalone catalog from the landing page source.')

@@ -9,13 +9,10 @@ Empty 的 Prompt 生成、预览与本浏览器图库属于独立可选能力：
 
 主题集成同时保留 theme-controller.ts、theme-colors.css 和三选项主题选择器。保留 light 默认值与 light／dark／milk 的选择记忆，milk 的浏览器 color-scheme 为 light。dark 使用对应深色背景、主题和文本，milk 使用牛奶柔白、暖白高光与浅暖灰凹槽；边框、表面及八类阴影按材料角色校准颜色与透明度，保持左上受光、右下投影、凸面较亮和凹槽较暗。边框宽度、圆角、投影方向及交互几何保持；light 与 dark 的阴影几何相同，milk 通过更短偏移、更小模糊和紧密接触影加强实体感，具体参数复用同一令牌。Portal、SVG 和图表连接同一控制器与语义令牌；Canvas/WebGL 保持星体与建筑的自然照明，监听 milk-theme-change 更新需要适配的背景、文字、坐标和轨道，卸载时清理订阅，不用整页反相 filter。接口见 [三种主题](theme-modes.md)。
 
-毛玻璃集成保留 assets/material-controller.ts、assets/milk-glass.css 和 MaterialModeSwitch.vue，与三种主题分别管理状态；在基础令牌、组件主题及交互 CSS 之后引入材质 CSS，在 initTheme() 后、mount 前调用 initMaterial()。根落地页与独立 shadcn 沙盒使用同一控制器和样式；按需移植其他组件时也需接入这些资源。Card、按钮、Tabbar、输入与 Portal 按原材料角色透明化，文字及媒体内容保持清晰，不以整个容器 opacity 代替。GlassMaterialShowcase.vue 提供三种底色的局部预览，示例交互仅作用于当前组件。接口、局部 milk-glass 类和回退见 [毛玻璃材质](glass-material.md)。
-
 按键触感同时保留 assets/press-controller.ts，在入口 initTheme() 后、mount 前调用一次 initPressFeedback()，卸载与 HMR dispose 调用其返回的清理函数；领域组件、最小面板和 shadcn 沙盒共用同一控制器。使用统一按下／回位令牌与 data-milk-press 状态，不给每个按钮各写计时器。按钮、Tab 与开关轻微压下后平稳回位，快速点击仍有最短反馈时间，鼠标、触摸和键盘行为一致；拖拽节点、滑杆、SVG 与浮层定位不被按键动效改写。完整时序和减少动态效果规则见 [交互规范](motion-and-network.md)。
 
 | 组件 | 运行依赖 | 用途 |
 | --- | --- | --- |
-| MaterialModeSwitch.vue + GlassMaterialShowcase.vue | Vue、CSS 背景虚化与不透明回退 | 独立材质切换、三主题毛玻璃局部示例 |
 | InstrumentControls.vue | Vue、Reka UI | 刻度、实体 Tab、按键、开关 |
 | ChartStudio.vue | Vue、ECharts 6 | 趋势、柱图、图例、数据表 |
 | RelationStudio.vue + StellarGraph.vue + StellarSurface.vue | Vue、SVG、原生 Canvas/WebGL | 电流神经／章鱼关系、球面星体与太阳日冕的星空图 |

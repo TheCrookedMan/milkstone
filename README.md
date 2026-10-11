@@ -15,7 +15,7 @@
 
 ## 为什么叫 Milkstone
 
-**Milk** 对应纸白与牛奶乳白、柔和高光与细腻表面，**Stone** 对应石墨暗色、实体厚度与稳定的按压反馈。白色、黑色、乳白三种风格共享一套材料角色、布局和交互规则，并可独立开启毛玻璃材质。
+**Milk** 对应纸白与牛奶乳白、柔和高光与细腻表面，**Stone** 对应石墨暗色、实体厚度与稳定的按压反馈。白色、黑色、乳白三种风格共享一套材料角色、布局和交互规则。
 
 Milkstone 将可运行的页面、可编辑的组件源码和可供 Agent 复用的规范放在同一个工程中。你可以浏览组件、复制领域工作台，也可以安装技能，让 Agent 按相同的设计语言完成后续页面。
 
@@ -32,7 +32,6 @@ Milkstone 将可运行的页面、可编辑的组件源码和可供 Agent 复用
 | 模块 | 已实现能力 |
 | --- | --- |
 | **shadcn-vue 组件目录** | 70 项交互演示，支持中英文搜索、分类筛选；按钮、Card、表单、Tabs、表格、日历、导航、浮层等共享材质与排版规范 |
-| **毛玻璃材质** | 与白色、黑色、乳白独立组合；半透明 Card、按钮、Tabbar、输入与浮层保留凸凹触感，提供切换记忆、随主题切换的样本与不透明回退 |
 | **实体控件** | 刻度旋钮、蚀刻标签、胶囊按键、凹槽导航、开关及轻压回弹反馈 |
 | **空状态插图** | 自定义 Prompt 经大模型生成 Hairline 等距线稿、明暗预览与自包含交互 HTML；已有图可保存到本浏览器图库、直接复用及 JSON 导入导出；生成需另行配置可选 API 服务 |
 | **数据图表** | ECharts 折线与柱形切换、系列显隐、数据明细；组件目录另含 Unovis Chart 和 TanStack Data Table |
@@ -78,7 +77,7 @@ pnpm dev --host 127.0.0.1
 | `/#/#relations` | 关系与星空 |
 | `/#/#campus` | 园区雷达 |
 | `/#/#workflow` | 节点工作流 |
-| `/#/#theme` | 白色、黑色与乳白设计规范、毛玻璃材质样本 |
+| `/#/#theme` | 白色、黑色与乳白设计规范 |
 | `/#/guide` | 使用指南 |
 
 ### 可选：Prompt 生成空状态插图
@@ -134,7 +133,7 @@ pnpm preview
 | 数据与图形 | ECharts、Unovis、TanStack Table、SVG、Canvas 2D、原生 WebGL |
 | 可选线稿生成 | 独立 Node.js API、OpenAI 兼容模型、Hairline 固定引擎与静态校验、隔离预览、服务缓存与本浏览器图库 |
 | 节点编辑 | Vue Flow 与独立的 ComfyUI 格式适配器 |
-| 状态与动效 | Vue 响应式状态、已注册的 Pinia 入口、主题与独立材质控制器、共享按压、悬浮波纹、焦点循光及滚动渐入控制器，GSAP 按需编排 |
+| 状态与动效 | Vue 响应式状态、已注册的 Pinia 入口、主题控制器、共享按压、悬浮波纹、焦点循光及滚动渐入控制器，GSAP 按需编排 |
 | Agent 交付 | SKILL.md、参考规范、可复用资产、Node.js 安装器、ZIP / tar.gz 归档 |
 
 ```text
@@ -175,12 +174,11 @@ milkstone/
 - **渐入**：标题、卡片和工作台随视区逐层显现，700ms 淡入并轻移 18px；同组错峰 80ms，延迟上限 240ms。
 - **按压**：100ms 按下、至少 112ms 反馈、420ms 平稳回位；普通按钮下沉 2px、缩放至 0.975。
 - **三种风格**：白色清爽、黑色沉静、乳白温润；共用布局、层级与状态规则，按材料角色切换配色，保留相同的凸起和凹槽感。
-- **毛玻璃**：在任一主题中独立开启，半透明表面叠加背景虚化和细亮边；Card、按钮、输入和 Tabs 保留凸凹层次，文字及媒体保持清晰，不支持或减少透明时回退实面。
 - **轻触与焦点**：按钮悬浮时表面微波轻轻荡开，按下后阻尼回位；仅输入框焦点以低饱和雾蓝、青玉与淡紫流光沿已有边缘游走，首尾自然渐隐；复合输入只在编辑器聚焦时亮起，内部按钮不触发。其他元素不新增焦点边框，原有材质与选中状态保持。保留 Reka 的键盘、ARIA 和焦点管理，输入框支持减少动态效果及静态边界回退。
 
 乳白以 `#f4f1ea` 牛奶柔白为基底，`#fbf9f4` 凸面与 `#e9e4da` 凹槽形成柔和层次，搭配暖白高光、浅暖灰投影与深灰褐文字。Card 与按钮使用范围更小、更凝实的投影和贴边接触影，让表面更清楚地浮起；组件的间距、字阶或阻尼保持一致。
 
-详细说明：[设计规范](skills/milk-white-web-design/references/design-system.md) · [三种主题](skills/milk-white-web-design/references/theme-modes.md) · [毛玻璃材质](skills/milk-white-web-design/references/glass-material.md) · [交互与动画](skills/milk-white-web-design/references/motion-and-network.md) · [组件目录规范](skills/milk-white-web-design/references/shadcn-catalog.md)。
+详细说明：[设计规范](skills/milk-white-web-design/references/design-system.md) · [三种主题](skills/milk-white-web-design/references/theme-modes.md) · [交互与动画](skills/milk-white-web-design/references/motion-and-network.md) · [组件目录规范](skills/milk-white-web-design/references/shadcn-catalog.md)。
 
 ## Agent Skill
 
@@ -208,7 +206,7 @@ node /path/to/milkstone/bin/milk-white-web-design.mjs install --target /path/to/
 安装后在支持的 Agent 中调用：
 
 ```text
-$milk-white-web-design 为我的产品实现纸感界面，支持白色、黑色、乳白主题、可切换毛玻璃材质与实体交互。
+$milk-white-web-design 为我的产品实现纸感界面，支持白色、黑色、乳白主题与实体交互。
 ```
 
 ChatGPT 桌面插件注册、其他宿主路径与实际验证范围见 [Agent 接入说明](docs/agent-installation.md)。文件写入与宿主实际启用分别验证。
@@ -254,7 +252,7 @@ pnpm dev
 
 ## 当前范围
 
-页面中的表单、收藏、星体配置与工作流用于本地交互演示，未连接业务后端。主题、毛玻璃材质选择与用户保存的线稿图库保存在当前浏览器；图库可通过 JSON 导出与导入迁移，不等同于账号云同步。
+页面中的表单、收藏、星体配置与工作流用于本地交互演示，未连接业务后端。主题选择与用户保存的线稿图库保存在当前浏览器；图库可通过 JSON 导出与导入迁移，不等同于账号云同步。
 
 Prompt 生成线稿是真实模型接口能力，需要自行配置可选 Node 服务及模型提供方；静态 GitHub Pages 和静态 1Panel 站点本身不运行模型。未配置、请求失败或图形校验失败时显示实际错误，不用预设模板假装生成成功。生成结果标记为 `validation: "static"`，不代表已经通过 Hairline 原技能的八画面视觉验收。
 
