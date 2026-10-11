@@ -36,6 +36,6 @@ light 基准：画布 #e9eaee、面板 #ebedf1、凸面 #eef0f4、浅亮面 #f4f
 
 按钮用 button，导航用链接，弹窗使用可访问对话框。Input、Textarea、Select、Combobox 及 InputGroup、Tags、PIN/OTP 等复合输入容器聚焦时不显示最外层 outline、Tailwind ring 或焦点边框变色，以内部 inset 材质变化、光标、选中与状态提示表达焦点；正常 1px 半透明边框和柔影保持。普通按钮、Tab 与链接仍保留可见键盘 outline。dark 与 Portal 同样遵循，保留键盘、ARIA 与焦点恢复行为。减少动态效果时去除位移和持续动画，信息仍完整可用。演示数据明确标注，真实接口失败不得回退为假成功。
 
-overflow 为 scroll／auto 的区域隐藏横纵滚动条并保留滚动，明暗主题及 Portal 一致，覆盖 Textarea、Sidebar、Table、Message 与 ScrollArea。不得用 overflow:hidden／clip 代替；保留滚轮、触控与键盘访问，以边界、标签和适当焦点入口帮助识别可滚动区域，具体实现见 [设计系统](references/design-system.md)。
+overflow 为 scroll／auto 的区域使用细而低调的纸感滚动条：凹槽轨道、圆角浮起滑块、白色高光与微投影，悬浮加深、拖拽压实；明暗保持同向光照，横纵轴及 Portal 一致，覆盖 Textarea、Sidebar、Table、Message 与 ScrollArea。不改原有 overflow，保留拖拽、滚轮、触控与键盘访问，具体令牌与原生回退见 [设计系统](references/design-system.md)。
 
 交付设计和可运行结果，运行适合改动的类型检查、构建及浏览器验证。只完成文档时不宣称应用已运行；不自动部署或替换用户已安装技能。

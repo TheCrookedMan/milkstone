@@ -26,7 +26,7 @@ import { MessageScroller, MessageScrollerButton, MessageScrollerContent, Message
 import { Progress } from '@/components/ui/progress'
 import { Questionnaire, QuestionnaireActions, QuestionnaireChoice, QuestionnaireChoices, QuestionnaireDescription, QuestionnaireError, QuestionnaireItem, QuestionnaireNext, QuestionnairePrevious, QuestionnaireProgress, QuestionnaireSubmit, QuestionnaireTitle } from '@/components/ui/questionnaire'
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable'
-import { ScrollArea } from '@/components/ui/scroll-area'
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Spinner } from '@/components/ui/spinner'
@@ -288,10 +288,15 @@ function submitQuestionnaire(event: Event) {
   </div>
 
   <div v-else-if="name === 'scroll-area'" class="demo-stack w-full">
-    <ScrollArea class="scroll-list" aria-label="组件索引">
+    <ScrollArea type="always" class="scroll-list" role="region" aria-label="纵向组件索引">
       <div class="scroll-content"><strong class="text-sm">组件索引</strong><div v-for="(item, index) in ['触感按钮', '刻度旋钮', '数据图表', '神经网络', '章鱼图', '轨道星空', '园区雷达', '工作流画布', '消息面板', '图层检查器']" :key="item" class="scroll-row"><span class="demo-caption">{{ String(index + 1).padStart(2, '0') }}</span>{{ item }}<Separator /></div></div>
     </ScrollArea>
-    <p class="demo-caption">滚动查看其余组件；聚焦列表后也可使用方向键。</p>
+    <strong class="text-sm">材质标签</strong>
+    <ScrollArea type="always" class="scroll-list scroll-list-horizontal" role="region" aria-label="横向材质标签">
+      <div class="scroll-tags"><span v-for="(material, index) in ['冷灰纸面', '浮起亮面', '细磨石感', '柔和凹槽', '半透玻璃', '金属刻度', '轻纤维纹', '夜间石墨']" :key="material" class="scroll-tag"><small>{{ String(index + 1).padStart(2, '0') }}</small>{{ material }}</span></div>
+      <template #scrollbars><ScrollBar orientation="horizontal" /></template>
+    </ScrollArea>
+    <p class="demo-caption">沿细凹槽拖动浮起滑块，或使用滚轮、触控和方向键；示例保持轨道可见。</p>
   </div>
 
   <div v-else-if="name === 'separator'" class="demo-stack w-full">
@@ -353,10 +358,14 @@ function submitQuestionnaire(event: Event) {
 .resize-frame { height: 162px; overflow: hidden; border: 1px solid transparent; border-radius: 10px; box-shadow: var(--milk-shadow); }
 .resize-pane { display: flex; height: 100%; align-items: center; justify-content: center; flex-direction: column; gap: var(--milk-ui-space-3); padding: var(--milk-ui-space-3); font-size: var(--milk-ui-font-body); line-height: var(--milk-ui-leading-body); background: var(--muted); }
 .resize-pane-secondary { background: var(--background); }
-.scroll-list { height: 200px; width: 100%; border: 1px solid transparent; border-radius: 10px; box-shadow: var(--milk-pressed); }
-.scroll-content { padding: var(--milk-ui-space-4); }
+.scroll-list { height: 180px; width: 100%; overflow: hidden; border: 1px solid transparent; border-radius: 10px; background: var(--milk-surface-recessed); box-shadow: var(--milk-pressed); }
+.scroll-content { padding: var(--milk-ui-space-4); padding-inline-end: calc(var(--milk-ui-space-4) + var(--milk-scroll-size)); }
 .scroll-row { display: flex; flex-wrap: wrap; align-items: center; column-gap: var(--milk-ui-space-3); row-gap: var(--milk-ui-space-3); padding-top: var(--milk-ui-space-3); font-size: var(--milk-ui-font-body); line-height: var(--milk-ui-leading-body); }
 .scroll-row [data-slot='separator'] { width: 100%; }
+.scroll-list-horizontal { height: 86px; }
+.scroll-tags { display: flex; width: max-content; gap: var(--milk-ui-space-3); padding: var(--milk-ui-space-4); padding-bottom: calc(var(--milk-ui-space-4) + var(--milk-scroll-size)); }
+.scroll-tag { display: inline-flex; align-items: center; gap: var(--milk-ui-space-2); flex-shrink: 0; padding: var(--milk-ui-space-2) var(--milk-ui-space-3); border: var(--milk-border-width) solid transparent; border-radius: 999px; background: var(--milk-surface-raised) padding-box, var(--milk-border-gradient) border-box; box-shadow: var(--milk-button-shadow); font-size: var(--milk-ui-font-label); line-height: var(--milk-ui-leading-label); white-space: nowrap; }
+.scroll-tag small { font-size: var(--milk-ui-font-caption); font-variant-numeric: tabular-nums; }
 .separator-links { min-height: 24px; font-size: var(--milk-ui-font-label); line-height: var(--milk-ui-leading-label); }
 .skeleton-preview { display: flex; align-items: center; gap: var(--milk-ui-space-3); width: 100%; min-height: 80px; }
 .typography-recipe { width: 100%; }

@@ -61,7 +61,7 @@ Card、按钮、TabsList、Input、Textarea、Select、面板与 Portal 普通�
 
 窄屏 Card 内边距可降至 20px，标准字号和普通控件高度保持；组合字段、操作区和导航优先换行，确需横向滚动时保留清晰边界。子项设置可收缩宽度，说明允许换行，长名称按实际可用空间折行或截断，浮层宽度限制在视口内。不能靠固定桌面宽度、裁剪文字或缩小字形消除溢出。
 
-Textarea、Sidebar、Table／Data Table、Message Scroller 与浮层的 scroll／auto 区域隐藏横纵原生滚动条，沿用 milk-tokens.css 的统一规则，light／dark 及 Portal 一致。ScrollArea 的自绘 DOM 滚动条由 shadcn-theme.css 视觉隐藏，保留 Reka 的测量与滚动布局；不得改为 overflow:hidden／clip 来隐藏滚动条。区域边界和标签保持可辨，滚轮、触控与键盘仍能访问全部内容，独立非交互滚动区按需提供 tabindex="0" 和可访问名称，不覆盖基础组件自身焦点语义。
+Textarea、Sidebar、Table／Data Table、Message Scroller 与浮层的 scroll／auto 区域采用共享纸感滚动条：12px 凹槽轨道、圆角浮起滑块、白高光与微投影，悬浮加深、拖拽压实，light／dark 同向受光，横纵轴及 Portal 一致。原生使用 milk-tokens.css 的 thin／scrollbar-color 回退与受支持的 ::-webkit-scrollbar 完整样式；ScrollArea 自绘条在 shadcn-theme.css 复用相同材质，按 Reka 的 hover／scroll 语义显现，保留滑块拖拽、DOM 测量及键盘行为。仅隐藏 Reka 视口原生条等明确用途的局部滚动条，不改原有 overflow 或用 hidden／clip 裁切内容。区域边界和标签保持可辨，滚轮、触控与键盘仍能访问全部内容，独立非交互滚动区按需提供 tabindex="0" 和可访问名称，不覆盖基础组件自身焦点语义。
 
 这些规则适用于 light、dark 及 Portal 内的组件，几何、层级与受光方向一致。保留基础组件的 props、插槽、尺寸变体和用户传入 `class` 的扩展能力；共享选择器按语义或组件标记作用，不通过全局 `!important` 锁死业务布局。覆盖上游默认密度时同时检查嵌套组合，避免 InputGroup 按钮、Calendar 日期、Sidebar 操作和表格工具栏被放大两次。
 

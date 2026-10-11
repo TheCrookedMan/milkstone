@@ -58,8 +58,45 @@
 
 @layer base { * { @apply border-border; } }
 
-/* Keep Reka scrollbars mounted for viewport measurement, without visible tracks. */
-[data-slot=scroll-area-scrollbar], [data-slot=scroll-area-corner] { opacity:0; pointer-events:none }
+/* Reka owns visibility, sizing and thumb translation. These material layers
+   only change color/opacity, so hovering and dragging never alter its geometry. */
+[data-slot=scroll-area-scrollbar] {
+  z-index:1;
+  padding:3px;
+  border:0;
+  border-radius:999px;
+  background:var(--milk-scroll-track);
+  box-shadow:var(--milk-scroll-track-shadow);
+  opacity:1;
+  transition:opacity 160ms ease,background-color 160ms ease;
+}
+[data-slot=scroll-area-scrollbar][data-orientation=vertical] { width:var(--milk-scroll-size) }
+[data-slot=scroll-area-scrollbar][data-orientation=horizontal] { height:var(--milk-scroll-size) }
+[data-slot=scroll-area-scrollbar][data-state=visible] { animation:milk-scrollbar-in 180ms ease-out }
+[data-slot=scroll-area-scrollbar][data-state=hidden] { opacity:0; pointer-events:none; animation:milk-scrollbar-out 160ms ease-in }
+[data-slot=scroll-area-thumb] {
+  border:1px solid var(--milk-border-color);
+  background:var(--milk-scroll-thumb);
+  box-shadow:var(--milk-scroll-thumb-shadow);
+  cursor:grab;
+  transition:background-color 160ms ease,box-shadow 160ms ease,opacity 160ms ease;
+}
+[data-slot=scroll-area-scrollbar]:hover [data-slot=scroll-area-thumb] { background:var(--milk-scroll-thumb-hover) }
+[data-slot=scroll-area-scrollbar]:active [data-slot=scroll-area-thumb] {
+  background:var(--milk-scroll-thumb-active);
+  box-shadow:var(--milk-scroll-track-shadow);
+  cursor:grabbing;
+}
+[data-slot=scroll-area-thumb][data-state=hidden] { opacity:0; pointer-events:none }
+[data-slot=scroll-area-corner] { background:transparent; pointer-events:none }
+@keyframes milk-scrollbar-in { from { opacity:0 } to { opacity:1 } }
+@keyframes milk-scrollbar-out { from { opacity:1 } to { opacity:0 } }
+@media(forced-colors:active) {
+  [data-slot=scroll-area-scrollbar] { background:Canvas; box-shadow:none }
+  [data-slot=scroll-area-thumb],
+  [data-slot=scroll-area-scrollbar]:hover [data-slot=scroll-area-thumb],
+  [data-slot=scroll-area-scrollbar]:active [data-slot=scroll-area-thumb] { background:CanvasText; border-color:Canvas; box-shadow:none }
+}
 
 /* Soft raised surfaces share upper-left highlights and lower-right shading.
    Inputs and tab wells use inset roles; keyboard focus retains its own outline. */

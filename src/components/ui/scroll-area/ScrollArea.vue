@@ -27,7 +27,10 @@ const delegatedProps = reactiveOmit(props, "class")
     >
       <slot />
     </ScrollAreaViewport>
-    <ScrollBar />
+    <!-- Keep custom axes outside the measured viewport content. -->
+    <slot name="scrollbars">
+      <ScrollBar />
+    </slot>
     <ScrollAreaCorner data-slot="scroll-area-corner" />
   </ScrollAreaRoot>
 </template>
