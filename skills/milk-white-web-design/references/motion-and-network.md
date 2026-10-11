@@ -15,6 +15,10 @@ Card 使用圆角灰白表面与外浮柔影，按钮采用紧凑胶囊；普通
 
 悬浮波纹复用 assets/hover-controller.ts 与 assets/milk-hover.css，在应用入口调用一次 initHoverRipple()，返回清理函数接入卸载与 HMR dispose。指针进入启用的 button、a.pill、summary、role="button" 或 data-milk-press-target 时，从进入点扩散三道低对比细波纹，总长 1500ms，错开 120ms，平滑渐入渐出；持续停留不循环，移出以 180ms 衰减，再进入可重播。装饰在原圆角表面内裁剪，保留文字、材质、按压反馈与焦点流光，不改背景、transform、布局或业务事件；异步按钮和 Portal 由同一委托入口承接。data-milk-hover-ignore 可退出，data-milk-press-ignore、禁用／inert、拖拽节点、滑杆及编辑区不触发；触摸、无悬浮能力、减少动态效果和 forced-colors 不播放。波纹结束即停止绘制循环，失焦、后台和取消时停止当前波纹，卸载时移除装饰并释放监听。光色使用 milk-hover.css 中的主题令牌，两模式保持相同扩散几何和时序。
 
+Carousel 的单张展示可启用 `effect="material"`，使用与 Embla 同版本的 `embla-carousel-fade` 8.6.0 实现原位交替。旧项逐渐收起表面高光与投影，变平、轻微下沉并模糊淡出；下一项在相同位置从模糊透明恢复清晰，高光与柔影随之浮起。材质进度跟随 Fade 的实际不透明度，最虚状态约 blur(5px)、下移 4px、scale(.985)，完整实体恢复原尺寸与位置；不另起计时器或 RAF，连续点击、反向和触摸拖动继续使用同一 Embla 状态。Card 或 `data-carousel-surface` 表面通过暂停的 relief 关键帧采样平面到 `--milk-card-shadow` 的深度；内部独立浮起装饰可标记 `data-carousel-relief="object"`，同步收放 `--milk-shadow`，避免旧卡已经淡出而内部投影仍然浮起。light／dark 复用相同进度、几何与阴影角色，主题切换不重启动画。
+
+该模式面向单张占满视口的内容，保留真实 slide DOM、插槽、Embla API 和 `init-api`；只有活动项接受焦点及交互，其他项隐藏于辅助技术，不能只靠 opacity 隐藏。默认 `effect="slide"` 保留上游滑动与多张并排行为，接入示例见 [组件集](shadcn-catalog.md)。减少动态效果时立即显示选中项的完整实体，不播放模糊、缩放或淡入淡出；重新初始化和卸载时还原插件管理的样式、可访问状态与监听。
+
 尊重 prefers-reduced-motion，按键立即改变材质，取消位移、缩放和过渡，连续动画停止，信息与操作仍完整。GSAP 使用 context 并在卸载 revert，事件监听与定时器清理。
 
 弹窗可用原生 dialog 或 Reka：提供名称、初始焦点、Tab 约束、Esc 关闭与触发焦点恢复。复制操作处理权限失败；表单使用 label、原生校验、错误与成功状态。演示行为明确标注，不能伪装持久化。

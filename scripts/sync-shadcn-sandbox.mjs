@@ -9,7 +9,7 @@ const manifest = JSON.parse(await readFile(join(root, 'package.json'), 'utf8'))
 const selected = [
   'vue', 'reka-ui', '@vueuse/core', '@lucide/vue', 'lucide-vue-next',
   '@internationalized/date', '@unovis/vue', '@unovis/ts', '@tanstack/vue-table',
-  'vee-validate', '@vee-validate/zod', 'zod', 'embla-carousel-vue', 'vue-input-otp',
+  'vee-validate', '@vee-validate/zod', 'zod', 'embla-carousel-vue', 'embla-carousel-fade', 'vue-input-otp',
   'vue-sonner', 'clsx', 'tailwind-merge', 'class-variance-authority',
   '@fontsource-variable/noto-sans-sc', '@fontsource/ibm-plex-sans',
   'tailwindcss', '@tailwindcss/vite', 'tw-animate-css', 'vite',

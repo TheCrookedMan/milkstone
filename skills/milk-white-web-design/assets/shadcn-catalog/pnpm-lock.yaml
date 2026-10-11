@@ -50,6 +50,9 @@ importers:
       clsx:
         specifier: 2.1.1
         version: 2.1.1
+      embla-carousel-fade:
+        specifier: 8.6.0
+        version: 8.6.0(embla-carousel@8.6.0)
       embla-carousel-vue:
         specifier: 8.6.0
         version: 8.6.0(vue@3.5.43(typescript@5.9.3))
@@ -935,6 +938,11 @@ packages:
 
   elkjs@0.10.2:
     resolution: {integrity: sha512-Yx3ORtbAFrXelYkAy2g0eYyVY8QG0XEmGdQXmy0eithKKjbWRfl3Xe884lfkszfBF6UKyIy4LwfcZ3AZc8oxFw==}
+
+  embla-carousel-fade@8.6.0:
+    resolution: {integrity: sha512-qaYsx5mwCz72ZrjlsXgs1nKejSrW+UhkbOMwLgfRT7w2LtdEB03nPRI06GHuHv5ac2USvbEiX2/nAHctcDwvpg==}
+    peerDependencies:
+      embla-carousel: 8.6.0
 
   embla-carousel-reactive-utils@8.6.0:
     resolution: {integrity: sha512-fMVUDUEx0/uIEDM0Mz3dHznDhfX+znCCDCeIophYb1QGVM7YThSWX+wz11zlYwWFOr74b4QLGg0hrGPJeG2s4A==}
@@ -2484,6 +2492,10 @@ snapshots:
   earcut@3.2.4: {}
 
   elkjs@0.10.2: {}
+
+  embla-carousel-fade@8.6.0(embla-carousel@8.6.0):
+    dependencies:
+      embla-carousel: 8.6.0
 
   embla-carousel-reactive-utils@8.6.0(embla-carousel@8.6.0):
     dependencies:

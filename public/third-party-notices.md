@@ -24,6 +24,7 @@ Third-party software, fonts and icons retain their own copyright and license ter
 | `class-variance-authority` | 0.7.1 | Apache-2.0 | [class-variance-authority.txt](licenses/class-variance-authority.txt) | Copied from the installed package. |
 | `clsx` | 2.1.1 | MIT | [clsx.txt](licenses/clsx.txt) | Copied from the installed package. |
 | `echarts` | 6.0.0 | Apache-2.0 | [echarts.txt](licenses/echarts.txt)<br>[echarts-NOTICE.txt](licenses/echarts-NOTICE.txt)<br>[echarts-licenses-LICENSE-d3.txt](licenses/echarts-licenses-LICENSE-d3.txt) | Copied from the installed package. |
+| `embla-carousel-fade` | 8.6.0 | MIT | [embla-carousel-vue.txt](licenses/embla-carousel-vue.txt) | Published package has no LICENSE file; exact [v8.6.0 upstream LICENSE](https://raw.githubusercontent.com/davidjerleke/embla-carousel/v8.6.0/LICENSE) is preserved. |
 | `embla-carousel-vue` | 8.6.0 | MIT | [embla-carousel-vue.txt](licenses/embla-carousel-vue.txt) | Published package has no LICENSE file; exact [v8.6.0 upstream LICENSE](https://raw.githubusercontent.com/davidjerleke/embla-carousel/v8.6.0/LICENSE) is preserved. |
 | `gsap` | 3.15.0 | Custom Standard “No Charge” | [gsap-license-notice.txt](licenses/gsap-license-notice.txt) | Custom Standard "No Charge" license; **not MIT**. Package declaration and source copyright banner preserved; [official full terms](https://gsap.com/community/standard-license/). |
 | `lucide-vue-next` | 1.0.0 | ISC | [lucide-vue-next.txt](licenses/lucide-vue-next.txt) | Copied from the installed package. |

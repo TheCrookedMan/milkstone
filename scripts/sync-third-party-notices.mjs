@@ -68,7 +68,7 @@ for (const name of Object.keys(direct).sort(order)) {
     files.push(await preserve(name, installed.version, suffixFor(path), data))
   }
   let note = 'Copied from the installed package.'
-  if (name === 'embla-carousel-vue' && !files.length) {
+  if (['embla-carousel-vue', 'embla-carousel-fade'].includes(name) && !files.length) {
     // The published Vue wrapper omits LICENSE; preserve the exact official
     // repository license at the matching v8.6.0 tag instead. No network is
     // needed to regenerate notices after the repository has been cloned.

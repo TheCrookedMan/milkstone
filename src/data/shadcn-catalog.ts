@@ -30,7 +30,7 @@ export const shadcnCatalog: ShadcnCatalogItem[] = [
   { id: 'button-group', name: 'Button Group', label: '按钮组', category: '表单与输入', description: '把相关操作排成一组，保持按键之间的节奏。', owner: 'input' },
   { id: 'calendar', name: 'Calendar', label: '日历', category: '表单与输入', description: '翻阅月份、点选日期，为计划留下一处标记。', owner: 'input' },
   { id: 'card', name: 'Card', label: '卡片', category: '基础与展示', description: '微光落在边缘，托起一张承载内容的纸面卡片。', owner: 'display' },
-  { id: 'carousel', name: 'Carousel', label: '轮播', category: '基础与展示', description: '逐张翻看材质样本，比较表面的深浅与层次。', owner: 'display' },
+  { id: 'carousel', name: 'Carousel', label: '轮播', category: '基础与展示', description: '旧样本压平淡出，新样本由虚化到清晰，在原位浮起成形。', owner: 'display' },
   { id: 'chart', name: 'Chart', label: '图表', category: '基础与展示', description: '用灰阶、图例与刻度，把数据排列得有迹可循。', owner: 'display', wide: true },
   { id: 'checkbox', name: 'Checkbox', label: '复选框', category: '表单与输入', description: '独立勾选每一项，让选择落在可见的位置。', owner: 'input' },
   { id: 'collapsible', name: 'Collapsible', label: '可收起内容', category: '基础与展示', description: '把次要内容收好，需要时再展开。', owner: 'display' },

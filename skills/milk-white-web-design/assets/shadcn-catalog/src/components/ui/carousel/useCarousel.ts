@@ -1,24 +1,37 @@
 import type { UnwrapRefCarouselApi as CarouselApi, CarouselEmits, CarouselProps } from "./interface"
 import { createInjectionState } from "@vueuse/core"
 import emblaCarouselVue from "embla-carousel-vue"
-import { onMounted, ref } from "vue"
+import Fade from "embla-carousel-fade"
+import { usePreferredReducedMotion } from "@vueuse/core"
+import { computed, onUnmounted, ref, unref, watch } from "vue"
+import { materialTransition } from "./materialTransition"
 
 const [useProvideCarousel, useInjectCarousel] = createInjectionState(
   ({
     opts,
     orientation,
     plugins,
+    effect = "slide",
   }: CarouselProps, emits: CarouselEmits) => {
-    const [emblaNode, emblaApi] = emblaCarouselVue({
-      ...opts,
-      axis: orientation === "horizontal" ? "x" : "y",
-    }, plugins)
+    const reducedMotion = usePreferredReducedMotion()
+    const options = computed(() => {
+      const resolved = unref(opts)
+      return {
+        ...resolved,
+        ...(effect === "material" ? { containScroll: false as const, slidesToScroll: 1, duration: reducedMotion.value === "reduce" ? 0 : (resolved?.duration ?? 45) } : {}),
+        axis: orientation === "horizontal" ? "x" as const : "y" as const,
+      }
+    })
+    const resolvedPlugins = computed(() => effect === "material"
+      ? [...(unref(plugins) ?? []).filter(plugin => plugin.name !== "fade"), Fade(), materialTransition()]
+      : unref(plugins) ?? [])
+    const [emblaNode, emblaApi] = emblaCarouselVue(options, resolvedPlugins)
 
     function scrollPrev() {
-      emblaApi.value?.scrollPrev()
+      emblaApi.value?.scrollPrev(reducedMotion.value === "reduce")
     }
     function scrollNext() {
-      emblaApi.value?.scrollNext()
+      emblaApi.value?.scrollNext(reducedMotion.value === "reduce")
     }
 
     const canScrollNext = ref(false)
@@ -29,18 +42,26 @@ const [useProvideCarousel, useInjectCarousel] = createInjectionState(
       canScrollPrev.value = api?.canScrollPrev() || false
     }
 
-    onMounted(() => {
-      if (!emblaApi.value)
+    const selectedIndex = ref(0)
+    const slideCount = ref(0)
+
+    function update(api: CarouselApi) {
+      onSelect(api)
+      selectedIndex.value = api?.selectedScrollSnap() ?? 0
+      slideCount.value = api?.scrollSnapList().length ?? 0
+    }
+
+    watch(emblaApi, (api, previous) => {
+      previous?.off("reInit", update).off("select", update)
+      if (!api)
         return
+      update(api)
+      api.on("reInit", update).on("select", update)
+      emits("init-api", api)
+    }, { immediate: true })
+    onUnmounted(() => emblaApi.value?.off("reInit", update).off("select", update))
 
-      emblaApi.value?.on("init", onSelect)
-      emblaApi.value?.on("reInit", onSelect)
-      emblaApi.value?.on("select", onSelect)
-
-      emits("init-api", emblaApi.value)
-    })
-
-    return { carouselRef: emblaNode, carouselApi: emblaApi, canScrollPrev, canScrollNext, scrollPrev, scrollNext, orientation }
+    return { carouselRef: emblaNode, carouselApi: emblaApi, canScrollPrev, canScrollNext, scrollPrev, scrollNext, orientation, effect, selectedIndex, slideCount }
   },
 )
 

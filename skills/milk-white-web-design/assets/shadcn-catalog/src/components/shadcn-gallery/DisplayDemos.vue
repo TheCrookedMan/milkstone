@@ -173,13 +173,13 @@ function submitQuestionnaire(event: Event) {
     <CardFooter><Button size="sm" :variant="cardSaved ? 'outline' : 'default'" :aria-pressed="cardSaved" @click="cardSaved = !cardSaved">{{ cardSaved ? '已加入收藏' : '收藏此方案' }}</Button></CardFooter>
   </Card>
 
-  <Carousel v-else-if="name === 'carousel'" class="w-full" :opts="{ align: 'start' }">
+  <Carousel v-else-if="name === 'carousel'" v-slot="{ selectedIndex, slideCount }" class="w-full" effect="material" :opts="{ align: 'start' }" aria-label="材质样本轮播">
     <CarouselContent>
       <CarouselItem v-for="(title, index) in ['纸面基底', '凹槽表面', '浮起亮面']" :key="title">
-        <div class="carousel-surface" :data-tone="index"><span class="demo-caption">MATERIAL / 0{{ index + 1 }}</span><strong>{{ title }}</strong><span class="carousel-disc" aria-hidden="true" /></div>
+        <div class="carousel-surface" data-carousel-surface :data-tone="index"><span class="demo-caption">MATERIAL / 0{{ index + 1 }}</span><strong>{{ title }}</strong><span class="carousel-disc" data-carousel-relief="object" aria-hidden="true" /></div>
       </CarouselItem>
     </CarouselContent>
-    <div class="carousel-controls"><CarouselPrevious style="position: static; transform: none;" aria-label="上一张" /><span class="demo-caption">滑动或切换材质</span><CarouselNext style="position: static; transform: none;" aria-label="下一张" /></div>
+    <div class="carousel-controls"><CarouselPrevious style="position: static; transform: none;" aria-label="上一张" /><span class="demo-caption" role="status" aria-live="polite">{{ selectedIndex + 1 }} / {{ slideCount || 3 }} · 虚实之间，原位成形</span><CarouselNext style="position: static; transform: none;" aria-label="下一张" /></div>
   </Carousel>
 
   <div v-else-if="name === 'chart'" class="demo-stack w-full">

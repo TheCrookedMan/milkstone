@@ -75,6 +75,8 @@ Textarea、Sidebar、Table／Data Table、Message Scroller 与浮层的 scroll�
 
 目录 Card 的入场使用共享 reveal-controller.ts 与 milk-motion.css，在分组容器添加 data-milk-reveal-group。Card 进入视区时以 700ms 渐显与 18px 上移展现，直接子项按 80ms 错峰、最多延迟 240ms；筛选与延迟加载的新内容由共享观察器登记。动效只施加到展示包装层，不覆盖 Calendar、Slider、拖拽区域或 Portal 的内部定位与已有交互；键盘聚焦时立即显示，减少动态效果时完整静态呈现。
 
+Carousel 保留默认滑动模式；单张材质示例启用 `effect="material"`，以官方 `embla-carousel-fade` 8.6.0 原位交替旧项的消隐与新项的浮起，材质细节见 [交互规范](motion-and-network.md)。落地页采用 `:opts="{ align: 'start', containScroll: false, slidesToScroll: 1, duration: 45 }"`；`duration` 为 Embla 的运动参数，并非毫秒。复用完整 Card，或给自定义卡片表面添加 `data-carousel-surface`；内部带独立阴影的装饰可添加 `data-carousel-relief="object"`。保持每项全宽，箭头、键盘与触摸共用 Embla 状态；多张并排或需要平移展示时继续使用 `effect="slide"`。复制此模式时同时带上材质插件、主题样式和固定版本的 Fade 依赖，不只复制演示 CSS。
+
 用户只需要某个组件时按依赖关系复制该组件及其组合基础件，不要求其他项目加载全部目录。使用完整演示时保留搜索分类、基础源码、主题、工具函数和相关依赖；现有实体控件、关系图、园区扫描和工作流继续使用各自的领域组件。
 
 ## 来源

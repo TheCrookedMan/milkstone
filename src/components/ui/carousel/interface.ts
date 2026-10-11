@@ -15,6 +15,8 @@ export interface CarouselProps {
   opts?: CarouselOptions
   plugins?: CarouselPlugin
   orientation?: "horizontal" | "vertical"
+  /** Material dissolves one full-width slide in place; slide preserves Embla's scrolling layout. */
+  effect?: "slide" | "material"
 }
 
 export interface CarouselEmits {

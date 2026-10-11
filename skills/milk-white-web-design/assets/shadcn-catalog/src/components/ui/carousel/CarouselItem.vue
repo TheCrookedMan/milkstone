@@ -5,7 +5,7 @@ import { useCarousel } from "./useCarousel"
 
 const props = defineProps<WithClassAsProps>()
 
-const { orientation } = useCarousel()
+const { orientation, effect } = useCarousel()
 </script>
 
 <template>
@@ -19,6 +19,7 @@ const { orientation } = useCarousel()
       props.class,
     )"
   >
-    <slot />
+    <div v-if="effect === 'material'" data-slot="carousel-material"><slot /></div>
+    <slot v-else />
   </div>
 </template>
